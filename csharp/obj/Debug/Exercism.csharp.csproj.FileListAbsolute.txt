@@ -3,3 +3,8 @@ C:\Users\cmccandless\Dropbox\Exercism\csharp\bin\Debug\Exercism.csharp.pdb
 C:\Users\cmccandless\Dropbox\Exercism\csharp\obj\Debug\Exercism.csharp.dll
 C:\Users\cmccandless\Dropbox\Exercism\csharp\obj\Debug\Exercism.csharp.pdb
 C:\Users\cmccandless\Dropbox\Exercism\csharp\obj\Debug\Exercism.csharp.csprojResolveAssemblyReference.cache
+C:\Users\mccan\Documents\Code\Github Repos\ExercismSolutions\csharp\bin\Debug\Exercism.csharp.dll
+C:\Users\mccan\Documents\Code\Github Repos\ExercismSolutions\csharp\bin\Debug\Exercism.csharp.pdb
+C:\Users\mccan\Documents\Code\Github Repos\ExercismSolutions\csharp\obj\Debug\Exercism.csharp.csprojResolveAssemblyReference.cache
+C:\Users\mccan\Documents\Code\Github Repos\ExercismSolutions\csharp\obj\Debug\Exercism.csharp.dll
+C:\Users\mccan\Documents\Code\Github Repos\ExercismSolutions\csharp\obj\Debug\Exercism.csharp.pdb
