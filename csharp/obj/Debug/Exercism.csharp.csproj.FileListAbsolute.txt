@@ -1,0 +1,5 @@
+C:\Users\cmccandless\Dropbox\Exercism\csharp\bin\Debug\Exercism.csharp.dll
+C:\Users\cmccandless\Dropbox\Exercism\csharp\bin\Debug\Exercism.csharp.pdb
+C:\Users\cmccandless\Dropbox\Exercism\csharp\obj\Debug\Exercism.csharp.dll
+C:\Users\cmccandless\Dropbox\Exercism\csharp\obj\Debug\Exercism.csharp.pdb
+C:\Users\cmccandless\Dropbox\Exercism\csharp\obj\Debug\Exercism.csharp.csprojResolveAssemblyReference.cache

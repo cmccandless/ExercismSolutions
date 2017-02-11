@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FEF69435-D885-45DD-A446-04FD3BD3F593}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Exercism</RootNamespace>
+    <AssemblyName>Exercism.csharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.4.0\lib\Mono.Cecil.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.4.0\lib\Mono.Cecil.Mdb.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.4.0\lib\Mono.Cecil.Pdb.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.4.0\lib\Mono.Cecil.Rocks.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.engine, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.4.0\lib\nunit.engine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.4.0\lib\nunit.engine.api.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NUnit3.TestAdapter, Version=3.4.0.0, Culture=neutral, PublicKeyToken=4cb40d35494691ac, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.4.0\lib\NUnit3.TestAdapter.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="accumulate\AccumulateTest.cs" />
+    <Compile Include="accumulate\IEnumerableExtensions.cs" />
+    <Compile Include="acronym\Acronym.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="acronym\AcronymTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="all-your-base\AllYourBaseTest.cs" />
+    <Compile Include="all-your-base\Base.cs" />
+    <Compile Include="allergies\Allergies.cs" />
+    <Compile Include="allergies\AllergiesTest.cs" />
+    <Compile Include="alphametics\Alphametics.cs" />
+    <Compile Include="alphametics\AlphameticsTest.cs" />
+    <Compile Include="anagram\Anagram.cs" />
+    <Compile Include="anagram\AnagramTest.cs" />
+    <Compile Include="atbash-cipher\Atbash.cs" />
+    <Compile Include="atbash-cipher\AtbashTest.cs" />
+    <Compile Include="bank-account\BankAccount.cs" />
+    <Compile Include="bank-account\BankAccountTest.cs" />
+    <Compile Include="beer-song\Beer.cs" />
+    <Compile Include="beer-song\BeerTests.cs" />
+    <Compile Include="binary-search-tree\BinarySearchTree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="binary-search-tree\BinarySearchTreeTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="binary-search\BinarySearch.cs" />
+    <Compile Include="binary-search\BinarySearchTest.cs" />
+    <Compile Include="binary\Binary.cs" />
+    <Compile Include="binary\BinaryTest.cs" />
+    <Compile Include="bob\Bob.cs" />
+    <Compile Include="bob\BobTest.cs" />
+    <Compile Include="book-store\BookStore.cs" />
+    <Compile Include="book-store\BookStoreTest.cs" />
+    <Compile Include="bowling\BowlingGame.cs" />
+    <Compile Include="bowling\BowlingTest.cs" />
+    <Compile Include="bracket-push\BracketPush.cs" />
+    <Compile Include="bracket-push\BracketPushTest.cs" />
+    <Compile Include="change\Change.cs" />
+    <Compile Include="change\ChangeTest.cs" />
+    <Compile Include="circular-buffer\CircularBuffer.cs" />
+    <Compile Include="circular-buffer\CircularBufferTest.cs" />
+    <Compile Include="clock\Clock.cs" />
+    <Compile Include="clock\ClockTest.cs" />
+    <Compile Include="connect\Connect.cs" />
+    <Compile Include="connect\ConnectTest.cs" />
+    <Compile Include="crypto-square\Crypto.cs" />
+    <Compile Include="crypto-square\CryptoSquareTest.cs" />
+    <Compile Include="custom-set\CustomSet.cs" />
+    <Compile Include="custom-set\CustomSetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="diamond\Diamond.cs" />
+    <Compile Include="diamond\DiamondTest.cs" />
+    <Compile Include="difference-of-squares\DifferenceOfSquaresTests.cs" />
+    <Compile Include="difference-of-squares\Squares.cs" />
+    <Compile Include="diffie-hellman\DiffieHellman.cs" />
+    <Compile Include="diffie-hellman\DiffieHellmanTest.cs" />
+    <Compile Include="dominoes\Dominoes.cs" />
+    <Compile Include="dominoes\DominoesTest.cs" />
+    <Compile Include="dot-dsl\DotDslTest.cs" />
+    <Compile Include="dot-dsl\Graph.cs" />
+    <Compile Include="error-handling\ErrorHandling.cs" />
+    <Compile Include="error-handling\ErrorHandlingTest.cs" />
+    <Compile Include="etl\ETL.cs" />
+    <Compile Include="etl\ETLTest.cs" />
+    <Compile Include="example\Example.cs" />
+    <Compile Include="example\ExampleTests.cs" />
+    <Compile Include="flatten-array\FlattenArrayTest.cs" />
+    <Compile Include="flatten-array\Flattener.cs" />
+    <Compile Include="food-chain\FoodChain.cs" />
+    <Compile Include="food-chain\FoodChainTest.cs" />
+    <Compile Include="forth\Forth.cs" />
+    <Compile Include="forth\ForthTest.cs" />
+    <Compile Include="gigasecond\Gigasecond.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gigasecond\GigasecondTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="go-counting\GoCounting.cs" />
+    <Compile Include="go-counting\GoCountingTest.cs" />
+    <Compile Include="grade-school\GradeSchoolTest.cs" />
+    <Compile Include="grade-school\School.cs" />
+    <Compile Include="grains\Grains.cs" />
+    <Compile Include="grains\GrainsTest.cs" />
+    <Compile Include="grep\Grep.cs" />
+    <Compile Include="grep\GrepTest.cs" />
+    <Compile Include="hamming\Hamming.cs" />
+    <Compile Include="hamming\HammingTest.cs" />
+    <Compile Include="hangman\HangmanGame.cs" />
+    <Compile Include="hangman\HangmanTest.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="hexadecimal\Hexadecimal.cs" />
+    <Compile Include="hexadecimal\HexadecimalTest.cs" />
+    <Compile Include="house\House.cs" />
+    <Compile Include="house\HouseTest.cs" />
+    <Compile Include="isogram\Isogram.cs" />
+    <Compile Include="isogram\IsogramTest.cs" />
+    <Compile Include="kindergarten-garden\Garden.cs" />
+    <Compile Include="kindergarten-garden\KinderGartenGardenTest.cs" />
+    <Compile Include="largest-series-product\LargestSeriesProduct.cs" />
+    <Compile Include="largest-series-product\LargestSeriesProductTest.cs" />
+    <Compile Include="leap\LeapTest.cs" />
+    <Compile Include="ledger\Ledger.cs" />
+    <Compile Include="ledger\LedgerTest.cs" />
+    <Compile Include="linked-list\Deque.cs" />
+    <Compile Include="linked-list\LinkedListTest.cs" />
+    <Compile Include="list-ops\ListOps.cs" />
+    <Compile Include="list-ops\ListOpsTest.cs" />
+    <Compile Include="luhn\Luhn.cs" />
+    <Compile Include="luhn\LuhnTest.cs" />
+    <Compile Include="markdown\Markdown.cs" />
+    <Compile Include="markdown\MarkdownTest.cs" />
+    <Compile Include="matrix\Matrix.cs" />
+    <Compile Include="matrix\MatrixTest.cs" />
+    <Compile Include="meetup\Meetup.cs" />
+    <Compile Include="meetup\MeetupTest.cs" />
+    <Compile Include="minesweeper\Minesweeper.cs" />
+    <Compile Include="minesweeper\MinesweeperTest.cs" />
+    <Compile Include="nth-prime\NthPrime.cs" />
+    <Compile Include="nth-prime\NthPrimeTest.cs" />
+    <Compile Include="nucleotide-count\DNA.cs" />
+    <Compile Include="nucleotide-count\NucleotideCountTest.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="ocr-numbers\OcrNumbers.cs" />
+    <Compile Include="ocr-numbers\OcrNumbersTest.cs" />
+    <Compile Include="octal\Octal.cs" />
+    <Compile Include="octal\OctalTest.cs" />
+    <Compile Include="palindrome-products\Palindrome.cs" />
+    <Compile Include="palindrome-products\PalindromeTest.cs" />
+    <Compile Include="pangram\Pangram.cs" />
+    <Compile Include="pangram\PangramTest.cs" />
+    <Compile Include="parallel-letter-frequency\ParallelLetterFrequency.cs" />
+    <Compile Include="parallel-letter-frequency\ParallelLetterFrequencyTest.cs" />
+    <Compile Include="pascals-triangle\PascalsTriangle.cs" />
+    <Compile Include="pascals-triangle\PascalsTriangleTest.cs" />
+    <Compile Include="perfect-numbers\PerfectNumbers.cs" />
+    <Compile Include="perfect-numbers\PerfectNumbersTest.cs" />
+    <Compile Include="phone-number\PhoneNumber.cs" />
+    <Compile Include="phone-number\PhoneNumberTest.cs" />
+    <Compile Include="pig-latin\PigLatin.cs" />
+    <Compile Include="pig-latin\PigLatinTest.cs" />
+    <Compile Include="poker\Poker.cs" />
+    <Compile Include="poker\PokerTest.cs" />
+    <Compile Include="pov\Pov.cs" />
+    <Compile Include="pov\PovTest.cs" />
+    <Compile Include="prime-factors\PrimeFactors.cs" />
+    <Compile Include="prime-factors\PrimeFactorsTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="protein-translation\ProteinTranslation.cs" />
+    <Compile Include="protein-translation\ProteinTranslationTest.cs" />
+    <Compile Include="proverb\Proverb.cs" />
+    <Compile Include="proverb\ProverbTest.cs" />
+    <Compile Include="pythagorean-triplet\PythagoreanTripletTest.cs" />
+    <Compile Include="pythagorean-triplet\Triplet.cs" />
+    <Compile Include="queen-attack\Queen.cs" />
+    <Compile Include="queen-attack\QueenAttackTest.cs" />
+    <Compile Include="rail-fence-cipher\RailFenceCipher.cs" />
+    <Compile Include="rail-fence-cipher\RailFenceCipherTest.cs" />
+    <Compile Include="raindrops\Raindrops.cs" />
+    <Compile Include="raindrops\RaindropsTest.cs" />
+    <Compile Include="react\Reactor.cs" />
+    <Compile Include="react\ReactTest.cs" />
+    <Compile Include="rectangles\Rectangles.cs" />
+    <Compile Include="rectangles\RectanglesTest.cs" />
+    <Compile Include="rna-transcription\Complement.cs" />
+    <Compile Include="rna-transcription\ComplementTest.cs" />
+    <Compile Include="robot-name\Robot.cs" />
+    <Compile Include="robot-name\RobotNameTest.cs" />
+    <Compile Include="robot-simulator\RobotSimulator.cs" />
+    <Compile Include="robot-simulator\RobotSimulatorTest.cs" />
+    <Compile Include="roman-numerals\Int32Extensions.cs" />
+    <Compile Include="roman-numerals\RomanNumeralsTest.cs" />
+    <Compile Include="run-length-encoding\RunLengthEncoding.cs" />
+    <Compile Include="run-length-encoding\RunLengthEncodingTest.cs" />
+    <Compile Include="saddle-points\SaddlePoints.cs" />
+    <Compile Include="saddle-points\SaddlePointTests.cs" />
+    <Compile Include="say\Say.cs" />
+    <Compile Include="say\SayTest.cs" />
+    <Compile Include="scale-generator\ScaleGenerator.cs" />
+    <Compile Include="scale-generator\ScaleGeneratorTest.cs" />
+    <Compile Include="scrabble-score\Scrabble.cs" />
+    <Compile Include="scrabble-score\ScrabbleScoreTest.cs" />
+    <Compile Include="secret-handshake\SecretHandshake.cs" />
+    <Compile Include="secret-handshake\SecretHandshakeTests.cs" />
+    <Compile Include="series\Series.cs" />
+    <Compile Include="series\SeriesTest.cs" />
+    <Compile Include="sgf-parsing\SgfParsing.cs" />
+    <Compile Include="sgf-parsing\SgfParsingTest.cs" />
+    <Compile Include="sieve\Sieve.cs" />
+    <Compile Include="sieve\SieveTest.cs" />
+    <Compile Include="simple-cipher\Cipher.cs" />
+    <Compile Include="simple-cipher\SimpleCipherTest.cs" />
+    <Compile Include="simple-linked-list\SimpleLinkedList.cs" />
+    <Compile Include="simple-linked-list\SimpleLinkedListTest.cs" />
+    <Compile Include="space-age\SpaceAge.cs" />
+    <Compile Include="space-age\SpaceAgeTest.cs" />
+    <Compile Include="strain\IEnumerableExtentions.cs" />
+    <Compile Include="strain\StrainTest.cs" />
+    <Compile Include="sublist\Sublist.cs" />
+    <Compile Include="sublist\SublistTest.cs" />
+    <Compile Include="sum-of-multiples\SumOfMultiples.cs" />
+    <Compile Include="sum-of-multiples\SumOfMultiplesTest.cs" />
+    <Compile Include="tournament\Tournament.cs" />
+    <Compile Include="tournament\TournamentTest.cs" />
+    <Compile Include="transpose\Transpose.cs" />
+    <Compile Include="transpose\TransposeTest.cs" />
+    <Compile Include="tree-building\TreeBuilding.cs" />
+    <Compile Include="tree-building\TreeBuildingTest.cs" />
+    <Compile Include="triangle\Triangle.cs" />
+    <Compile Include="triangle\TriangleTest.cs" />
+    <Compile Include="trinary\Trinary.cs" />
+    <Compile Include="trinary\TrinaryTest.cs" />
+    <Compile Include="twelve-days\TwelveDaysSong.cs" />
+    <Compile Include="twelve-days\TwelveDaysTest.cs" />
+    <Compile Include="two-bucket\TwoBuckets.cs" />
+    <Compile Include="two-bucket\TwoBucketTest.cs" />
+    <Compile Include="variable-length-quantity\VariableLengthQuantity.cs" />
+    <Compile Include="variable-length-quantity\VariableLengthQuantityTest.cs" />
+    <Compile Include="word-count\Phrase.cs" />
+    <Compile Include="word-count\WordCountTest.cs" />
+    <Compile Include="word-search\WordSearch.cs" />
+    <Compile Include="word-search\WordSearchTest.cs" />
+    <Compile Include="wordy\WordProblem.cs" />
+    <Compile Include="wordy\WordyTest.cs" />
+    <Compile Include="zebra-puzzle\ZebraPuzzle.cs" />
+    <Compile Include="zebra-puzzle\ZebraPuzzleTest.cs" />
+    <Compile Include="zipper\Zipper.cs" />
+    <Compile Include="zipper\ZipperTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="accumulate\README.md" />
+    <None Include="acronym\README.md" />
+    <None Include="all-your-base\README.md" />
+    <None Include="allergies\README.md" />
+    <None Include="alphametics\README.md" />
+    <None Include="anagram\README.md" />
+    <None Include="atbash-cipher\README.md" />
+    <None Include="bank-account\README.md" />
+    <None Include="beer-song\README.md" />
+    <None Include="binary-search-tree\README.md" />
+    <None Include="binary-search\README.md" />
+    <None Include="binary\README.md" />
+    <None Include="bob\README.md" />
+    <None Include="book-store\README.md" />
+    <None Include="bowling\README.md" />
+    <None Include="bracket-push\README.md" />
+    <None Include="change\README.md" />
+    <None Include="circular-buffer\README.md" />
+    <None Include="clock\README.md" />
+    <None Include="connect\README.md" />
+    <None Include="crypto-square\README.md" />
+    <None Include="custom-set\README.md" />
+    <None Include="diamond\README.md" />
+    <None Include="difference-of-squares\README.md" />
+    <None Include="diffie-hellman\README.md" />
+    <None Include="dominoes\README.md" />
+    <None Include="dot-dsl\README.md" />
+    <None Include="error-handling\README.md" />
+    <None Include="etl\README.md" />
+    <None Include="flatten-array\README.md" />
+    <None Include="food-chain\README.md" />
+    <None Include="forth\README.md" />
+    <None Include="gigasecond\README.md" />
+    <None Include="go-counting\README.md" />
+    <None Include="grade-school\README.md" />
+    <None Include="grains\README.md" />
+    <None Include="grep\README.md" />
+    <None Include="hamming\README.md" />
+    <None Include="hangman\README.md" />
+    <None Include="hexadecimal\README.md" />
+    <None Include="house\README.md" />
+    <None Include="isogram\README.md" />
+    <None Include="kindergarten-garden\README.md" />
+    <None Include="largest-series-product\README.md" />
+    <None Include="leap\README.md" />
+    <None Include="ledger\README.md" />
+    <None Include="linked-list\README.md" />
+    <None Include="list-ops\README.md" />
+    <None Include="luhn\README.md" />
+    <None Include="markdown\README.md" />
+    <None Include="matrix\README.md" />
+    <None Include="meetup\README.md" />
+    <None Include="minesweeper\README.md" />
+    <None Include="nth-prime\README.md" />
+    <None Include="nucleotide-count\README.md" />
+    <None Include="ocr-numbers\README.md" />
+    <None Include="octal\README.md" />
+    <None Include="packages.config" />
+    <None Include="palindrome-products\README.md" />
+    <None Include="pangram\README.md" />
+    <None Include="parallel-letter-frequency\README.md" />
+    <None Include="pascals-triangle\README.md" />
+    <None Include="perfect-numbers\README.md" />
+    <None Include="phone-number\README.md" />
+    <None Include="pig-latin\README.md" />
+    <None Include="poker\README.md" />
+    <None Include="pov\README.md" />
+    <None Include="prime-factors\README.md" />
+    <None Include="protein-translation\README.md" />
+    <None Include="proverb\README.md" />
+    <None Include="pythagorean-triplet\README.md" />
+    <None Include="queen-attack\README.md" />
+    <None Include="rail-fence-cipher\README.md" />
+    <None Include="raindrops\README.md" />
+    <None Include="react\README.md" />
+    <None Include="rectangles\README.md" />
+    <None Include="rna-transcription\README.md" />
+    <None Include="robot-name\README.md" />
+    <None Include="robot-simulator\README.md" />
+    <None Include="roman-numerals\README.md" />
+    <None Include="run-length-encoding\README.md" />
+    <None Include="saddle-points\README.md" />
+    <None Include="say\README.md" />
+    <None Include="scale-generator\README.md" />
+    <None Include="scrabble-score\README.md" />
+    <None Include="secret-handshake\README.md" />
+    <None Include="series\README.md" />
+    <None Include="sgf-parsing\README.md" />
+    <None Include="sieve\README.md" />
+    <None Include="simple-cipher\README.md" />
+    <None Include="simple-linked-list\README.md" />
+    <None Include="space-age\README.md" />
+    <None Include="strain\README.md" />
+    <None Include="sublist\README.md" />
+    <None Include="sum-of-multiples\README.md" />
+    <None Include="tournament\README.md" />
+    <None Include="transpose\README.md" />
+    <None Include="tree-building\README.md" />
+    <None Include="triangle\README.md" />
+    <None Include="trinary\README.md" />
+    <None Include="twelve-days\README.md" />
+    <None Include="two-bucket\README.md" />
+    <None Include="variable-length-quantity\README.md" />
+    <None Include="word-count\README.md" />
+    <None Include="word-search\README.md" />
+    <None Include="wordy\README.md" />
+    <None Include="zebra-puzzle\README.md" />
+    <None Include="zipper\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\Exercism.csharp.dll" />
+    <Content Include="bin\Debug\Exercism.csharp.pdb" />
+    <Content Include="bin\Debug\nunit.framework.dll" />
+    <Content Include="bin\Debug\nunit.framework.xml" />
+    <Content Include="prime-factors\primes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
