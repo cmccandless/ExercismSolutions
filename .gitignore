@@ -177,3 +177,5 @@ testCaseCollection.xml
 csharp/bin/Debug/Exercism.csharp.dll
 *.pdb
 csharp/obj/Debug/Exercism.csharp.dll
+
+Exercism.VC.VC.opendb
