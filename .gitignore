@@ -179,3 +179,4 @@ csharp/bin/Debug/Exercism.csharp.dll
 csharp/obj/Debug/Exercism.csharp.dll
 
 Exercism.VC.VC.opendb
+*.pyc
