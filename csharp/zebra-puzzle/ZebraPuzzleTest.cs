@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Exercism.zebra_puzzle;
 
 public class ZebraPuzzleTest
 {
