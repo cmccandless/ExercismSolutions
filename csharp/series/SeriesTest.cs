@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Exercism.series;
 
 [TestFixture]
 public class SeriesTest

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Exercism.atbash;
 
 [TestFixture]
 public class AtbashTest

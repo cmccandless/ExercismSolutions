@@ -1,33 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-class Atbash
+namespace Exercism.atbash
 {
-	private const byte a = 97;
-	private const byte encodeVal = 2 * a + 25; //219
-	private const byte len = 5;
+    class Atbash
+    {
+        private const byte LEN = 5;
 
-	// Example:
-	// Before: abcdefghijklmnopqrstuvwxyz0123456789
-	// After:  zyxwv utsrq ponml kjihg fedcb a0123 45678 9
-	public static string Encode(string value)
-	{
-		return string.Join(" ",
-			// Wrap in array to access encoded length
-			from encoded in
-				new[]
-				{
-					string.Join(string.Empty, 
-						from char ch in value.ToLower()
-						where char.IsLetterOrDigit(ch)
-						select char.IsNumber(ch) ? ch : (char)(encodeVal - ch)
-					)					
-				}
-			let numGroups = (int)Math.Ceiling(encoded.Length / (double)len)
-			// Split encoded characters into groups of 5
-			from i in Enumerable.Range(0, numGroups)
-			let groupLen = Math.Min(len, encoded.Length - i * len)
-			select encoded.Substring(i * len, groupLen)
-		);
-	}
+        private static char Encode(char ch) => 
+            char.IsNumber(ch) ? ch : (char)(219 - ch);
+
+        private static int CountGroups(IEnumerable<char> col) => 
+            (int)Math.Ceiling(col.Count() / (double)LEN);
+
+        private static string SplitIntoFives(IEnumerable<char> encoded) =>
+            string.Join(" ", from i in Enumerable.Range(0, CountGroups(encoded))
+                             select encoded.Substring(i * LEN, LEN));
+        
+        public static string Encode(string value) =>
+            SplitIntoFives(value.ToLower().Where(char.IsLetterOrDigit).Select(Encode));
+    }
+    static partial class IEnumerableExtensions
+    {
+        public static IEnumerable<T> Slice<T>(this IEnumerable<T> col, int start, int stop) =>
+            col.Skip(start).Take(stop - start);
+
+        public static string Substring(this IEnumerable<char> str, int start, int length) =>
+            string.Join(string.Empty, str.Slice(start, start + length));
+    }
 }
