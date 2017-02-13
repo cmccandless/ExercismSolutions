@@ -13,15 +13,12 @@ public class Anagram
 
 	internal string[] Match(string[] candidates)
 	{
-		return (from _word in candidates
-				let word = _word.ToLower()
-				where !word.Equals(Word)
-				where SortLetters(word).Equals(Sorted)
-				select _word).ToArray();
+		return (from candidate in candidates
+				let candidateL = candidate.ToLower()
+				where !candidateL.Equals(Word)
+				where SortLetters(candidateL).Equals(Sorted)
+				select candidate).ToArray();
 	}
 
-	private string SortLetters(string word)
-	{
-		return string.Join(string.Empty, word.OrderBy(c => c));
-	}
+	private string SortLetters(string word) => string.Join(string.Empty, word.OrderBy(c => c));
 }
