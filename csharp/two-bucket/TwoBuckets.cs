@@ -35,11 +35,11 @@ public class Move
 	public Type MoveType;
 	public int Moves;
 	public int Goal;
-	public bool Success { get { return contents[(int)GoalBucket] == Goal; } }
+	public bool Success => contents[(int)GoalBucket] == Goal; 
 	public Bucket GoalBucket;
 	private int[] contents;
 	private int[] size;
-	public int OtherBucketContents { get { return contents[1 - (int)GoalBucket]; } }
+	public int OtherBucketContents => contents[1 - (int)GoalBucket];
 	public Move[] Next = new Move[0];
 	public Move(Move parent, Bucket startBucket, int[] contents, int[] size, int goal, Type type, int moves = 1)
 	{
@@ -95,16 +95,15 @@ public class Move
 		}
 		return contents;
 	}
-	public override string ToString()
-	{
-		return string.Format("{0}: {1}/{2},{3}/{4}", MoveType, contents[0], size[0], contents[1], size[1]);
-	}
+	public override string ToString() =>
+        $"{MoveType}: {contents[0]}/{size[0]},{contents[1]}/{size[1]}";
+
 	public string MoveString()
 	{
 		return (Parent == null ?
 			string.Format("GOAL {0}/{1},{2}/{3} -\n",
 			GoalBucket == Bucket.One ? Goal.ToString() : "?", size[0], 
 			GoalBucket == Bucket.Two ? Goal.ToString() : "?", size[1]) :
-			Parent.MoveString()) + "\n" + this.ToString();
+			Parent.MoveString()) + "\n" + ToString();
 	}
 }

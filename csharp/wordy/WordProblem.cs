@@ -1,40 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
-static class WordProblem
+namespace Exercism.wordy
 {
-	private const RegexOptions REGEX_OPTIONS = RegexOptions.Compiled | RegexOptions.IgnoreCase;
-	private static Regex rgxEquationParts = new Regex(@"-?[\d]+|plus|minus|multiplied by|divided\sby", REGEX_OPTIONS);
-	public static int Solve(string wordProblem)
-	{
-		var result = 0;
-		var op = "plus";
-		var matches = rgxEquationParts.Matches(wordProblem).Cast<Match>();
-		if (matches.Count() < 3) throw new ArgumentException();
-		foreach (var match in matches)
-		{
-			int value;
-			if (int.TryParse(match.Groups[0].Value, out value))
-			{
-				switch (op)
-				{
-					case "plus":
-						result += value;
-						break;
-					case "minus":
-						result -= value;
-						break;
-					case "multiplied by":
-						result *= value;
-						break;
-					case "divided by":
-						result /= value;
-						break;
-				}
-			}
-			else op = match.Groups[0].Value;
-		}
-		return result;
-	}
+    public static class WordProblem
+    {
+        private static int DequeueInt(this Queue<string> q) =>
+            int.Parse(q.Dequeue().Replace("?", ""));
+
+        public static int Solve(string wordProblem)
+        {
+            var result = 0;
+            var q = new Queue<string>(wordProblem.Split(' '));
+            while (q.Any())
+            {
+                var x = q.Dequeue();
+                switch (x)
+                {
+                    case "What": break;
+                    case "is": result = q.DequeueInt(); break;
+                    case "plus": result += q.DequeueInt(); break;
+                    case "minus": result -= q.DequeueInt(); break;
+                    case "multiplied": q.Dequeue(); result *= q.DequeueInt(); break;
+                    case "divided": q.Dequeue(); result /= q.DequeueInt(); break;
+                    default: throw new ArgumentException();
+                }
+            }
+            return result;
+        }
+    }
 }

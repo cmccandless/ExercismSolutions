@@ -1,57 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Exercism.variable_length_quantity
 {
-	public class VariableLengthQuantity
-	{
-		public static uint[] ToBytes(uint[] inputs)
-		{
-			return inputs.SelectMany(i =>
-				{
-					var bytes = new Stack<uint>();
-					do
-					{
-						var x = i & 0x7Fu;
-						i >>= 7;
-						if (bytes.Count > 0) x |= 0x80;
-						bytes.Push(x);
-					} while (i > 0);
-					return bytes;
-				}).ToArray();
-		}
-		public static uint[] FromBytes(uint[] inputs)
-		{
-			var q = new Queue<uint>(inputs);
-			var results = new List<uint>();
-			var current = 0u;
-			var usedBits = 0;
-			var needNext = false;
-			while (q.Any())
-			{
-				var i = q.Dequeue();
-				current |= (i & 0x7F);
-				var isFirst = !needNext;
-				needNext = (i & 0x80) > 0;
-				if (needNext)
-				{
-					if (isFirst) for (usedBits = 0; (1 << usedBits) <= current; usedBits++) { }
-					else usedBits += 7;
-					if (usedBits > 32) throw new Exception("Overflow");
-					current <<= 7;
-				}
-				else
-				{
-					if (usedBits > 25) throw new Exception("Overflow");
-					results.Add(current);
-					current = 0;
-				}
-			}
-			if (needNext) throw new Exception("Incomplete sequence");
-			return results.ToArray();
-		}
-	}
+    public class VariableLengthQuantity
+    {
+        private static uint[] ToBytes(uint i) =>
+            (from j in Enumerable.Range(0, 5)
+             let highBit = (j == 0 ? 0x0u : 0x80)
+             select ((i >> (j * 7)) & 0x7f) | highBit)
+            .Reverse()
+            .SkipWhile(x => x == 0x80)
+            .ToArray();
+
+        public static uint[] ToBytes(uint[] inputs) =>
+            inputs.SelectMany(ToBytes).ToArray();
+
+        public static uint[] FromBytes(uint[] inputs)
+        {
+            var results = new List<uint>();
+            var indexed = inputs.Select((x, i) => new { x, i });
+            while (indexed.Any())
+            {
+                var grp = indexed.TakeWhile((t, j) => j == 0 ||
+                    (inputs[t.i - 1] & 0x80) > 0).Select(t => t.x).ToArray();
+                if (grp.Length == 5 && grp.First() >= 0xa0)
+                    throw new Exception("Overflow");
+                if (grp.Length == indexed.Count() && grp.Last() >= 0x80)
+                    throw new Exception("Incomplete sequence");
+                var val = grp.Aggregate(0u, (a, x) => (a << 7) | (x & 0x7f));
+                results.Add(val);
+                indexed = indexed.Skip(grp.Length);
+            }
+            return results.ToArray();
+        }
+    }
 }
