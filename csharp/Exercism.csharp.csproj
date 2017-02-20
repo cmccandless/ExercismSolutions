@@ -102,8 +102,6 @@
     </Compile>
     <Compile Include="binary-search\BinarySearch.cs" />
     <Compile Include="binary-search\BinarySearchTest.cs" />
-    <Compile Include="binary\Binary.cs" />
-    <Compile Include="binary\BinaryTest.cs" />
     <Compile Include="bob\Bob.cs" />
     <Compile Include="bob\BobTest.cs" />
     <Compile Include="book-store\BookStore.cs" />
@@ -167,8 +165,6 @@
     <Compile Include="hangman\HangmanGame.cs" />
     <Compile Include="hangman\HangmanTest.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="hexadecimal\Hexadecimal.cs" />
-    <Compile Include="hexadecimal\HexadecimalTest.cs" />
     <Compile Include="house\House.cs" />
     <Compile Include="house\HouseTest.cs" />
     <Compile Include="isogram\Isogram.cs" />
@@ -203,8 +199,6 @@
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="ocr-numbers\OcrNumbers.cs" />
     <Compile Include="ocr-numbers\OcrNumbersTest.cs" />
-    <Compile Include="octal\Octal.cs" />
-    <Compile Include="octal\OctalTest.cs" />
     <Compile Include="palindrome-products\Palindrome.cs" />
     <Compile Include="palindrome-products\PalindromeTest.cs" />
     <Compile Include="pangram\Pangram.cs" />
@@ -288,8 +282,6 @@
     <Compile Include="tree-building\TreeBuildingTest.cs" />
     <Compile Include="triangle\Triangle.cs" />
     <Compile Include="triangle\TriangleTest.cs" />
-    <Compile Include="trinary\Trinary.cs" />
-    <Compile Include="trinary\TrinaryTest.cs" />
     <Compile Include="twelve-days\TwelveDaysSong.cs" />
     <Compile Include="twelve-days\TwelveDaysTest.cs" />
     <Compile Include="two-bucket\TwoBuckets.cs" />
@@ -322,7 +314,6 @@
     <None Include="beer-song\README.md" />
     <None Include="binary-search-tree\README.md" />
     <None Include="binary-search\README.md" />
-    <None Include="binary\README.md" />
     <None Include="bob\README.md" />
     <None Include="book-store\README.md" />
     <None Include="bowling\README.md" />
@@ -350,7 +341,6 @@
     <None Include="grep\README.md" />
     <None Include="hamming\README.md" />
     <None Include="hangman\README.md" />
-    <None Include="hexadecimal\README.md" />
     <None Include="house\README.md" />
     <None Include="isogram\README.md" />
     <None Include="kindergarten-garden\README.md" />
@@ -367,7 +357,6 @@
     <None Include="nth-prime\README.md" />
     <None Include="nucleotide-count\README.md" />
     <None Include="ocr-numbers\README.md" />
-    <None Include="octal\README.md" />
     <None Include="packages.config" />
     <None Include="palindrome-products\README.md" />
     <None Include="pangram\README.md" />
@@ -410,7 +399,6 @@
     <None Include="transpose\README.md" />
     <None Include="tree-building\README.md" />
     <None Include="triangle\README.md" />
-    <None Include="trinary\README.md" />
     <None Include="twelve-days\README.md" />
     <None Include="two-bucket\README.md" />
     <None Include="variable-length-quantity\README.md" />
