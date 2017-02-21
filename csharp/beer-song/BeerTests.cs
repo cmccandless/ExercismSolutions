@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Exercism.beer_song;
 
 public class BeerTests
 {

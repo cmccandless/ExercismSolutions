@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Exercism.binary_search;
 
 [TestFixture]
 public class BinarySearchTest
