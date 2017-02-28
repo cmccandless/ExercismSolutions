@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+using Exercism.binary_search_tree;
 
 public class BinarySearchTreeTest
 {

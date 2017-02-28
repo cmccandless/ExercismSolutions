@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Exercism.bob;
 
 [TestFixture]
 public class BobTest
