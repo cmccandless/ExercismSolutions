@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Exercism.change; 
 
 public class ChangeTest
 {

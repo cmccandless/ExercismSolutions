@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Exercism.bracket_push;
 
 public class BracketPushTest
 {

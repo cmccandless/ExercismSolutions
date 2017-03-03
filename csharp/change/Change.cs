@@ -1,30 +1,49 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-class Change
+namespace Exercism.change
 {
-	public static int[] Calculate(int target, int[] actual)
-	{
-		if (target < 0 || (actual.Length > 0 && target > 0 &&
-			target < actual.First())) throw new ArgumentException();
-		var m = new int[target + 1, actual.Length + 1][];
-		for (int j = 0; j <= actual.Length; j++) m[0, j] = new int[0];
-		for (int i = 1; i <= target; i++)
-			for (int j = 1; j <= actual.Length; j++)
-			{
-				var x = actual[j - 1];
-				if (i == x) m[i, j] = new[] { x };
-				if (m[i, j - 1] != null && 
-					(m[i, j] == null || m[i, j].Length > m[i, j - 1].Length))
-						m[i, j] = m[i, j - 1];
-				for (int i2 = 0; i2 < i; i2++)
-					if (m[i2, j] != null && i2 + x == i &&
-						(m[i, j] == null || m[i, j].Length > m[i2, j].Length + 1))
-						m[i, j] = m[i2, j].Concat(new[] { x }).ToArray();
-			}
-		return m[target, actual.Length];
-	}
+    public static class Change
+    {
+        private static void Validate(int targetValue, int[] coinSet)
+        {
+            if (targetValue < 0) throw new ArgumentException("Target must be a positive value.");
+            if (coinSet.Length > 0 && targetValue > 0 && targetValue < coinSet[0])
+                throw new ArgumentException("Target smaller than smallest coin in set.");
+        }
+
+        private static int Size<T>(this T[] a, int defaultValue = 0x7FFFFFFF) => a?.Length ?? defaultValue;
+
+        private static void SetPosition(int targetValue, int coin, int[,][] m, int t, int c)
+        {
+            var sx = new[] { coin };
+            if (t == coin)
+            {
+                m[t, c] = sx;
+                return;
+            }
+            if (m[t, c].Size() > m[t, c - 1].Size()) m[t, c] = m[t, c - 1];
+            for (int t2 = 0; t2 < t; t2++)
+            {
+                if (t2 + coin != t) continue;
+                if (m[t, c].Size() > (uint)m[t2, c].Size() + 1)
+                    m[t, c] = m[t2, c].Concat(sx).ToArray();
+            }
+        }
+
+        private static void SetRow(int targetValue, int[] coinSet, int[,][] m, int t)
+        {
+            for (int c = 1; c <= coinSet.Length; c++)
+                SetPosition(targetValue, coinSet[c - 1], m, t, c);
+        }
+
+        public static int[] Calculate(int targetValue, int[] coinSet)
+        {
+            Validate(targetValue, coinSet);
+            var m = new int[targetValue + 1, coinSet.Length + 1][];
+            for (int c = 0; c <= coinSet.Length; c++) m[0, c] = new int[0];
+            for (int t = 1; t <= targetValue; t++) SetRow(targetValue, coinSet, m, t);
+            return m[targetValue, coinSet.Length];
+        }
+    }
 }

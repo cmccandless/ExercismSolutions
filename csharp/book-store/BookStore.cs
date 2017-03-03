@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 public class BookStore
 {
 	private const int BASE_COST = 8;
 	private static double[] discount = new[] { 1, 1, .95, .9, .8, .75 };
-	public static double CalculateTotalCost(List<int> list)
-	{
-		return BASE_COST * Math.Min(CalcMethod1(list), CalcMethod2(list));
-	}
-	public static double CalcMethod1(List<int> list)
+	public static double CalculateTotalCost(List<int> list) => 
+        BASE_COST * Math.Min(CalcMethod1(list), CalcMethod2(list));
+    private static double SumSet(IEnumerable<int> s) => Math.Round(s.Count() * discount[s.Count()], 2);
+    private static double CalcMethod1(List<int> list)
 	{
 		var stack = new Stack<int>(list.OrderBy(x => x));
 		var sets = new List<List<int>>();
@@ -29,15 +26,15 @@ public class BookStore
 			if (index >= sets.Count) sets.Add(new List<int>());
 			sets[index++].Add(i);
 		}
-		return sets.Sum(s => Math.Round(s.Count * discount[s.Count], 2));
-	}
+        return sets.Select(SumSet).Sum();
+    }
 	public static double CalcMethod2(List<int> list)
 	{
-		var stack = new Stack<int>(from x in list
-								   group x by x into grp
-								   orderby grp.Count()
-								   from y in grp
-								   select y);
+        var stack = new Stack<int>(from x in list
+                                   group x by x into grp
+                                   orderby grp.Count()
+                                   from y in grp
+                                   select y);
 		var sets = new List<HashSet<int>>();
 		while (stack.Any())
 		{
@@ -50,6 +47,6 @@ public class BookStore
 			}
 			set.Add(i);
 		}
-		return sets.Sum(s => Math.Round(s.Count * discount[s.Count], 2));
-	}
+        return sets.Select(SumSet).Sum();
+    }
 }

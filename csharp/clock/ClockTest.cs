@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Exercism.clock;
 
 [TestFixture]
 public class ClockTest
