@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Exercism.crypto_square;
 
 [TestFixture]
 public class CryptoSquareTest
