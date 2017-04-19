@@ -1,39 +1,27 @@
-using NUnit.Framework;
-
-public class Year
-{
-	public static bool IsLeap(int year)
-	{
-		return year % 4 == 0 &&
-			(year % 400 == 0 ||
-			year % 100 > 0);
-	}
-}
-
-[TestFixture]
+using Xunit;
 public class LeapTest
 {
-    [Test]
-    public void Valid_leap_year()
+    [Fact]
+    public void Year_not_divisible_by_4_is_common_year()
     {
-        Assert.That(Year.IsLeap(1996), Is.True);
+        Assert.False(Leap.IsLeapYear(2015));
     }
 
-    [Test]
-    public void Invalid_leap_year()
+    [Fact]
+    public void Year_divisible_by_4_not_divisible_by_100_is_leap_year()
     {
-        Assert.That(Year.IsLeap(1997), Is.False);
+        Assert.True(Leap.IsLeapYear(2016));
     }
 
-    [Test]
-    public void Turn_of_the_20th_century_is_not_a_leap_year()
+    [Fact]
+    public void Year_divisible_by_100_not_divisible_by_400_is_common_year()
     {
-        Assert.That(Year.IsLeap(1900), Is.False);
+        Assert.False(Leap.IsLeapYear(2100));
     }
 
-    [Test]
-    public void Turn_of_the_25th_century_is_a_leap_year()
+    [Fact]
+    public void Year_divisible_by_400_is_leap_year()
     {
-        Assert.That(Year.IsLeap(2400), Is.True);
+        Assert.True(Leap.IsLeapYear(2000));
     }
 }
