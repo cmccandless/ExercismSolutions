@@ -3,18 +3,12 @@ using System.Linq;
 
 public class SumOfMultiples
 {
-	public static int To(int[] nums, int mult)
-	{
-		var vals = new List<int>();
-		foreach (var x in nums)
-		{
-			int n=x;
-			while (n < mult)
-			{
-				vals.Add(n);
-				n += x;
-			}
-		}
-		return vals.Distinct().Sum();
-	}
+    private static IEnumerable<int> MultsLessThan(int n, int mult)
+    {
+        var result = new List<int>();
+        for (int x = n; x < mult; x += n) result.Add(x);
+        return result;
+    }
+
+    public static int To(int[] nums, int mult) => new HashSet<int>(nums.SelectMany(n => MultsLessThan(n, mult))).Sum();
 }

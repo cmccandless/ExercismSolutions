@@ -2,8 +2,6 @@
 
 public class Hamming
 {
-	internal static int Compute(string a, string b)
-	{
-		return Enumerable.Range(0, a.Length).Count(i => !a[i].Equals(b[i]));
-	}
+    private static int NotSame<T>(T a, T b) => a.Equals(b) ? 0 : 1;
+    public static int Compute(string a, string b) => a.Zip(b, NotSame).Sum();
 }
