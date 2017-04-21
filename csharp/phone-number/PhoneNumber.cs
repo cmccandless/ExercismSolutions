@@ -1,27 +1,21 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
 
 public class PhoneNumber
 {
-	public string AreaCode { get { return Number.Substring(0, 3); } }
+    public readonly string Number;
 
-	public string Number { get; set; }
+    public string AreaCode => Number.Substring(0, 3);
 
-	public PhoneNumber(string number)
-	{
-			Number = Regex.Replace(number, @"[()-.]|\s", string.Empty);
-		if ((Number.Length > 10 && Number[0]!='1') ||
-			Number.Length < 10)
-			Number = "0000000000";
-		else
-			Number = Number.Substring(Number.Length - 10);
-	}
+    private string Prefix => Number.Substring(3, 3);
 
-	public override string ToString()
-	{
-		return string.Format(
-			"({0}) {1}-{2}",
-			AreaCode,
-			Number.Substring(3,3),
-			Number.Substring(6));
-	}
+    private string Suffix => Number.Substring(6);
+
+    public PhoneNumber(string number)
+    {
+        Number = string.Join("", number.Where(char.IsDigit));
+        if (Number.Length == 11 && Number[0] == '1') Number = Number.Substring(1);
+        else if (Number.Length != 10) Number = new string('0', 10);
+    }
+
+    public override string ToString() => $"({AreaCode}) {Prefix}-{Suffix}";
 }

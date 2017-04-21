@@ -1,42 +1,48 @@
 ﻿using System;
-namespace Exercism.bank_account
+
+public class BankAccount
 {
-    public class BankAccount
+    private object _lock = new object();
+    private int balance = 0;
+    private bool isOpen = false;
+
+    public void Open()
     {
-        private object _lock = new object();
-        private int balance = 0;
-        private bool isOpen = false;
-
-        public void Open()
+        lock (_lock)
         {
-            lock (_lock) isOpen = true;
+            if (isOpen) throw new InvalidOperationException("Account already open.");
+            isOpen = true;
         }
+    }
 
-        public int GetBalance()
+    public int Balance
+    {
+        get
         {
             lock (_lock)
             {
-                if (!isOpen) throw new InvalidOperationException();
+                if (!isOpen) throw new InvalidOperationException("Account not open.");
                 return balance;
             }
         }
+    }
 
-        public void UpdateBalance(int deposit)
+    public void UpdateBalance(int deposit)
+    {
+        lock (_lock)
         {
-            lock (_lock)
-            {
-                if (!isOpen) throw new InvalidOperationException();
-                balance += deposit;
-            }
+            if (!isOpen) throw new InvalidOperationException("Account not open.");
+            balance += deposit;
         }
+    }
 
-        public void Close()
+    public void Close()
+    {
+        lock (_lock)
         {
-            lock (_lock)
-            {
-                balance = 0;
-                isOpen = false;
-            }
+            if (!isOpen) throw new InvalidOperationException("Account not open.");
+            balance = 0;
+            isOpen = false;
         }
     }
 }
