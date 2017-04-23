@@ -1,53 +1,58 @@
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class ScrabbleScoreTest
 {
-    [Test]
+    [Fact]
     public void Empty_word_scores_zero()
     {
-        Assert.That(Scrabble.Score(""), Is.EqualTo(0));
+        Assert.Equal(0, Scrabble.Score(""));
     }
 
-    [Test]
+    [Fact]
     public void Whitespace_scores_zero()
     {
-        Assert.That(Scrabble.Score(" \t\n"), Is.EqualTo(0));
+        Assert.Equal(0, Scrabble.Score(" \t\n"));
     }
 
-    [Test]
+    [Fact]
     public void Null_scores_zero()
     {
-        Assert.That(Scrabble.Score(null), Is.EqualTo(0));
+        Assert.Equal(0, Scrabble.Score(null));
     }
 
-    [Test]
+    [Fact]
     public void Scores_very_short_word()
     {
-        Assert.That(Scrabble.Score("a"), Is.EqualTo(1));
+        Assert.Equal(1, Scrabble.Score("a"));
     }
 
-    [Test]
+    [Fact]
     public void Scores_other_very_short_word()
     {
-        Assert.That(Scrabble.Score("f"), Is.EqualTo(4));
+        Assert.Equal(4, Scrabble.Score("f"));
     }
 
-    [Test]
+    [Fact]
     public void Simple_word_scores_the_number_of_letters()
     {
-        Assert.That(Scrabble.Score("street"), Is.EqualTo(6));
+        Assert.Equal(6, Scrabble.Score("street"));
     }
 
-    [Test]
+    [Fact]
     public void Complicated_word_scores_more()
     {
-        Assert.That(Scrabble.Score("quirky"), Is.EqualTo(22));
+        Assert.Equal(22, Scrabble.Score("quirky"));
     }
 
-    [Test]
+    [Fact]
     public void Scores_are_case_insensitive()
     {
-        Assert.That(Scrabble.Score("OXYPHENBUTAZONE"), Is.EqualTo(41));
+        Assert.Equal(41, Scrabble.Score("OXYPHENBUTAZONE"));
+    }
+    
+    [Fact]
+    public void Entire_alphabet()
+    {
+        Assert.Equal(87, Scrabble.Score("abcdefghijklmnopqrstuvwxyz"));
     }
 }
