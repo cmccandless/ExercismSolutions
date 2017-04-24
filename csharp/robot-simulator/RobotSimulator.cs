@@ -1,65 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-
-public enum Bearing
+﻿public enum Bearing
 {
-	North = 1,
-	East,
-	South,
-	West,
+    North = 1,
+    East,
+    South,
+    West,
 }
-class Coordinate
+public class Coordinate
 {
-	public int[] pos;
-	public Coordinate(int x, int y)
-	{
-		pos = new[] { x, y };
-	}
-	public override bool Equals(object obj)
-	{
-		return obj is Coordinate && (obj as Coordinate).pos[0] == pos[0] && (obj as Coordinate).pos[1] == pos[1];
-	}
-	public override int GetHashCode()
-	{
-		return base.GetHashCode();
-	}
+    public int[] pos;
+    public Coordinate(params int[] p) { pos = p; }
+    public override bool Equals(object obj) => Equals(obj as Coordinate);
+    public bool Equals(Coordinate other) => pos[0].Equals(other?.pos[0]) && pos[1].Equals(other.pos[1]);
+    public override int GetHashCode() => base.GetHashCode();
 }
-class RobotSimulator
+public class RobotSimulator
 {
-	private int bearing { get; set; }
-	public Bearing Bearing
-	{
-		get
-		{
-			return (Bearing)bearing;
-		}
-		set
-		{
-			bearing = (int)value;
-		}
-	}
-	public Coordinate Coordinate { get; set; }
-	private Dictionary<char, Action> sim;
-	public RobotSimulator(Bearing _bearing, Coordinate coord)
-	{
-		Bearing = _bearing;
-		Coordinate = coord;
-		sim = new Dictionary<char, Action>()
-		{
-			{ 'A', () => Coordinate.pos[bearing % 2] += bearing < 3 ? 1 : -1 },
-			{ 'R', () => bearing = (bearing % 4) + 1 },
-			{ 'L', () => bearing = ((bearing + 2) % 4) + 1 },
-		};
-	}
+    private int bearing { get; set; }
+    public Bearing Bearing
+    {
+        get => (Bearing)bearing;
+        set => bearing = (int)value;
+    }
+    public Coordinate Coordinate { get; set; }
+    public RobotSimulator(Bearing _bearing, Coordinate coord)
+    {
+        Bearing = _bearing;
+        Coordinate = coord;
+    }
 
-	public void Simulate(string instructions)
-	{
-		foreach (var ch in instructions.ToUpper()) sim[ch]();
-	}
+    public void Simulate(string instructions)
+    {
+        foreach (var ch in instructions.ToUpper())
+        {
+            switch (ch)
+            {
+                case 'A': Advance(); break;
+                case 'R': TurnRight(); break;
+                case 'L': TurnLeft(); break;
+            }
+        }
+    }
 
-	public void Advance() { sim['A'](); }
+    public void Advance() => Coordinate.pos[bearing % 2] += bearing < 3 ? 1 : -1;
 
-	public void TurnRight() { sim['R'](); }
+    public void TurnRight() => bearing = (bearing % 4) + 1;
 
-	public void TurnLeft() { sim['L'](); }
+    public void TurnLeft() => bearing = ((bearing + 2) % 4) + 1;
 }

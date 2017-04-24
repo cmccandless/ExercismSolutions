@@ -1,27 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-public enum NumberType { Deficient, Perfect, Abundant }
-public class PerfectNumbers
+public enum Classification { Deficient, Perfect, Abundant }
+
+public static class PerfectNumbers
 {
-	public static NumberType Classify(int n)
-	{
-		var s = new HashSet<int>(Factors(n)).Sum() - n;
-		return s < 0 ? NumberType.Deficient : (s == 0 ? NumberType.Perfect : NumberType.Abundant);
-	}
-	private static IEnumerable<int> Factors(int n)
-	{
-		yield return 1;
-		for (int i=2;i<Math.Sqrt(n);i++)
-		{
-			if (n%i==0)
-			{
-				yield return i;
-				yield return n / i;
-			}
-		}
-	}
+    public static Classification Classify(int n) => ClassifyDifference(n.Factors().Sum() - n);
+
+    private static Classification ClassifyDifference(int d) => 
+        d < 0 ? Classification.Deficient : 
+        d == 0 ? Classification.Perfect : 
+        Classification.Abundant;
+
+    private static IEnumerable<int> Factors(this int n)
+    {
+        if (n < 1) throw new ArgumentOutOfRangeException();
+        if (n == 1) yield break;
+        yield return 1;
+        var limit = Math.Sqrt(n);
+        for (int i = 2; i <= limit; i++)
+        {
+            var q = n / (double)i;
+            if (q % 1 == 0)
+            {
+                yield return i;
+                if (i < q) yield return (int)q;
+            }
+        }
+    }
 }
