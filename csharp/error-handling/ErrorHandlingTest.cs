@@ -1,41 +1,40 @@
 ﻿using System;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class ErrorHandlingTest
 {
     // Read more about exception handling here:
     // https://msdn.microsoft.com/en-us/library/ms173162.aspx?f=255&MSPPError=-2147217396
-    [TestCase]
+    [Fact]
     public void ThrowException()
     {
-        Assert.Throws<Exception>(ErrorHandling.HandleErrorByThrowingException);
+        Assert.Throws<Exception>(() => ErrorHandling.HandleErrorByThrowingException());
     }
 
     // Read more about nullable types here:
     // https://msdn.microsoft.com/en-us/library/1t3y8s4s.aspx?f=255&MSPPError=-2147217396
-    [TestCase]
+    [Fact()]
     public void ReturnNullableType()
     {
         var successfulResult = ErrorHandling.HandleErrorByReturningNullableType("1");
-        Assert.That(successfulResult, Is.EqualTo(1));
+        Assert.Equal(1, successfulResult);
 
         var failureResult = ErrorHandling.HandleErrorByReturningNullableType("a");
-        Assert.That(failureResult, Is.EqualTo(null));
+        Assert.Equal(null, failureResult);
     }
 
     // Read more about out parameters here:
     // https://msdn.microsoft.com/en-us/library/t3c3bfhx.aspx?f=255&MSPPError=-2147217396
-    [TestCase]
+    [Fact()]
     public void ReturnWithOutParameter()
     {
         int result;
         var successfulResult = ErrorHandling.HandleErrorWithOutParam("1", out result);
-        Assert.That(successfulResult, Is.EqualTo(true));
-        Assert.That(result, Is.EqualTo(1));
+        Assert.Equal(true, successfulResult);
+        Assert.Equal(1, result);
         
         var failureResult = ErrorHandling.HandleErrorWithOutParam("a", out result);
-        Assert.That(failureResult, Is.EqualTo(false));
+        Assert.Equal(false, failureResult);
         // The value of result is meaningless here (it could be anything) so it shouldn't be used and it's not validated 
     }
 
@@ -51,12 +50,12 @@ public class ErrorHandlingTest
 
     // Read more about IDisposable here:
     // https://msdn.microsoft.com/en-us/library/system.idisposable(v=vs.110).aspx
-    [TestCase]
+    [Fact()]
     public void DisposableObjectsAreDisposedWhenThrowingAnException()
     {
-        var disposbaleResource = new DisposableResource();
+        var disposableResource = new DisposableResource();
 
-        Assert.Throws<Exception>(() => ErrorHandling.DisposableResourcesAreDisposedWhenExceptionIsThrown(disposbaleResource));
-        Assert.That(disposbaleResource.IsDisposed, Is.EqualTo(true));
+        Assert.Throws<Exception>(() => ErrorHandling.DisposableResourcesAreDisposedWhenExceptionIsThrown(disposableResource));
+        Assert.Equal(true, disposableResource.IsDisposed);
     }
 }
