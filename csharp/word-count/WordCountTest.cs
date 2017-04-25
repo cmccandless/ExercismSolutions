@@ -1,20 +1,19 @@
 using System.Collections.Generic;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class WordCountTest
 {
-    [Test]
+    [Fact]
     public void Count_one_word()
     {
         var counts = new Dictionary<string,int> {
             { "word", 1 }
         };
 
-        Assert.That(Phrase.WordCount("word"), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("word"));
     }
 
-    [Test]
+    [Fact]
     public void Count_one_of_each()
     {
         var counts = new Dictionary<string,int> {
@@ -23,10 +22,10 @@ public class WordCountTest
             { "each", 1 }
         };
 
-        Assert.That(Phrase.WordCount("one of each"), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("one of each"));
     }
 
-    [Test]
+    [Fact]
     public void Count_multiple_occurrences()
     {
         var counts = new Dictionary<string,int> {
@@ -37,10 +36,10 @@ public class WordCountTest
             { "blue", 1 },
         };
 
-        Assert.That(Phrase.WordCount("one fish two fish red fish blue fish"), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("one fish two fish red fish blue fish"));
     }
 
-    [Test]
+    [Fact]
     public void Count_everything_just_once()
     {
         var counts = new Dictionary<string,int> {
@@ -52,10 +51,10 @@ public class WordCountTest
             { "men",    1 },
         };
 
-        Assert.That(Phrase.WordCount("all the kings horses and all the kings men"), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("all the kings horses and all the kings men"));
     }
 
-    [Test]
+    [Fact]
     public void Ignore_punctuation()
     {
         var counts = new Dictionary<string,int> {
@@ -66,10 +65,10 @@ public class WordCountTest
             { "javascript", 1 },
         };
 
-        Assert.That(Phrase.WordCount("car : carpet as java : javascript!!&@$%^&"), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("car : carpet as java : javascript!!&@$%^&"));
     }
 
-    [Test]
+    [Fact]
     public void Handles_cramped_list()
     {
         var counts = new Dictionary<string,int> {
@@ -78,10 +77,10 @@ public class WordCountTest
             { "three", 1 },
         };
 
-        Assert.That(Phrase.WordCount("one,two,three"), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("one,two,three"));
     }
 
-    [Test]
+    [Fact]
     public void Include_numbers()
     {
         var counts = new Dictionary<string,int> {
@@ -90,20 +89,20 @@ public class WordCountTest
             { "2",       1 },
         };
 
-        Assert.That(Phrase.WordCount("testing, 1, 2 testing"), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("testing, 1, 2 testing"));
     }
 
-    [Test]
+    [Fact]
     public void Normalize_case()
     {
         var counts = new Dictionary<string,int> {
             { "go", 3 },
         };
 
-        Assert.That(Phrase.WordCount("go Go GO"), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("go Go GO"));
     }
 
-    [Test]
+    [Fact]
     public void With_apostrophes()
     {
         var counts = new Dictionary<string,int> {
@@ -114,20 +113,20 @@ public class WordCountTest
             { "cry",   1 },
         };
 
-        Assert.That(Phrase.WordCount("First: don't laugh. Then: don't cry."), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("First: don't laugh. Then: don't cry."));
     }
 
-    [Test]
+    [Fact]
     public void With_free_standing_apostrophes()
     {
         var counts = new Dictionary<string, int> {
             { "go", 3 },
         };
 
-        Assert.That(Phrase.WordCount("go ' Go '' GO"), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("go ' Go '' GO"));
     }
 
-    [Test]
+    [Fact]
     public void With_apostrophes_as_quotes()
     {
         var counts = new Dictionary<string, int> {
@@ -140,7 +139,7 @@ public class WordCountTest
             { "o'clock", 1 },
         };
 
-        Assert.That(Phrase.WordCount("She said, 'let's meet at twelve o'clock'"), Is.EqualTo(counts));
+        Assert.Equal(counts, Phrase.WordCount("She said, 'let's meet at twelve o'clock'"));
     }
 
 }

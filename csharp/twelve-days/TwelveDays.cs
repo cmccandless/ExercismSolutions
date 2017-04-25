@@ -35,23 +35,22 @@ public class TwelveDaysSong
         "twelve Drummers Drumming",
     };
 
-    public string Sing() => Verses(1, 12);
+    public static string Sing() => Verses(1, 12);
 
-    public string Verse(int verse) => BuildVerse(verse);
+    public static string Verse(int verse) => BuildVerse(verse);
 
-    public string Verses(int start, int end) =>
-        string.Join(string.Empty,
+    public static string Verses(int start, int end) =>
+        string.Join(string.Empty, 
             Enumerable.Range(start, end - start + 1)
-            .Select(i => BuildVerse(i) + "\n"));
+            .Select(i => $"{BuildVerse(i)}\n"));
 
-    private string BuildVerse(int verse)
+    private static string BuildVerse(int verse)
     {
         var parts = Enumerable.Range(1, verse)
             .Select(i => verses[i])
             .Reverse()
             .ToArray();
         if (verse > 1) parts[parts.Length - 1] = $"and {parts[parts.Length - 1]}";
-        return $"On the {((Ordinal)verse)} day of Christmas my true love gave to me, " +
-            string.Join(", ", parts) + "\n";
+        return $"On the {(Ordinal)verse} day of Christmas my true love gave to me, {string.Join(", ", parts)}\n";
     }
 }
