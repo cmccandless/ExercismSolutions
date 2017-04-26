@@ -1,50 +1,42 @@
 ﻿using System;
-using System.Linq;
 
-public enum Schedule
-{
-	First,
-	Second,
-	Third,
-	Fourth,
-	Teenth,
-	Last,
-}
+public enum Schedule { First, Second, Third, Fourth, Teenth, Last, }
 
 public class Meetup
 {
-	private int Month { get; set; }
-	private int Year { get; set; }
+    private int Month, Year;
+    public Meetup(int month, int year) { Month = month; Year = year; }
 
-	public Meetup(int month, int year)
-	{
-		this.Month = month;
-		this.Year = year;
-	}
-
-	public DateTime Day(DayOfWeek dayOfWeek, Schedule schedule)
-	{
-		var daysInMonth = DateTime.DaysInMonth(Year,Month);
-		switch(schedule)
-		{
-			case Schedule.First:
-			case Schedule.Second:
-			case Schedule.Third:
-			case Schedule.Fourth:
-				return (from i in Enumerable.Range(1,daysInMonth)
-						let d = new DateTime(Year, Month, i)
-						where d.DayOfWeek == dayOfWeek
-						select d).ToArray()[(int)schedule];
-			case Schedule.Teenth:
-				return Enumerable.Range(13, 7)
-					.Select(i => new DateTime(Year, Month, i))
-					.First(d => d.DayOfWeek == dayOfWeek);
-			default:
-			case Schedule.Last:
-				return (from i in Enumerable.Range(1, daysInMonth)
-						let d = new DateTime(Year, Month, i)
-						where d.DayOfWeek == dayOfWeek
-						select d).Last();
-		}
-	}
+    public DateTime Day(DayOfWeek dayOfWeek, Schedule schedule)
+    {
+        int nth = 0, start, stop, inc = 1;
+        var daysInMonth = DateTime.DaysInMonth(Year, Month);
+        switch (schedule)
+        {
+            case Schedule.First:
+            case Schedule.Second:
+            case Schedule.Third:
+            case Schedule.Fourth:
+                start = 1;
+                stop = daysInMonth;
+                nth = (int)schedule;
+                break;
+            case Schedule.Teenth:
+                start = 13;
+                stop = 19;
+                break;
+            default:
+            case Schedule.Last:
+                start = daysInMonth;
+                stop = 1;
+                inc = -1;
+                break;
+        }
+        for (var counter = 0; start != stop + inc; start += inc)
+        {
+            var d = new DateTime(Year, Month, start);
+            if (d.DayOfWeek == dayOfWeek && counter++ == nth) return d;
+        }
+        return default(DateTime);
+    }
 }

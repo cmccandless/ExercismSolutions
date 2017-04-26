@@ -1,0 +1,2 @@
+@ECHO OFF
+..\update.py %* 
