@@ -1,25 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
-static class PascalsTriangle
+public static class PascalsTriangle
 {
-	public static int[][] Calculate(int n)
-	{
-		var result = new List<int[]>();
-		for (int r = 1; r <= n; r++)
-		{
-			var row = new int[r].Select(_ => 1).ToArray();
-			if (r > 2)
-			{
-				var previousRow = result.Last();
-				for (int c = 1; c < r - 1; c++)
-				{
-					row[c] = previousRow[c - 1] + previousRow[c];
-				}
-			}
-			result.Add(row);
-		}
-		return result.ToArray();
-	}
+    private static bool InRange(this int x, int high, int low = 0) => x > low && x < high;
+
+    private static int Sum(this int[] p, int c) => p[c - 1] + p[c];
+
+    private static int Cell(this int[][] a, byte _, int c) => c.InRange(a.Length) ? a[a.Length - 1].Sum(c) : 1;
+
+    private static int[] NextRow(this int[][] a) => new byte[a.Length + 1].Select(a.Cell).ToArray();
+
+    private static int[][] GenTriangle(int[][] a, byte _) => a.Concat(new[] { a.NextRow() }).ToArray();
+
+    public static int[][] Calculate(int n) => new byte[n].Aggregate(new int[0][], GenTriangle);
 }

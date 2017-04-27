@@ -1,150 +1,138 @@
-using NUnit.Framework;
+using System;
+using Xunit;
 
-[TestFixture]
 public class RandomKeyCipherTest
 {
-    private Cipher cipher;
+    private readonly Cipher cipher = new Cipher();
 
-    [SetUp]
-    public void Setup()
-    {
-        cipher = new Cipher();
-    }
-
-    [Test]
+    [Fact]
     public void Cipher_key_is_made_of_letters()
     {
-        Assert.That(cipher.Key, Does.Match("[a-z]+"));
+        Assert.Matches("[a-z]+", cipher.Key);
     }
 
-    [Test]
+    [Fact]
     public void Default_cipher_key_is_100_characters()
     {
-        Assert.That(cipher.Key, Has.Length.EqualTo(100));
+        Assert.Equal(100, cipher.Key.Length);
     }
 
-    [Test]
+    [Fact]
     public void Cipher_keys_are_randomly_generated()
     {
-        Assert.That(cipher.Key, Is.Not.EqualTo(new Cipher().Key));
+        Assert.NotEqual(new Cipher().Key, cipher.Key);
     }
 
     // Here we take advantage of the fact that plaintext of "aaa..." doesn't output
     // the key. This is a critical problem with shift ciphers, some characters
     // will always output the key verbatim.
-    [Test]
+    [Fact]
     public void Cipher_can_encode()
     {
-        Assert.That(cipher.Encode("aaaaaaaaaa"), Is.EqualTo(cipher.Key.Substring(0, 10)));
+        Assert.Equal(cipher.Key.Substring(0, 10), cipher.Encode("aaaaaaaaaa"));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_can_decode()
     {
-        Assert.That(cipher.Decode(cipher.Key.Substring(0, 10)), Is.EqualTo("aaaaaaaaaa"));
+        Assert.Equal("aaaaaaaaaa", cipher.Decode(cipher.Key.Substring(0, 10)));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_is_reversible()
     {
         const string PLAINTEXT = "abcdefghij";
-        Assert.That(cipher.Decode(cipher.Encode(PLAINTEXT)), Is.EqualTo(PLAINTEXT));
+        Assert.Equal(PLAINTEXT, cipher.Decode(cipher.Encode(PLAINTEXT)));
     }
 }
 
-[TestFixture]
+
 public class IncorrectKeyCipherTest
 {
-    [Test]
+    [Fact]
     public void Cipher_throws_with_an_all_caps_key()
     {
-        Assert.That(() => new Cipher("ABCDEF"), Throws.ArgumentException);
+        Assert.Throws<ArgumentException>(() => new Cipher("ABCDEF"));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_throws_with_any_caps_key()
     {
-        Assert.That(() => new Cipher("abcdEFg"), Throws.ArgumentException);
+        Assert.Throws<ArgumentException>(() => new Cipher("abcdEFg"));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_throws_with_numeric_key()
     {
-        Assert.That(() => new Cipher("12345"), Throws.ArgumentException);
+        Assert.Throws<ArgumentException>(() => new Cipher("12345"));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_throws_with_any_numeric_key()
     {
-        Assert.That(() => new Cipher("abcd345ef"), Throws.ArgumentException);
+        Assert.Throws<ArgumentException>(() => new Cipher("abcd345ef"));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_throws_with_empty_key()
     {
-        Assert.That(() => new Cipher(""), Throws.ArgumentException);
+        Assert.Throws<ArgumentException>(() => new Cipher(""));
     }
 }
 
-[TestFixture]
+
 public class SubstitutionCipherTest
 {
     private const string KEY = "abcdefghij";
-    private Cipher cipher;
+    private readonly Cipher cipher = new Cipher(KEY);
 
-    [SetUp]
-    public void Setup()
-    {
-        cipher = new Cipher(KEY);
-    }
-
-    [Test]
+    [Fact]
     public void Cipher_keeps_the_submitted_key()
     {
-        Assert.That(cipher.Key, Is.EqualTo(KEY));
+        Assert.Equal(KEY, cipher.Key);
     }
 
-    [Test]
+    [Fact]
     public void Cipher_can_encode_with_given_key()
     {
-        Assert.That(cipher.Encode("aaaaaaaaaa"), Is.EqualTo("abcdefghij"));
+        Assert.Equal("abcdefghij", cipher.Encode("aaaaaaaaaa"));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_can_decode_with_given_key()
     {
-        Assert.That(cipher.Decode("abcdefghij"), Is.EqualTo("aaaaaaaaaa"));
+        Assert.Equal("aaaaaaaaaa", cipher.Decode("abcdefghij"));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_is_reversible_given_key()
     {
         const string PLAINTEXT = "abcdefghij";
-        Assert.That(cipher.Decode(cipher.Encode(PLAINTEXT)), Is.EqualTo(PLAINTEXT));
+        Assert.Equal(PLAINTEXT, cipher.Decode(cipher.Encode(PLAINTEXT)));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_can_double_shift_encode()
     {
         const string PLAINTEXT = "iamapandabear";
-        Assert.That(new Cipher(PLAINTEXT).Encode(PLAINTEXT), Is.EqualTo("qayaeaagaciai"));
+        Assert.Equal("qayaeaagaciai", new Cipher(PLAINTEXT).Encode(PLAINTEXT));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_can_wrap_encode()
     {
-        Assert.That(cipher.Encode("zzzzzzzzzz"), Is.EqualTo("zabcdefghi"));
+        Assert.Equal("zabcdefghi", cipher.Encode("zzzzzzzzzz"));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_can_encode_a_message_that_is_shorter_than_the_key()
     {
-        Assert.That(cipher.Encode("aaaaa"), Is.EqualTo("abcde"));
+        Assert.Equal("abcde", cipher.Encode("aaaaa"));
     }
 
-    [Test]
+    [Fact]
     public void Cipher_can_decode_a_message_that_is_shorter_than_the_key()
     {
-        Assert.That(cipher.Decode("abcde"), Is.EqualTo("aaaaa"));
+        Assert.Equal("aaaaa", cipher.Decode("abcde"));
     }
 }
