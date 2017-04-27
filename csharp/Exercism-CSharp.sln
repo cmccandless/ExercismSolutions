@@ -101,6 +101,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCipher", "simple-ciph
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RomanNumerals", "roman-numerals\RomanNumerals.csproj", "{09C73DE2-7815-41F6-8856-167312F41104}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Acronym", "acronym\Acronym.csproj", "{0CF9609C-0770-43C0-8DFC-A4DAA1746891}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -303,6 +305,10 @@ Global
 		{09C73DE2-7815-41F6-8856-167312F41104}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09C73DE2-7815-41F6-8856-167312F41104}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09C73DE2-7815-41F6-8856-167312F41104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CF9609C-0770-43C0-8DFC-A4DAA1746891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CF9609C-0770-43C0-8DFC-A4DAA1746891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CF9609C-0770-43C0-8DFC-A4DAA1746891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CF9609C-0770-43C0-8DFC-A4DAA1746891}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
