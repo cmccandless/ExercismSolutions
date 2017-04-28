@@ -1,25 +1,46 @@
-namespace Exercism
+using Xunit;
+
+public class AcronymTest
 {
-    using NUnit.Framework;
-
-    [TestFixture]
-    public class AcronymTest
+    [Fact]
+    public void Basic()
     {
-        [Test]
-        public void Empty_string_abbreviated_to_empty_string()
-        {
-            Assert.That(Acronym.Abbreviate(string.Empty), Is.EqualTo(string.Empty));
-        }
+        Assert.Equal("PNG", Acronym.Abbreviate("Portable Network Graphics"));
+    }
 
-        [TestCase("Portable Network Graphics", ExpectedResult = "PNG")]
-        [TestCase("Ruby on Rails", ExpectedResult = "ROR")]
-        [TestCase("HyperText Markup Language", ExpectedResult = "HTML")]
-        [TestCase("First In, First Out", ExpectedResult = "FIFO")]
-        [TestCase("PHP: Hypertext Preprocessor", ExpectedResult = "PHP")]
-        [TestCase("Complementary metal-oxide semiconductor", ExpectedResult = "CMOS")]
-        public string Phrase_abbreviated_to_acronym(string phrase)
-        {
-            return Acronym.Abbreviate(phrase);
-        }
+    [Fact]
+    public void Lowercase_words()
+    {
+        Assert.Equal("ROR", Acronym.Abbreviate("Ruby on Rails"));
+    }
+
+    [Fact]
+    public void Camelcase()
+    {
+        Assert.Equal("HTML", Acronym.Abbreviate("HyperText Markup Language"));
+    }
+
+    [Fact]
+    public void Punctuation()
+    {
+        Assert.Equal("FIFO", Acronym.Abbreviate("First In, First Out"));
+    }
+
+    [Fact]
+    public void All_caps_words()
+    {
+        Assert.Equal("PHP", Acronym.Abbreviate("PHP: Hypertext Preprocessor"));
+    }
+
+    [Fact]
+    public void Non_acronym_all_caps_word()
+    {
+        Assert.Equal("GIMP", Acronym.Abbreviate("GNU Image Manipulation Program"));
+    }
+
+    [Fact]
+    public void Hyphenated()
+    {
+        Assert.Equal("CMOS", Acronym.Abbreviate("Complementary metal-oxide semiconductor"));
     }
 }
