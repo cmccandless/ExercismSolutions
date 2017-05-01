@@ -1,67 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RecordCollection = System.Collections.Generic.IEnumerable<TreeBuildingRecord>;
 
-namespace Exercism.tree_building
+public class TreeBuildingRecord
 {
-    public class TreeBuildingRecord
+    public int ParentId, RecordId;
+
+    public bool IsRoot => RecordId == 0;
+
+    public TreeBuildingRecord Validate(HashSet<int> ids) =>
+        IsRoot ? ValidateRootRecord() : ValidateNonRootRecord(ids);
+
+    private TreeBuildingRecord ValidateRootRecord() =>
+        this.Assert(r => r.ParentId == 0, "Root cannot have parent.");
+
+    private TreeBuildingRecord ValidateNonRootRecord(HashSet<int> ids) =>
+        this.Assert(r => r.RecordId != r.ParentId, "Direct cycle.")
+            .Assert(r => r.RecordId > r.ParentId, "Parent ID higher than node ID.")
+            .Assert(r => ids.Contains(r.RecordId - 1), "Non-continuous.");
+}
+
+public class Tree
+{
+    public int Id, ParentId;
+
+    public static Tree FromRecord(TreeBuildingRecord record) =>
+        new Tree { Id = record.RecordId, ParentId = record.ParentId, };
+
+    public List<Tree> Children { get; set; } = new List<Tree>();
+
+    public bool IsLeaf => Children.Count == 0;
+
+    public int Count => 1 + Children.Sum(c => c.Count);
+
+    public bool IsParentOf(Tree t) => t.ParentId == Id && t.Id != Id;
+}
+
+public static class TreeBuilder
+{
+    public static T Assert<T>(this T o, Func<T, bool> lambda, string msg = "")
     {
-        public int ParentId { get; set; }
-        public int RecordId { get; set; }
+        if (lambda(o)) return o;
+        throw new ArgumentException(msg);
     }
 
-    public class Tree
+    private static HashSet<int> GetIds(this RecordCollection records) =>
+        new HashSet<int>(records.Select(r => r.RecordId));
+
+    private static RecordCollection ValidateRecords(this RecordCollection records, HashSet<int> ids) =>
+        records.Select(r => r.Validate(ids));
+
+    private static Tree AssignTo(this List<Tree> trees, Tree tree)
     {
-        public int Id { get; set; }
-        public int ParentId { get; set; }
-
-        public List<Tree> Children { get; set; } = new List<Tree>();
-
-        public bool IsLeaf => Children.Count == 0;
-
-        public override string ToString() => $"({ParentId}){Id}({string.Join(",", Children)})";
+        tree.Children.AddRange(trees.Where(tree.IsParentOf).OrderBy(t => t.Id));
+        return tree;
     }
 
-    public static class TreeBuilder
-    {
-        private static T Except<T>(this T o, Func<T, bool> lambda, string msg = "")
-        {
-            if (lambda(o)) throw new Exception(msg);
-            return o;
-        }
+    private static Tree AssignChildren(this List<Tree> trees) =>
+        trees.Select(trees.AssignTo).First(t => t.Id == 0);
 
-        private static HashSet<int> GetIds(this IEnumerable<TreeBuildingRecord> records) =>
-            new HashSet<int>(records.Select(r => r.RecordId));
-
-        private static IEnumerable<TreeBuildingRecord>
-            ValidateRecords(this IEnumerable<TreeBuildingRecord> records) =>
-            new List<TreeBuildingRecord>(records).ValidateRecords(records.GetIds());
-
-        private static IEnumerable<TreeBuildingRecord>
-            ValidateRecords(this List<TreeBuildingRecord> records, HashSet<int> ids) =>
-            records.Select(rec => rec.RecordId == 0 ?
-                    rec.Except(r => r.ParentId != 0, "Root cannot have parent.") :
-                    rec.Except(r => r.RecordId < r.ParentId, "Parent ID higher than node ID.")
-                        .Except(r => r.RecordId == r.ParentId, "Direct cycle.")
-                        .Except(r => !ids.Contains(r.RecordId - 1), "Non-continuous."));
-
-        private static Tree FromRecord(TreeBuildingRecord record) =>
-            new Tree { ParentId = record.ParentId, Id = record.RecordId };
-
-        private static Tree AssignChildren(this IEnumerable<Tree> trees) =>
-            trees.Select(tree =>
-            {
-                var childs = trees.Where(t => t.ParentId == tree.Id && t.Id != tree.Id);
-                tree.Children.AddRange(childs.OrderBy(c => c.Id));
-                return tree;
-            }).ToList().First(t => t.Id == 0);
-
-        private static int Count(this Tree tree) => 1 + tree.Children.Sum(c => c.Count());
-
-        public static Tree BuildTree(IEnumerable<TreeBuildingRecord> records) =>
-            records.ValidateRecords()
-            .Select(FromRecord).ToList()
-            .AssignChildren()
-            .Except(t => t.Count() != records.Count(), "Indirect cycle.");
-    }
+    public static Tree BuildTree(this RecordCollection records) =>
+        records.Assert(r => r.Any(), "Empty input collection.")
+        .ValidateRecords(records.GetIds())
+        .Select(Tree.FromRecord).ToList()
+        .AssignChildren()
+        .Assert(t => t.Count == records.Count(), "Indirect cycle.");
 }

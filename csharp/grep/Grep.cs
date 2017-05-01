@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-public class Grep
+public static class Grep
 {
+    private static List<string> CreateList(params string[] a) => a.Where(s => s != null).ToList();
+
 //	- `-n` Print the line numbers of each matching line.
 //- `-l` Print only the names of files that contain at least one matching line.
 //- `-i` Match line using a case-insensitive comparison.
@@ -18,27 +17,26 @@ public class Grep
 		var results = new List<string>();
 		var opts = RegexOptions.None;
 		if (flags.Contains("-i")) opts |= RegexOptions.IgnoreCase;
-		if (flags.Contains("-v")) pattern = string.Format("^(?!.*{0}).*$",pattern);
-		else if (flags.Contains("-x")) pattern = string.Format("^{0}$", pattern);
+		if (flags.Contains("-v")) pattern = $"^(?!.*{pattern}).*$";
+		else if (flags.Contains("-x")) pattern = $"^{pattern}$";
 		var lineNos = flags.Contains("-n");
 		var fileNamesOnly = flags.Contains("-l");
+        var multiFile = files.Length > 1;
 		var rgx = new Regex(pattern,opts);
 		foreach (var file in files)
-		{
-			var lines = File.ReadAllLines(file);
-			for (int i = 0; i < lines.Length; i++)
+        {
+            var lines = File.ReadAllLines(file);
+			for (var i = 0; i < lines.Length; i++)
 			{
 				var line = lines[i];
-				var match = rgx.Match(line);
-				if (match.Success)
+				if (rgx.IsMatch(line))
 				{
 					if (fileNamesOnly) 
 					{
 						results.Add(file);
 						break;
-					}
-					results.Add(string.Format("{0}{1}{2}", files.Length > 1 ? file+":" : string.Empty,
-						lineNos ? string.Format("{0}:",i+1) : string.Empty,line));
+                    }
+                    results.Add(string.Join(":", CreateList(multiFile ? file : null, lineNos ? $"{i + 1}" : null, line)));
 				}
 			}
 		}

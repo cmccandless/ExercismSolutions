@@ -1,11 +1,12 @@
-﻿using System.IO;
-using NUnit.Framework;
+﻿using System;
+using System.IO;
+using Xunit;
 
-public class GrepTest
+public class GrepTest : IDisposable
 {
-	private const string IliadFileName = "iliad.txt";
-	private const string IliadContents =
-		@"Achilles sing, O Goddess! Peleus' son;
+    private const string IliadFileName = "iliad.txt";
+    private const string IliadContents =
+        @"Achilles sing, O Goddess! Peleus' son;
 His wrath pernicious, who ten thousand woes
 Caused to Achaia's host, sent many a soul
 Illustrious into Ades premature,
@@ -16,9 +17,9 @@ The noble Chief Achilles from the son
 Of Atreus, Agamemnon, King of men.
 ";
 
-	private const string MidsummerNightFileName = "midsummer-night.txt";
-	private const string MidsummerNightContents =
-		@"I do entreat your grace to pardon me.
+    private const string MidsummerNightFileName = "midsummer-night.txt";
+    private const string MidsummerNightContents =
+        @"I do entreat your grace to pardon me.
 I know not by what power I am made bold,
 Nor how it may concern my modesty,
 In such a presence here to plead my thoughts;
@@ -27,9 +28,9 @@ The worst that may befall me in this case,
 If I refuse to wed Demetrius.
 ";
 
-	private const string ParadiseLostFileName = "paradise-lost.txt";
-	private const string ParadiseLostContents =
-		@"Of Mans First Disobedience, and the Fruit
+    private const string ParadiseLostFileName = "paradise-lost.txt";
+    private const string ParadiseLostContents =
+        @"Of Mans First Disobedience, and the Fruit
 Of that Forbidden Tree, whose mortal tast
 Brought Death into the World, and all our woe,
 With loss of Eden, till one greater Man
@@ -38,358 +39,323 @@ Sing Heav'nly Muse, that on the secret top
 Of Oreb, or of Sinai, didst inspire
 That Shepherd, who first taught the chosen Seed
 ";
+    
+    public GrepTest()
+    {
+        Directory.SetCurrentDirectory(Path.GetTempPath());
+        File.WriteAllText(IliadFileName, IliadContents);
+        File.WriteAllText(MidsummerNightFileName, MidsummerNightContents);
+        File.WriteAllText(ParadiseLostFileName, ParadiseLostContents);
+    }
+    
+    public void Dispose()
+    {
+        Directory.SetCurrentDirectory(Path.GetTempPath());
+        File.Delete(IliadFileName);
+        File.Delete(MidsummerNightFileName);
+        File.Delete(ParadiseLostFileName);
+    }
 
-	[OneTimeSetUp]
-	public void SetUp()
-	{
-		if (!Helper.IsAdministrator())
-		{
-			Assert.Ignore("Run as administrator to run these tests");
-		}
-		File.WriteAllText(IliadFileName, IliadContents);
-		File.WriteAllText(MidsummerNightFileName, MidsummerNightContents);
-		File.WriteAllText(ParadiseLostFileName, ParadiseLostContents);
-	}
+    [Fact]
+    public void One_file_one_match_no_flags()
+    {
+        const string pattern = "Agamemnon";
+        const string flags = "";
+        var files = new[] { IliadFileName };
 
-	[OneTimeTearDown]
-	public void TearDown()
-	{
-		if (!Helper.IsAdministrator())
-		{
-			Assert.Ignore("Run as administrator to run these tests");
-		}
-		File.Delete(IliadFileName);
-		File.Delete(MidsummerNightFileName);
-		File.Delete(ParadiseLostFileName);
-	}
+        const string expected =
+            "Of Atreus, Agamemnon, King of men.\n";
 
-	[Test]
-	public void One_file_one_match_no_flags()
-	{
-		const string pattern = "Agamemnon";
-		const string flags = "";
-		var files = new[] { IliadFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		const string expected =
-			"Of Atreus, Agamemnon, King of men.\n";
+    [Fact]
+    public void One_file_one_match_print_line_numbers_flag()
+    {
+        const string pattern = "Forbidden";
+        const string flags = "-n";
+        var files = new[] { ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        const string expected =
+            "2:Of that Forbidden Tree, whose mortal tast\n";
 
-	[Test]
-	public void One_file_one_match_print_line_numbers_flag()
-	{
-		const string pattern = "Forbidden";
-		const string flags = "-n";
-		var files = new[] { ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		const string expected =
-			"2:Of that Forbidden Tree, whose mortal tast\n";
+    [Fact]
+    public void One_file_one_match_case_insensitive_flag()
+    {
+        const string pattern = "Forbidden";
+        const string flags = "-i";
+        var files = new[] { ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        const string expected =
+            "Of that Forbidden Tree, whose mortal tast\n";
 
-	[Test]
-	public void One_file_one_match_case_insensitive_flag()
-	{
-		const string pattern = "Forbidden";
-		const string flags = "-i";
-		var files = new[] { ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		const string expected =
-			"Of that Forbidden Tree, whose mortal tast\n";
+    [Fact]
+    public void One_file_one_match_print_file_names_flag()
+    {
+        const string pattern = "Forbidden";
+        const string flags = "-l";
+        var files = new[] { ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        var expected =
+            $"{ParadiseLostFileName}\n";
 
-	[Test]
-	public void One_file_one_match_print_file_names_flag()
-	{
-		const string pattern = "Forbidden";
-		const string flags = "-l";
-		var files = new[] { ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		var expected =
-			//$"{ParadiseLostFileName}\n";
-			string.Format("{0}\n", ParadiseLostFileName);
+    [Fact]
+    public void One_file_one_match_match_entire_lines_flag()
+    {
+        const string pattern = "With loss of Eden, till one greater Man";
+        const string flags = "-x";
+        var files = new[] { ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        const string expected =
+            "With loss of Eden, till one greater Man\n";
 
-	[Test]
-	public void One_file_one_match_match_entire_lines_flag()
-	{
-		const string pattern = "With loss of Eden, till one greater Man";
-		const string flags = "-x";
-		var files = new[] { ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		const string expected =
-			"With loss of Eden, till one greater Man\n";
+    [Fact]
+    public void One_file_one_match_multiple_flags()
+    {
+        const string pattern = "OF ATREUS, Agamemnon, KIng of MEN.";
+        var files = new[] { IliadFileName };
+        const string flags = "-n -i -x";
+        const string expected =
+            "9:Of Atreus, Agamemnon, King of men.\n";
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-	[Test]
-	public void One_file_one_match_multiple_flags()
-	{
-		const string pattern = "OF ATREUS, Agamemnon, KIng of MEN.";
-		var files = new[] { IliadFileName };
-		const string flags = "-n -i -x";
-		const string expected =
-			"9:Of Atreus, Agamemnon, King of men.\n";
+    [Fact]
+    public void One_file_several_matches_no_flags()
+    {
+        const string pattern = "may";
+        const string flags = "";
+        var files = new[] { MidsummerNightFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        const string expected =
+            "Nor how it may concern my modesty,\n" +
+            "But I beseech your grace that I may know\n" +
+            "The worst that may befall me in this case,\n";
 
-	[Test]
-	public void One_file_several_matches_no_flags()
-	{
-		const string pattern = "may";
-		const string flags = "";
-		var files = new[] { MidsummerNightFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		const string expected =
-			"Nor how it may concern my modesty,\n" +
-			"But I beseech your grace that I may know\n" +
-			"The worst that may befall me in this case,\n";
+    [Fact]
+    public void One_file_several_matches_print_line_numbers_flag()
+    {
+        const string pattern = "may";
+        const string flags = "-n";
+        var files = new[] { MidsummerNightFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        const string expected =
+            "3:Nor how it may concern my modesty,\n" +
+            "5:But I beseech your grace that I may know\n" +
+            "6:The worst that may befall me in this case,\n";
 
-	[Test]
-	public void One_file_several_matches_print_line_numbers_flag()
-	{
-		const string pattern = "may";
-		const string flags = "-n";
-		var files = new[] { MidsummerNightFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		const string expected =
-			"3:Nor how it may concern my modesty,\n" +
-			"5:But I beseech your grace that I may know\n" +
-			"6:The worst that may befall me in this case,\n";
+    [Fact]
+    public void One_file_several_matches_match_entire_lines_flag()
+    {
+        const string pattern = "may";
+        const string flags = "-x";
+        var files = new[] { MidsummerNightFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        const string expected = "";
 
-	[Test]
-	public void One_file_several_matches_match_entire_lines_flag()
-	{
-		const string pattern = "may";
-		const string flags = "-x";
-		var files = new[] { MidsummerNightFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		const string expected = "";
+    [Fact]
+    public void One_file_several_matches_case_insensitive_flag()
+    {
+        const string pattern = "ACHILLES";
+        const string flags = "-i";
+        var files = new[] { IliadFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        const string expected =
+            "Achilles sing, O Goddess! Peleus' son;\n" +
+            "The noble Chief Achilles from the son\n";
 
-	[Test]
-	public void One_file_several_matches_case_insensitive_flag()
-	{
-		const string pattern = "ACHILLES";
-		const string flags = "-i";
-		var files = new[] { IliadFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		const string expected =
-			"Achilles sing, O Goddess! Peleus' son;\n" +
-			"The noble Chief Achilles from the son\n";
+    [Fact]
+    public void One_file_several_matches_inverted_flag()
+    {
+        const string pattern = "Of";
+        const string flags = "-v";
+        var files = new[] { ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        const string expected =
+            "Brought Death into the World, and all our woe,\n" +
+            "With loss of Eden, till one greater Man\n" +
+            "Restore us, and regain the blissful Seat,\n" +
+            "Sing Heav'nly Muse, that on the secret top\n" +
+            "That Shepherd, who first taught the chosen Seed\n";
 
-	[Test]
-	public void One_file_several_matches_inverted_flag()
-	{
-		const string pattern = "Of";
-		const string flags = "-v";
-		var files = new[] { ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		const string expected =
-			"Brought Death into the World, and all our woe,\n" +
-			"With loss of Eden, till one greater Man\n" +
-			"Restore us, and regain the blissful Seat,\n" +
-			"Sing Heav'nly Muse, that on the secret top\n" +
-			"That Shepherd, who first taught the chosen Seed\n";
+    [Theory]
+    [InlineData("")]
+    [InlineData("-n")]
+    [InlineData("-l")]
+    [InlineData("-x")]
+    [InlineData("-i")]
+    [InlineData("-n -l -x -i")]
+    public void One_file_no_matches_various_flags(string flags)
+    {
+        const string pattern = "Gandalf";
+        var files = new[] { IliadFileName };
+        const string expected = "";
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-	[TestCase("")]
-	[TestCase("-n")]
-	[TestCase("-l")]
-	[TestCase("-x")]
-	[TestCase("-i")]
-	[TestCase("-n -l -x -i")]
-	public void One_file_no_matches_various_flags(string flags)
-	{
-		const string pattern = "Gandalf";
-		var files = new[] { IliadFileName };
-		const string expected = "";
+    [Fact]
+    public void Multiple_files_one_match_no_flags()
+    {
+        const string pattern = "Agamemnon";
+        const string flags = "";
+        var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        var expected =
+            $"{IliadFileName}:Of Atreus, Agamemnon, King of men.\n";
 
-	[Test]
-	public void Multiple_files_one_match_no_flags()
-	{
-		const string pattern = "Agamemnon";
-		const string flags = "";
-		var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		var expected =
-			//$"{IliadFileName}:Of Atreus, Agamemnon, King of men.\n";
-			string.Format("{0}:Of Atreus, Agamemnon, King of men.\n", IliadFileName);
+    [Fact]
+    public void Multiple_files_several_matches_no_flags()
+    {
+        const string pattern = "may";
+        const string flags = "";
+        var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        var expected =
+            $"{MidsummerNightFileName}:Nor how it may concern my modesty,\n" +
+            $"{MidsummerNightFileName}:But I beseech your grace that I may know\n" +
+            $"{MidsummerNightFileName}:The worst that may befall me in this case,\n";
 
-	[Test]
-	public void Multiple_files_several_matches_no_flags()
-	{
-		const string pattern = "may";
-		const string flags = "";
-		var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		var expected =
-			//$"{MidsummerNightFileName}:Nor how it may concern my modesty,\n" +
-			//$"{MidsummerNightFileName}:But I beseech your grace that I may know\n" +
-			//$"{MidsummerNightFileName}:The worst that may befall me in this case,\n";
-			string.Format("{0}:Nor how it may concern my modesty,\n" +
-				"{0}:But I beseech your grace that I may know\n" +
-				"{0}:The worst that may befall me in this case,\n", MidsummerNightFileName);
+    [Fact]
+    public void Multiple_files_several_matches_print_line_numbers_flag()
+    {
+        const string pattern = "that";
+        const string flags = "-n";
+        var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        var expected =
+            $"{MidsummerNightFileName}:5:But I beseech your grace that I may know\n" +
+            $"{MidsummerNightFileName}:6:The worst that may befall me in this case,\n" +
+            $"{ParadiseLostFileName}:2:Of that Forbidden Tree, whose mortal tast\n" +
+            $"{ParadiseLostFileName}:6:Sing Heav'nly Muse, that on the secret top\n";
 
-	[Test]
-	public void Multiple_files_several_matches_print_line_numbers_flag()
-	{
-		const string pattern = "that";
-		const string flags = "-n";
-		var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		var expected =
-			//$"{MidsummerNightFileName}:5:But I beseech your grace that I may know\n" +
-			//$"{MidsummerNightFileName}:6:The worst that may befall me in this case,\n" +
-			//$"{ParadiseLostFileName}:2:Of that Forbidden Tree, whose mortal tast\n" +
-			//$"{ParadiseLostFileName}:6:Sing Heav'nly Muse, that on the secret top\n";
-			string.Format("{0}:5:But I beseech your grace that I may know\n" +
-			"{0}:6:The worst that may befall me in this case,\n" +
-			"{1}:2:Of that Forbidden Tree, whose mortal tast\n" +
-			"{1}:6:Sing Heav'nly Muse, that on the secret top\n",
-			MidsummerNightFileName, ParadiseLostFileName);
+    [Fact]
+    public void Multiple_files_several_matches_print_file_names_flag()
+    {
+        const string pattern = "who";
+        const string flags = "-l";
+        var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        var expected =
+            $"{IliadFileName}\n" +
+            $"{ParadiseLostFileName}\n";
 
-	[Test]
-	public void Multiple_files_several_matches_print_file_names_flag()
-	{
-		const string pattern = "who";
-		const string flags = "-l";
-		var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		var expected =
-			//$"{IliadFileName}\n" +
-			//$"{ParadiseLostFileName}\n";
-			string.Format("{0}\n" +
-			"{1}\n", IliadFileName, ParadiseLostFileName);
+    [Fact]
+    public void Multiple_files_several_matches_case_insensitive_flag()
+    {
+        const string pattern = "TO";
+        const string flags = "-i";
+        var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        var expected =
+            $"{IliadFileName}:Caused to Achaia's host, sent many a soul\n" +
+            $"{IliadFileName}:Illustrious into Ades premature,\n" +
+            $"{IliadFileName}:And Heroes gave (so stood the will of Jove)\n" +
+            $"{IliadFileName}:To dogs and to all ravening fowls a prey,\n" +
+            $"{MidsummerNightFileName}:I do entreat your grace to pardon me.\n" +
+            $"{MidsummerNightFileName}:In such a presence here to plead my thoughts;\n" +
+            $"{MidsummerNightFileName}:If I refuse to wed Demetrius.\n" +
+            $"{ParadiseLostFileName}:Brought Death into the World, and all our woe,\n" +
+            $"{ParadiseLostFileName}:Restore us, and regain the blissful Seat,\n" +
+            $"{ParadiseLostFileName}:Sing Heav'nly Muse, that on the secret top\n";
 
-	[Test]
-	public void Multiple_files_several_matches_case_insensitive_flag()
-	{
-		const string pattern = "TO";
-		const string flags = "-i";
-		var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		var expected =
-			//$"{IliadFileName}:Caused to Achaia's host, sent many a soul\n" +
-			//$"{IliadFileName}:Illustrious into Ades premature,\n" +
-			//$"{IliadFileName}:And Heroes gave (so stood the will of Jove)\n" +
-			//$"{IliadFileName}:To dogs and to all ravening fowls a prey,\n" +
-			//$"{MidsummerNightFileName}:I do entreat your grace to pardon me.\n" +
-			//$"{MidsummerNightFileName}:In such a presence here to plead my thoughts;\n" +
-			//$"{MidsummerNightFileName}:If I refuse to wed Demetrius.\n" +
-			//$"{ParadiseLostFileName}:Brought Death into the World, and all our woe,\n" +
-			//$"{ParadiseLostFileName}:Restore us, and regain the blissful Seat,\n" +
-			//$"{ParadiseLostFileName}:Sing Heav'nly Muse, that on the secret top\n";
-			string.Format("{0}:Caused to Achaia's host, sent many a soul\n" +
-			"{0}:Illustrious into Ades premature,\n" +
-			"{0}:And Heroes gave (so stood the will of Jove)\n" +
-			"{0}:To dogs and to all ravening fowls a prey,\n" +
-			"{1}:I do entreat your grace to pardon me.\n" +
-			"{1}:In such a presence here to plead my thoughts;\n" +
-			"{1}:If I refuse to wed Demetrius.\n" +
-			"{2}:Brought Death into the World, and all our woe,\n" +
-			"{2}:Restore us, and regain the blissful Seat,\n" +
-			"{2}:Sing Heav'nly Muse, that on the secret top\n",
-			IliadFileName, MidsummerNightFileName, ParadiseLostFileName);
+    [Fact]
+    public void Multiple_files_several_matches_inverted_flag()
+    {
+        const string pattern = "a";
+        const string flags = "-v";
+        var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        var expected =
+            $"{IliadFileName}:Achilles sing, O Goddess! Peleus' son;\n" +
+            $"{IliadFileName}:The noble Chief Achilles from the son\n" +
+            $"{MidsummerNightFileName}:If I refuse to wed Demetrius.\n";
 
-	[Test]
-	public void Multiple_files_several_matches_inverted_flag()
-	{
-		const string pattern = "a";
-		const string flags = "-v";
-		var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		var expected =
-			//$"{IliadFileName}:Achilles sing, O Goddess! Peleus' son;\n" +
-			//$"{IliadFileName}:The noble Chief Achilles from the son\n" +
-			//$"{MidsummerNightFileName}:If I refuse to wed Demetrius.\n";
-			string.Format("{0}:Achilles sing, O Goddess! Peleus' son;\n" +
-			"{0}:The noble Chief Achilles from the son\n" +
-			"{1}:If I refuse to wed Demetrius.\n",
-			IliadFileName, MidsummerNightFileName);
+    [Fact]
+    public void Multiple_files_one_match_match_entire_lines_flag()
+    {
+        const string pattern = "But I beseech your grace that I may know";
+        const string flags = "-x";
+        var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        var expected =
+            $"{MidsummerNightFileName}:But I beseech your grace that I may know\n";
 
-	[Test]
-	public void Multiple_files_one_match_match_entire_lines_flag()
-	{
-		const string pattern = "But I beseech your grace that I may know";
-		const string flags = "-x";
-		var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-		var expected =
-			//$"{MidsummerNightFileName}:But I beseech your grace that I may know\n";
-			string.Format("{0}:But I beseech your grace that I may know\n", MidsummerNightFileName);
+    [Fact]
+    public void Multiple_files_one_match_multiple_flags()
+    {
+        const string pattern = "WITH LOSS OF EDEN, TILL ONE GREATER MAN";
+        var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
+        const string flags = "-n -i -x";
+        var expected =
+            $"{ParadiseLostFileName}:4:With loss of Eden, till one greater Man\n";
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 
-	[Test]
-	public void Multiple_files_one_match_multiple_flags()
-	{
-		const string pattern = "WITH LOSS OF EDEN, TILL ONE GREATER MAN";
-		var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
-		const string flags = "-n -i -x";
-		var expected =
-			//$"{ParadiseLostFileName}:4:With loss of Eden, till one greater Man\n";
-			string.Format("{0}:4:With loss of Eden, till one greater Man\n", ParadiseLostFileName);
+    [Theory]
+    [InlineData("")]
+    [InlineData("-n")]
+    [InlineData("-l")]
+    [InlineData("-x")]
+    [InlineData("-i")]
+    [InlineData("-n -l -x -i")]
+    public void Multiple_files_no_matches_various_flags(string flags)
+    {
+        const string pattern = "Frodo";
+        var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
 
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        const string expected = "";
 
-	[TestCase("")]
-	[TestCase("-n")]
-	[TestCase("-l")]
-	[TestCase("-x")]
-	[TestCase("-i")]
-	[TestCase("-n -l -x -i")]
-	public void Multiple_files_no_matches_various_flags(string flags)
-	{
-		const string pattern = "Frodo";
-		var files = new[] { IliadFileName, MidsummerNightFileName, ParadiseLostFileName };
-
-		const string expected = "";
-
-		Assert.That(Grep.Find(pattern, flags, files), Is.EqualTo(expected));
-	}
+        Assert.Equal(expected, Grep.Find(pattern, flags, files));
+    }
 }
