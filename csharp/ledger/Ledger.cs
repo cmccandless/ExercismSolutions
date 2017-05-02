@@ -5,78 +5,73 @@ using System.Linq;
 
 public class LedgerEntry
 {
-	public LedgerEntry(DateTime date, string desc, float chg)
-	{
-		Date = date;
-		Desc = desc;
-		Chg = chg;
-	}
+    public LedgerEntry(DateTime date, string desc, float chg)
+    {
+        Date = date;
+        Desc = desc;
+        Chg = chg;
+    }
 
-	public readonly DateTime Date;
-	public readonly string Desc;
-	public readonly float Chg;
+    public readonly DateTime Date;
+    public readonly string Desc;
+    public readonly float Chg;
+    public override string ToString() => $"{Date}@{Desc}@{Chg}";
 }
 
 public static class Ledger
 {
-	public static LedgerEntry CreateEntry(string date, string desc, int chng)
-	{
-		return new LedgerEntry(DateTime.Parse(date, CultureInfo.InvariantCulture), desc, chng / 100.0f);
-	}
+    internal static T Assert<T>(this T obj, Func<T, bool> c, string msg = "")
+    {
+        if (c(obj)) return obj;
+        throw new ArgumentException(msg);
+    }
 
-	private static CultureInfo CreateCulture(string cur, string loc)
-	{
-		var curSymb = new Dictionary<string, string> { { "USD", "$" }, { "EUR", "€" } };
-		var datPat = new Dictionary<string, string> { { "en-US", "MM/dd/yyyy" }, { "nl-NL", "dd/MM/yyyy" } };
-		var culture = new CultureInfo(loc);
-		try { culture.NumberFormat.CurrencySymbol = curSymb[cur]; }
-		catch (KeyNotFoundException) { throw new ArgumentException("Invalid currency"); }
-		try { culture.DateTimeFormat.ShortDatePattern = datPat[loc]; }
-		catch (KeyNotFoundException) { throw new ArgumentException("Invalid locale"); }
-		return culture;
-	}
+    public static LedgerEntry CreateEntry(string date, string desc, int chng) =>
+        new LedgerEntry(DateTime.Parse(date, CultureInfo.InvariantCulture), desc, chng / 100.0f);
 
-	private static string PrintHead(string loc)
-	{
-		var pad = new[] { 10, 25, 13 };
-		var label = new Dictionary<string, string[]> {
-			{"en-US",new[]{"Date","Description","Change"}},
-			{"nl-NL",new[]{"Datum","Omschrijving","Verandering"}}
-		};
-		try { return string.Join(" | ", label[loc].Zip(pad, (l, s) => l.PadRight(s))); }
-		catch (KeyNotFoundException) { throw new ArgumentException("Invalid locale"); }
-	}
+    private static Dictionary<string, string> curSymb = new Dictionary<string, string>
+    { ["USD"] = "$", ["EUR"] = "€" };
 
-	private static string Date(IFormatProvider culture, DateTime date) { return date.ToString("d", culture); }
+    private static Dictionary<string, string> datPat = new Dictionary<string, string>
+    { ["en-US"] = "MM/dd/yyyy", ["nl-NL"] = "dd/MM/yyyy" };
 
-	private static string Truncate(this string desc, int length)
-	{
-		return desc.Length > length ? desc.Substring(0, length - 3) + "..." : desc;
-	}
+    private static CultureInfo CreateCulture(string cur, string loc)
+    {
+        var culture = new CultureInfo(loc);
+        culture.NumberFormat.CurrencySymbol = curSymb[cur.Assert(curSymb.ContainsKey, "Invalid currency")];
+        culture.DateTimeFormat.ShortDatePattern = datPat[loc.Assert(datPat.ContainsKey, "Invalid Locale")];
+        return culture;
+    }
 
-	private static string Change(IFormatProvider culture, float cgh)
-	{
-		return cgh < 0.0 ? cgh.ToString("C", culture) : cgh.ToString("C", culture) + " ";
-	}
+    private static string[] GetPrintLabels(string loc)
+    {
+        switch (loc)
+        {
+            case "en-US": return new[] { "Date", "Description", "Change" };
+            case "nl-NL": return new[] { "Datum", "Omschrijving", "Verandering" };
+        }
+        throw new ArgumentException("Invalid locale");
+    }
 
-	private static string PrintEntry(IFormatProvider culture, LedgerEntry entry)
-	{
-		return string.Join(" | ", new[] {
-			Date(culture, entry.Date),
-			string.Format("{0,-25}", entry.Desc.Truncate(25)),
-			string.Format("{0,13}", Change(culture, entry.Chg)) 
-		});
-	}
+    private static string PrintHead(string loc) =>
+        string.Join(" | ", GetPrintLabels(loc).Zip(new[] { 10, 25, 13 }, (l, s) => l.PadRight(s)));
 
+    private static string Date(IFormatProvider culture, DateTime date) => date.ToString("d", culture);
 
-	private static IEnumerable<LedgerEntry> sort(LedgerEntry[] entries)
-	{
-		return entries.OrderBy(e => e.Chg >= 0).ThenBy(x => x.Date + "@" + x.Desc + "@" + x.Chg);
-	}
+    private static string Truncate(this string desc, int length) =>
+        desc.Length > length ? desc.Substring(0, length - 3) + "..." : desc;
 
-	public static string Format(string currency, string locale, LedgerEntry[] entries)
-	{
-		var culture = CreateCulture(currency, locale);
-		return string.Join("\n", new[] { PrintHead(locale) }.Concat(from entry in sort(entries) select PrintEntry(culture, entry)));
-	}
+    private static string Change(IFormatProvider culture, float cgh) =>
+        $"{cgh.ToString("C", culture)}{(cgh < 0.0 ? "" : " ")}";
+
+    private static string PrintEntry(this IFormatProvider culture, LedgerEntry entry) =>
+        $"{Date(culture, entry.Date)} | {entry.Desc.Truncate(25),-25} | {Change(culture, entry.Chg),13}";
+
+    private static IEnumerable<LedgerEntry> Sorted(LedgerEntry[] entries) =>
+        entries.OrderBy(e => e.Chg >= 0).ThenBy(x => x.ToString());
+
+    public static string Format(string currency, string locale, LedgerEntry[] entries) =>
+        Format(PrintHead(locale), entries, CreateCulture(currency, locale));
+    public static string Format(string head, LedgerEntry[] entries, IFormatProvider culture) =>
+        $"{head}{(entries.Any() ? "\n" : "")}{string.Join("\n", Sorted(entries).Select(culture.PrintEntry))}";
 }
