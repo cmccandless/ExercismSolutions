@@ -2,81 +2,80 @@
 using System.IO;
 using System.Linq;
 
-static class Tournament
+public static class Tournament
 {
-	public static void Tally(Stream inStream, Stream outStream)
-	{
-		var dict = new Dictionary<string, TeamStats>();
-		using (var reader = new StreamReader(inStream))
-		{
-			while (!reader.EndOfStream)
-			{
-				var parts = reader.ReadLine().Split(';');
-				if (parts.Length != 3) continue;
-				if (!dict.ContainsKey(parts[0])) dict[parts[0]] = new TeamStats();
-				if (!dict.ContainsKey(parts[1])) dict[parts[1]] = new TeamStats();
-				switch (parts[2])
-				{
-					case "win":
-						dict[parts[0]].Wins++;
-						dict[parts[1]].Losses++;
-						break;
-					case "loss":
-						dict[parts[0]].Losses++;
-						dict[parts[1]].Wins++;
-						break;
-					case "draw":
-						dict[parts[0]].Draws++;
-						dict[parts[1]].Draws++;
-						break;
-				}
-			}
-		}
-		using (var writer = new StreamWriter(outStream))
-		{
-			writer.WriteLine(string.Join(" | ", new[] 
-			{
-				"Team".PadRight(30,' '),
-				"MP",
-				" W",
-				" D",
-				" L",
-				" P"
-			}));
-			var stats = from kvp in dict
-						let teamName = kvp.Key
-						let _stats = kvp.Value
-						where _stats.MatchesPlayed > 0
-						orderby _stats.Points descending, teamName
-						let ar = new[] { teamName.PadRight(30, ' ') }
-							.Concat(_stats.Stats.Select(n => n.ToString().PadLeft(3, ' ')))
-						select string.Join(" |", ar);
-			foreach (var line in stats)
-			{
-				writer.WriteLine(line);
-			}
-		}
-	}
-	private class TeamStats
-	{
-		public int MatchesPlayed { get { return Wins + Draws + Losses; } }
-		public int Wins { get; set; }
-		public int Draws { get; set; }
-		public int Losses { get; set; }
-		public int Points { get { return Wins * 3 + Draws; } }
-		public int[] Stats
-		{
-			get
-			{
-				return new[] 
-				{
-					MatchesPlayed,
-					Wins,
-					Draws,
-					Losses,
-					Points,
-				};
-			}
-		}
-	}
+    private static string HeaderStr = $"{"Team",-30} | MP |  W |  D |  L |  P";
+
+    private static TeamStats GetOrAdd(this Dictionary<string, TeamStats> dict, string team) =>
+        dict.ContainsKey(team) ? dict[team] : dict[team] = new TeamStats(team);
+
+    private static Dictionary<string, TeamStats> CollectStats(Stream inStream)
+    {
+        var dict = new Dictionary<string, TeamStats>();
+        using (var reader = new StreamReader(inStream))
+        {
+            while (!reader.EndOfStream)
+            {
+                var parts = reader.ReadLine().Split(';');
+                if (parts.Length >= 3) dict.GetOrAdd(parts[0]).AddGame(dict.GetOrAdd(parts[1]), parts[2][0]);
+            }
+        }
+        return dict;
+    }
+
+    private static IEnumerable<string> FormatEntries(this Dictionary<string, TeamStats> dict) =>
+        from stats in dict.Values
+        where stats.MatchesPlayed > 0
+        orderby stats.Points descending, stats.Name
+        select stats.ToString();
+
+    private static void WriteResults(this Dictionary<string, TeamStats> dict, Stream outStream)
+    {
+        using (var writer = new StreamWriter(outStream))
+        {
+            writer.WriteLine(HeaderStr);
+            foreach (var line in dict.FormatEntries()) writer.WriteLine(line);
+        }
+    }
+
+    public static void Tally(Stream inStream, Stream outStream) =>
+        CollectStats(inStream).WriteResults(outStream);
+
+    private class TeamStats
+    {
+        public readonly string Name;
+
+        public int Wins, Draws, Losses;
+
+        public int MatchesPlayed => Wins + Draws + Losses;
+
+        public int Points => Wins * 3 + Draws;
+
+        public int[] Stats => new[] { MatchesPlayed, Wins, Draws, Losses, Points, };
+
+        public string StatString => string.Join(" | ", Stats.Select(n => $"{n,2}"));
+
+        public TeamStats(string name) { Name = name; }
+
+        public override string ToString() => $"{Name,-30} | {StatString}";
+
+        public void AddGame(TeamStats away, char result)
+        {
+            switch (result)
+            {
+                case 'w':
+                    Wins++;
+                    away.Losses++;
+                    break;
+                case 'l':
+                    Losses++;
+                    away.Wins++;
+                    break;
+                case 'd':
+                    Draws++;
+                    away.Draws++;
+                    break;
+            }
+        }
+    }
 }

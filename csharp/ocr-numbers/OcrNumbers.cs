@@ -1,46 +1,32 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
-static class OcrNumbers
+public static class OcrNumbers
 {
-	private static Dictionary<int, string> Ocr = new Dictionary<int, string>()
-	{
-		  {0x77,"0"},
-		  {0x60,"1"},
-		  {0x3E,"2"},
-		  {0x7C,"3"},
-		  {0x69,"4"},
-		  {0x5D,"5"},
-		  {0x5F,"6"},
-		  {0x64,"7"},
-		  {0x7F,"8"},
-		  {0x7D,"9"},
-	};
-	public static string Convert(string input)
-	{
-		var result = string.Empty;
-		var rows = input.Split('\n');
-		var value = 0;
-		for (int i=0; i < rows[0].Length; i++)
-		{
-			switch(i%3)
-			{
-				case 0:
-					value = 0;
-					if (rows[1][i].Equals('|')) value |= 1;
-					if (rows[2][i].Equals('|')) value |= 1 << 1;
-					break;
-				case 1:
-					if (rows[0][i].Equals('_')) value |= 1 << 2;
-					if (rows[1][i].Equals('_')) value |= 1 << 3;
-					if (rows[2][i].Equals('_')) value |= 1 << 4;
-					break;
-				case 2:
-					if (rows[1][i].Equals('|')) value |= 1 << 5;
-					if (rows[2][i].Equals('|')) value |= 1 << 6;
-					result += Ocr.ContainsKey(value) ? Ocr[value] : "?";
-					break;
-			}
-		}
-		return result;
-	}
+    private static Dictionary<int, char> Ocr = new Dictionary<int, char>()
+    {
+        [0xAF] = '0', [0x09] = '1', [0x9E] = '2', [0x9B] = '3', [0x39] = '4',
+        [0xB3] = '5', [0xB7] = '6', [0x89] = '7', [0xBF] = '8', [0xBB] = '9',
+    };
+
+    public static Queue<T> ToQueue<T>(this IEnumerable<T> a) => new Queue<T>(a);
+
+    private static IEnumerable<T> Pop<T>(Queue<T> q) => new[] { q.Dequeue(), q.Dequeue(), q.Dequeue() };
+
+    private static IEnumerable<Queue<char>> GetLetters(this string input)
+    {
+        var lines = input.Split('\n').Select(ToQueue).Take(3).ToArray();
+        while (lines[0].Count > 2) yield return lines.SelectMany(Pop).ToQueue();
+    }
+
+    private static int HasSegment(char a, char b) => a == b ? 1 : 0;
+
+    private static int Accumulate(int r, int x) => (r << 1) | x;
+
+    private static char ToChar(this int x) => Ocr.ContainsKey(x) ? Ocr[x] : '?';
+
+    private static char Convert(IEnumerable<char> letter) => 
+        letter.Zip("*_*|_||_|", HasSegment).Aggregate(0, Accumulate).ToChar();
+
+    public static string Convert(string input) => new string(input.GetLetters().Select(Convert).ToArray());
 }

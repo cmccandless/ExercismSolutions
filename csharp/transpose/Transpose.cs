@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
-public class Transpose
+public static class Transpose
 {
-	public static string String(string input, string spacing = "")
-	{
-		var lines = input.Split('\n');
-		var result = new List<string>();
-		for (int i = 0; i < lines.Length; spacing += i < ++i ? ' ' : ' ')
-			for (int j = 0; j < lines[i].Length; j++)
-			{
-				if (result.Count <= j) result.Add(spacing);
-				result[j] += spacing.Substring(0, i - result[j].Length) + lines[i][j];
-			}
-		return string.Join("\n", result);
-	}
+    private static string TrimEndSingle(this string s) => s.EndsWith(" ") ? s.Substring(0, s.Length - 1) : s;
+
+    public static string String(string input) => String(input.Split('\n')).TrimEndSingle();
+
+    public static string String(string[] lines) => string.Join("\n", String(lines, lines.Max(s => s.Length)));
+
+    private static string ColumnAsRow(this string[] lines, byte _, int c) =>
+        new string(lines.Select(s => c < s.Length ? s[c] : ' ').ToArray());
+
+    public static string[] String(string[] lines, int maxLen) => new byte[maxLen].Select(lines.ColumnAsRow).ToArray();
 }

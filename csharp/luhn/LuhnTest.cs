@@ -1,55 +1,82 @@
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class LuhnTest
 {
-    [Test]
-    public void Check_digit_is_the_rightmost_digit()
+    [Fact]
+    public void Single_digit_strings_can_not_be_valid()
     {
-        Assert.That(new Luhn(34567).CheckDigit, Is.EqualTo(7));
+        Assert.False(Luhn.IsValid("1"));
     }
 
-    [Test]
-    public void Addends_doubles_every_other_number_from_the_right()
+    [Fact]
+    public void A_single_zero_is_invalid()
     {
-        Assert.That(new Luhn(12121).Addends, Is.EqualTo(new[] { 1, 4, 1, 4, 1 }));
+        Assert.False(Luhn.IsValid("0"));
     }
 
-    [Test]
-    public void Addends_subtracts_9_when_doubled_number_is_more_than_9()
+    [Fact]
+    public void A_simple_valid_sin_that_remains_valid_if_reversed()
     {
-        Assert.That(new Luhn(8631).Addends, Is.EqualTo(new[] { 7, 6, 6, 1 }));
+        Assert.True(Luhn.IsValid("059"));
     }
 
-    [TestCase(4913, ExpectedResult = 22)]
-    [TestCase(201773, ExpectedResult = 21)]
-    public int Checksum_adds_addends_together(int number)
+    [Fact]
+    public void A_simple_valid_sin_that_becomes_invalid_if_reversed()
     {
-        return new Luhn(number).Checksum;
+        Assert.True(Luhn.IsValid("59"));
     }
 
-    [TestCase(738, ExpectedResult = false)]
-    [TestCase(8739567, ExpectedResult = true)]
-    public bool Number_is_valid_when_checksum_mod_10_is_zero(int number)
+    [Fact]
+    public void A_valid_canadian_sin()
     {
-        return new Luhn(number).Valid;
+        Assert.True(Luhn.IsValid("055 444 285"));
     }
 
-    [Test]
-    public void Luhn_can_create_simple_numbers_with_valid_check_digit()
+    [Fact]
+    public void Invalid_canadian_sin()
     {
-        Assert.That(Luhn.Create(123), Is.EqualTo(1230));
+        Assert.False(Luhn.IsValid("055 444 286"));
     }
 
-    [Test]
-    public void Luhn_can_create_larger_numbers_with_valid_check_digit()
+    [Fact]
+    public void Invalid_credit_card()
     {
-        Assert.That(Luhn.Create(873956), Is.EqualTo(8739567));
+        Assert.False(Luhn.IsValid("8273 1232 7352 0569"));
     }
 
-    [Test]
-    public void Luhn_can_create_huge_numbers_with_valid_check_digit()
+    [Fact]
+    public void Valid_strings_with_a_non_digit_included_become_invalid()
     {
-        Assert.That(Luhn.Create(837263756), Is.EqualTo(8372637564));
+        Assert.False(Luhn.IsValid("055a 444 285"));
+    }
+
+    [Fact]
+    public void Valid_strings_with_punctuation_included_become_invalid()
+    {
+        Assert.False(Luhn.IsValid("055-444-285"));
+    }
+
+    [Fact]
+    public void Valid_strings_with_symbols_included_become_invalid()
+    {
+        Assert.False(Luhn.IsValid("055£ 444$ 285"));
+    }
+
+    [Fact]
+    public void Single_zero_with_space_is_invalid()
+    {
+        Assert.False(Luhn.IsValid(" 0"));
+    }
+
+    [Fact]
+    public void More_than_a_single_zero_is_valid()
+    {
+        Assert.True(Luhn.IsValid("0000 0"));
+    }
+
+    [Fact]
+    public void Input_digit_9_is_correctly_converted_to_output_digit_9()
+    {
+        Assert.True(Luhn.IsValid("091"));
     }
 }
