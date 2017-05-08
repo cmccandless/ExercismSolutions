@@ -1,78 +1,124 @@
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class PigLatinTest
 {
-    [TestCase("apple", ExpectedResult = "appleay")]
-    [TestCase("ear", ExpectedResult = "earay")]
-    [TestCase("igloo", ExpectedResult = "iglooay")]
-    [TestCase("object", ExpectedResult = "objectay")]
-    [TestCase("under", ExpectedResult = "underay")]
-    public string Ay_is_added_to_words_that_start_with_vowels(string word)
+    [Fact]
+    public void Word_beginning_with_a()
     {
-        return PigLatin.Translate(word);
+        Assert.Equal("appleay", PigLatin.Translate("apple"));
     }
 
-    [TestCase("pig", ExpectedResult = "igpay")]
-    [TestCase("koala", ExpectedResult = "oalakay")]
-    [TestCase("yellow", ExpectedResult = "ellowyay")]
-    [TestCase("xenon", ExpectedResult = "enonxay")]
-    public string First_letter_and_ay_are_moved_to_the_end_of_words_that_start_with_consonants(string word)
+    [Fact]
+    public void Word_beginning_with_e()
     {
-        return PigLatin.Translate(word);
+        Assert.Equal("earay", PigLatin.Translate("ear"));
     }
 
-    [Test]
-    public void Ch_is_treated_like_a_single_consonant()
+    [Fact]
+    public void Word_beginning_with_i()
     {
-        Assert.That(PigLatin.Translate("chair"), Is.EqualTo("airchay"));
+        Assert.Equal("iglooay", PigLatin.Translate("igloo"));
     }
 
-    [Test]
-    public void Qu_is_treated_like_a_single_consonant()
+    [Fact]
+    public void Word_beginning_with_o()
     {
-        Assert.That(PigLatin.Translate("queen"), Is.EqualTo("eenquay"));
+        Assert.Equal("objectay", PigLatin.Translate("object"));
     }
 
-    [Test]
-    public void Qu_and_a_single_preceding_consonant_are_treated_like_a_single_consonant()
+    [Fact]
+    public void Word_beginning_with_u()
     {
-        Assert.That(PigLatin.Translate("square"), Is.EqualTo("aresquay"));
+        Assert.Equal("underay", PigLatin.Translate("under"));
     }
 
-    [Test]
-    public void Th_is_treated_like_a_single_consonant()
+    [Fact]
+    public void Word_beginning_with_a_vowel_and_followed_by_a_qu()
     {
-        Assert.That(PigLatin.Translate("therapy"), Is.EqualTo("erapythay"));
+        Assert.Equal("equalay", PigLatin.Translate("equal"));
     }
 
-    [Test]
-    public void Thr_is_treated_like_a_single_consonant()
+    [Fact]
+    public void Word_beginning_with_p()
     {
-        Assert.That(PigLatin.Translate("thrush"), Is.EqualTo("ushthray"));
+        Assert.Equal("igpay", PigLatin.Translate("pig"));
     }
 
-    [Test]
-    public void Sch_is_treated_like_a_single_consonant()
+    [Fact]
+    public void Word_beginning_with_k()
     {
-        Assert.That(PigLatin.Translate("school"), Is.EqualTo("oolschay"));
+        Assert.Equal("oalakay", PigLatin.Translate("koala"));
     }
 
-    [Test]
-    public void Yt_is_treated_like_a_single_vowel()
+    [Fact]
+    public void Word_beginning_with_y()
     {
-        Assert.That(PigLatin.Translate("yttria"), Is.EqualTo("yttriaay"));
+        Assert.Equal("ellowyay", PigLatin.Translate("yellow"));
     }
 
-    [Test]
-    public void Xr_is_treated_like_a_single_vowel()
+    [Fact]
+    public void Word_beginning_with_x()
     {
-        Assert.That(PigLatin.Translate("xray"), Is.EqualTo("xrayay"));
+        Assert.Equal("enonxay", PigLatin.Translate("xenon"));
     }
 
-    [Test]
-    public void Phrases_are_translated()
+    [Fact]
+    public void Word_beginning_with_q_without_a_following_u()
     {
-        Assert.That(PigLatin.Translate("quick fast run"), Is.EqualTo("ickquay astfay unray"));
+        Assert.Equal("atqay", PigLatin.Translate("qat"));
+    }
+
+    [Fact]
+    public void Word_beginning_with_ch()
+    {
+        Assert.Equal("airchay", PigLatin.Translate("chair"));
+    }
+
+    [Fact]
+    public void Word_beginning_with_qu()
+    {
+        Assert.Equal("eenquay", PigLatin.Translate("queen"));
+    }
+
+    [Fact]
+    public void Word_beginning_with_qu_and_a_preceding_consonant()
+    {
+        Assert.Equal("aresquay", PigLatin.Translate("square"));
+    }
+
+    [Fact]
+    public void Word_beginning_with_th()
+    {
+        Assert.Equal("erapythay", PigLatin.Translate("therapy"));
+    }
+
+    [Fact]
+    public void Word_beginning_with_thr()
+    {
+        Assert.Equal("ushthray", PigLatin.Translate("thrush"));
+    }
+
+    [Fact]
+    public void Word_beginning_with_sch()
+    {
+        Assert.Equal("oolschay", PigLatin.Translate("school"));
+    }
+
+    [Fact]
+    public void Word_beginning_with_yt()
+    {
+        Assert.Equal("yttriaay", PigLatin.Translate("yttria"));
+    }
+
+    [Fact]
+    public void Word_beginning_with_xr()
+    {
+        Assert.Equal("xrayay", PigLatin.Translate("xray"));
+    }
+
+    [Fact]
+    public void A_whole_phrase()
+    {
+        Assert.Equal("ickquay astfay unray", PigLatin.Translate("quick fast run"));
     }
 }

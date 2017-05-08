@@ -1,31 +1,15 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 
-static class PigLatin
+public static class PigLatin
 {
-	private static string[] vowels = new string[] { "a", "e", "i", "o", "u", "yt", "xr" };
-	private static string[] exceptions = new string[] { "ch", "qu", "squ", "sch", "thr", "th", "sh" };
-	public static string Translate(string phrase)
-	{
-		return string.Join(" ", phrase.Split(' ').Select(w => TranslateWord(w)));
-	}
-	private static string TranslateWord(string word)
-	{
-		if (vowels.Any(v => word.StartsWith(v)))
-		{
-			return word + "ay";
-		}
-		else
-		{
-			var vowelIndex = 1;
-			foreach (var ex in exceptions)
-			{
-				if (word.StartsWith(ex))
-				{
-					vowelIndex = ex.Length;
-					break;
-				}
-			}
-			return word.Substring(vowelIndex) + word.Substring(0, vowelIndex) + "ay";
-		}
-	}
+    private static readonly string consonents = $"ch|qu|squ|sch|thr?|sh|y[^t]|x[^r]|[^aeiou]";
+
+    private static readonly string pattern = $@"^({consonents})?((yt|xr|[aeiou])\w*)$";
+
+    private static readonly Regex rgxWord = new Regex(pattern, RegexOptions.Compiled);
+
+    public static string Translate(string phrase) => string.Join(" ", phrase.Split(' ').Select(TranslateWord));
+
+    private static string TranslateWord(string word) => rgxWord.Replace(word, "$2$1ay");
 }

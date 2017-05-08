@@ -1,20 +1,35 @@
-﻿using NUnit.Framework;
+using Xunit;
+using System;
 
 public class NthPrimeTest
 {
-    [TestCase(1, ExpectedResult = 2)]
-    [TestCase(2, ExpectedResult = 3)]
-    [TestCase(3, ExpectedResult = 5)]
-    [TestCase(4, ExpectedResult = 7)]
-    [TestCase(5, ExpectedResult = 11)]
-    [TestCase(6, ExpectedResult = 13)]
-    [TestCase(7, ExpectedResult = 17)]
-    [TestCase(8, ExpectedResult = 19)]
-    [TestCase(1000, ExpectedResult = 7919)]
-    [TestCase(10000, ExpectedResult = 104729)]
-    [TestCase(10001, ExpectedResult = 104743)]
-    public int Nth_prime_calculated(int nth)
+    [Fact]
+    public void First_prime()
     {
-        return NthPrime.Nth(nth);
+        Assert.Equal(2, NthPrime.Prime(1));
+    }
+
+    [Fact]
+    public void Second_prime()
+    {
+        Assert.Equal(3, NthPrime.Prime(2));
+    }
+
+    [Fact]
+    public void Sixth_prime()
+    {
+        Assert.Equal(13, NthPrime.Prime(6));
+    }
+
+    [Fact]
+    public void Big_prime()
+    {
+        Assert.Equal(104743, NthPrime.Prime(10001));
+    }
+
+    [Fact]
+    public void There_is_no_zeroth_prime()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => NthPrime.Prime(0));
     }
 }
