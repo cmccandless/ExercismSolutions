@@ -1,4 +1,4 @@
-from os import path, getcwd, sep, system
+from os import path, getcwd, sep, popen
 from sys import argv, exit
 
 def printUsage():
@@ -33,4 +33,8 @@ if __name__ == '__main__':
 	# print('Track: {}'.format(track))
 	# print('Exercise: {}'.format(exercise))
 	# print(cwd)
-	system('powershell -Command "& exercism li {} | sls -patt "{}" -co 0,1"'.format(track, exercise))
+	cmd = 'powershell -Command "& exercism li {} | sls -patt "^{}$" -co 0,1"'.format(track, exercise)
+	proc = popen(cmd)
+	output = proc.readlines()
+	print(output[-3].strip())
+	# print('\n'.join(output))
