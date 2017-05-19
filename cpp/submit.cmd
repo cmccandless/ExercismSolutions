@@ -1,1 +1,0 @@
-exercism s %1\%1.h %1\%1.cpp

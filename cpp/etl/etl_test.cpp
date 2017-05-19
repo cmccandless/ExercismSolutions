@@ -13,7 +13,6 @@ BOOST_AUTO_TEST_CASE(transforms_one_value)
     BOOST_TEST(expected == actual);
 }
 
-#if defined(EXERCISM_RUN_ALL_TESTS)
 BOOST_AUTO_TEST_CASE(transforms_more_values)
 {
     const std::map<int, std::vector<char>> old{{1, {'A', 'E', 'I', 'O', 'U'}}};
@@ -58,4 +57,5 @@ BOOST_AUTO_TEST_CASE(transforms_a_full_dataset)
     };
     BOOST_TEST(expected == actual);
 }
+#if defined(EXERCISM_RUN_ALL_TESTS)
 #endif
