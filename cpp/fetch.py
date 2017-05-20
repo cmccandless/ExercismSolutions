@@ -15,12 +15,12 @@ if __name__ == '__main__':
 	chdir(exercise)
 	exercise = exercise.replace('-','_')
 	with open('{}.h'.format(exercise), 'w') as f:
-		f.write('#ifndef {0}_h\n#define {0}_h\n\n\n#endif\n'.format(exercise))
+		f.write('#ifndef {0}_h\n#define {0}_h\n\n\n\n#endif\n'.format(exercise))
 	with open('{}.cpp'.format(exercise), 'w') as f:
 		f.write('#include "{}.h"\n\n'.format(exercise))
 	if not path.exists('build'): mkdir('build')
 	chdir('build')
-	print(popen('cmake -G "Visual Studio 14" -DBOOST_INCLUDEDIR=C:\local\boost_1_64_0 ..').read())
+	print(popen('cmake -Wno-dev -G "Visual Studio 14" -DBOOST_INCLUDEDIR=C:\local\boost_1_64_0 ..').read())
 
 	
 # Not Submitted:   1 problem
