@@ -24,7 +24,7 @@ encodeEx partial text
     | null text = partial
     | otherwise = encodeEx (partial ++ str (fst g)) (snd g) where
         h = head text
-        g = break (/=h) text
+        g = break (/=t) text
 
 decode :: String -> String
 decode = decodeEx "" 0
