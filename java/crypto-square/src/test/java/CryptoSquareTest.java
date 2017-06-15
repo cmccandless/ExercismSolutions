@@ -107,7 +107,7 @@ public class CryptoSquareTest {
         assertEquals(expectedOutput, crypto.getCipherText());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void normalizedCipherTextIsSplitByHeightOfSquare() {
         Crypto crypto = new Crypto("Vampires are people too!");
@@ -116,7 +116,7 @@ public class CryptoSquareTest {
         assertEquals(expectedOutput, crypto.getNormalizedCipherText());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void normalizedCipherNotExactlyDivisibleBy5SpillsIntoSmallerSegment() {
         Crypto crypto = new Crypto("Madness, and then illumination.");
@@ -125,7 +125,7 @@ public class CryptoSquareTest {
         assertEquals(expectedOutput, crypto.getNormalizedCipherText());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void normalizedCipherIsSplitIntoSegmentsOfCorrectSize() {
         Crypto crypto = new Crypto("If man was meant to stay on the ground god would have given us roots");
@@ -134,7 +134,7 @@ public class CryptoSquareTest {
         assertEquals(expectedOutput, crypto.getNormalizedCipherText());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void normalizedCipherTextIsSplitIntoSegmentsOfCorrectSizeWithPunctuation() {
         Crypto crypto = new Crypto("Have a nice day. Feed the dog & chill out!");
