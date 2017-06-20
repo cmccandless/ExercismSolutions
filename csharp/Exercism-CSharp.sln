@@ -161,6 +161,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PigLatin", "pig-latin\PigLa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RailFenceCipher", "rail-fence-cipher\RailFenceCipher.csproj", "{4B114686-1557-412E-9AD8-853E002D7786}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RotationalCipher", "rotational-cipher\RotationalCipher.csproj", "{119F79DE-516C-4612-84EB-0766DA3D1BD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -483,6 +485,10 @@ Global
 		{4B114686-1557-412E-9AD8-853E002D7786}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B114686-1557-412E-9AD8-853E002D7786}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B114686-1557-412E-9AD8-853E002D7786}.Release|Any CPU.Build.0 = Release|Any CPU
+		{119F79DE-516C-4612-84EB-0766DA3D1BD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{119F79DE-516C-4612-84EB-0766DA3D1BD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{119F79DE-516C-4612-84EB-0766DA3D1BD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{119F79DE-516C-4612-84EB-0766DA3D1BD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
