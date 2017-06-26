@@ -9,14 +9,14 @@ data TriangleType = Equilateral
                   deriving (Eq, Show)
                   
 invalid :: Real a => a -> a -> a -> Bool
-invalid a b c = a == 0 || any (\p -> head p >= sum (drop 1 p)) (permutations [a,b,c])
+invalid a b c = a >= b + c || b >= a + c || c >= a + b
                   
 triangleType :: Real a => a -> a -> a -> TriangleType
 triangleType a b c 
     | invalid a b c = Illegal
-    | score == 6 = Equilateral
-    | score == 2 = Isosceles
+    | score == 3 = Equilateral
+    | score == 1 = Isosceles
     | otherwise = Scalene
     where
-        score = length $ filter (\p -> head p == (p !! 1)) (permutations [a,b,c])
+        score = length $ filter id [a==b,b==c,a==c]
         
