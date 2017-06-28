@@ -1,7 +1,7 @@
 module Meetup (Weekday(..), Schedule(..), meetupDay) where
 
 import Data.Maybe (fromJust)
-import Data.Time.Calendar (addDays, Day, fromGregorianValid)
+import Data.Time.Calendar (addDays, addGregorianMonthsRollOver, Day, fromGregorian)
 import Data.Time.Calendar.WeekDate (toWeekDate)
 
 data Weekday = Monday
@@ -18,29 +18,46 @@ data Schedule = First
               | Fourth
               | Last
               | Teenth deriving (Eq)
-              
-fromWeekday :: Weekday -> Int
-fromWeekday w 
-    | w == Monday = 1
-    | w == Tuesday = 2
-    | w == Wednesday = 3
-    | w == Thursday = 4
-    | w == Friday = 5
-    | w == Saturday = 6
-    | w == Sunday = 7
-    | otherwise = 0
     
-extractWeekday :: (Integer, Int, Int) -> Int
-extractWeekday (year, month, weekday) = weekday
-              
-firstOfMonth :: Integer -> Int -> Int -> Weekday -> Day
-firstOfMonth year month day weekday 
-    | fromWeekday weekday == w = d
-    | otherwise = firstOfMonth year month (day + 1) weekday
+toWeekday :: Int -> Weekday
+toWeekday n
+    | n == 1 = Monday
+    | n == 2 = Tuesday
+    | n == 3 = Wednesday
+    | n == 4 = Thursday
+    | n == 5 = Friday
+    | n == 6 = Saturday
+    | otherwise = Sunday
+    
+previous :: Schedule -> Schedule
+previous s 
+    | s == Second = First
+    | s == Third = Second
+    | s == Fourth = Third
+    | otherwise = First
+
+createDate :: Int -> Integer -> Int -> Day
+createDate day year month = fromGregorian year month day
+    
+firstDay :: Integer -> Int -> Day
+firstDay = createDate 1
+
+teenthDay :: Integer -> Int -> Day
+teenthDay = createDate 13
+
+addMonths :: Integer -> Day -> Day
+addMonths = addGregorianMonthsRollOver
+
+firstOfMonth :: Int -> Weekday -> Day -> Day
+firstOfMonth month weekday date 
+    | weekday == w = date
+    | otherwise = firstOfMonth month weekday $ addDays 1 date
     where 
-        d = fromJust $ fromGregorianValid year month 1
-        w = extractWeekday $ toWeekDate d
+        (_, m, wn) = toWeekDate date
+        w = toWeekday wn
 
 meetupDay :: Schedule -> Weekday -> Integer -> Int -> Day
-meetupDay Teenth weekday year month = firstOfMonth year month 13 weekday
-meetupDay schedule weekday year month = firstOfMonth year month 1 weekday
+meetupDay Teenth weekday year month = firstOfMonth month weekday $ teenthDay year month
+meetupDay First weekday year month = firstOfMonth month weekday $ firstDay year month
+meetupDay Last weekday year month = addDays (-7) $ firstOfMonth month weekday $ addMonths 1 $ firstDay year month
+meetupDay schedule weekday year month = addDays 7 $ meetupDay (previous schedule) weekday year month
