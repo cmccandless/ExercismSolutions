@@ -1,27 +1,34 @@
 module Clock (clockHour, clockMin, fromHourMin, toString) where
 
-type Clock = Int
+newtype Clock = Clock Int deriving (Eq, Show) 
 
-maxHours = 24
 maxMinutes = 60
-maxTime = maxHours * maxMinutes
+maxTime = 24 * maxMinutes
+
+instance Num Clock where
+    fromInteger             = Clock . fromInteger
+    negate (Clock t)        = Clock $ maxTime - t
+    (Clock t1) + (Clock t2) = fromHourMin 0 (t1 + t2)
+    (*) _ _                 = error "Not supported"
+    abs _                   = error "Not supported"
+    signum _                = error "Not supported"
 
 clockHour :: Clock -> Int
-clockHour = flip div 60
+clockHour (Clock t) = t `div` maxMinutes
 
 clockMin :: Clock -> Int
-clockMin = flip mod 60
-
-fromMin :: Int -> Clock
-fromMin minute
-    | minute < 0 = fromMin (minute + maxTime)
-    | otherwise = mod minute maxTime
+clockMin (Clock t) = t `mod` maxMinutes
 
 fromHourMin :: Int -> Int -> Clock
-fromHourMin hour minute = fromMin $ (60 * hour) + minute
+fromHourMin hour minute = case (hour, compare minute 0) of
+    (0,    LT) -> fromHourMin 0 (minute + maxTime)
+    (0,    _)  -> Clock $ minute `mod` maxTime
+    (hour, _)  -> fromHourMin 0 (hour * maxMinutes + minute)
 
 pad :: Int -> String
-pad s = let ss = show s in if s < 10 then '0' : ss else ss
+pad s = let ss = show s in case compare s 10 of
+    LT -> '0' : ss
+    _  -> ss
 
 toString :: Clock -> String
 toString clock = pad (clockHour clock) ++ ":" ++ pad (clockMin clock)
