@@ -10,8 +10,10 @@ mkTriplet a b c
     | otherwise = (a, b, c)
     
 genTriplits :: Int -> Int -> Int -> [(Int, Int, Int)]
-genTriplits m a (-1) = concatMap (genTriplits a) [a..m]
+genTriplits m a (-1) = concatMap (genTriplits m a) [a..m]
 genTriplits m a b = filter isPythagorean $ map (mkTriplet a b) [b..m]
 
 pythagoreanTriplets :: Int -> Int -> [(Int, Int, Int)]
-pythagoreanTriplets minFactor maxFactor = concatMap (\a -> genTriplits maxFactor a -1) [minFactor..maxFactor]
+pythagoreanTriplets minF maxF = concatMap f [minF..maxF]
+    where
+        f a = genTriplits maxF a (-1)
