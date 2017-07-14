@@ -1,21 +1,30 @@
 module Change (findFewestCoins) where
 
-import Data.List (sortBy)
-import Data.Maybe (isJust)
+type Value = Maybe [Integer]
 
-findFewestCoins :: Integer -> [Integer] -> Maybe [Integer]
-findFewestCoins target = f target . reverse
-    where
-        byLength x y = compare (length x) (length y)
-        f _ []              = Nothing
-        f 0 _              = Just []
-        f target css@(c:cs) = case compare target c of
-            LT -> f target cs
-            EQ -> Just [c]
-            GT -> if not $ null ms then head ms  else Nothing
-                where
-                    adj = target - c
-                    x = (c :) <$> f adj css
-                    y = (c :) <$> f adj cs
-                    z = f target cs
-                    ms = sortBy byLength $ filter isJust [x,y,z]
+size :: Value -> Int
+size = maybe 0x7ffffffe length
+
+setValAt :: Int -> [Value] -> Integer -> [Value]
+setValAt indexT row coin = start ++ (newCurrent : end)
+    where (start, current : end) = splitAt indexT row
+          pickBest :: Value -> (Int, Value) -> Value
+          pickBest prevVal (indexT2, newVal) = 
+              let isValid = fromInteger coin == indexT - indexT2
+                  isBetter = size prevVal > size newVal in
+              if isValid && isBetter 
+                  then (coin :) <$> newVal 
+                  else prevVal
+          bestFromPrev = foldl pickBest current $ zip [0..] start
+          newCurrent = if fromInteger coin == indexT 
+              then Just [coin] 
+              else bestFromPrev
+            
+setRow :: [Integer] -> [Value] -> Int -> [Value]
+setRow coins prevRow indexT = foldl (setValAt indexT) prevRow coins
+
+findFewestCoins :: Integer -> [Integer] -> Value
+findFewestCoins target coins = if target < 0 
+    then Nothing 
+    else let firstRow = Just [] : replicate (fromInteger target) Nothing in
+         last $ foldl (setRow coins) firstRow [1..fromInteger target]
