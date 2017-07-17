@@ -4,34 +4,37 @@ data BowlingError = IncompleteGame
                   | InvalidRoll { rollIndex :: Int, rollValue :: Int }
   deriving (Eq, Show)
   
-data BowlingResult = Either BowlingError Int
-  
 data Status = None | Spare | Strike deriving (Eq, Show)
+
+type FrameResult = Either BowlingError Int
 
 classify :: Int -> Int -> Status
 classify b1 b2
     | b1 == 10 = Strike
     | b1 + b2 == 10 = Spare
     | otherwise = None
+    
+combine :: FrameResult -> FrameResult -> FrameResult
+combine (Left IncompleteGame) _ =  Left IncompleteGame
+combine _ (Left IncompleteGame) = Left IncompleteGame
+combine (Left a@(InvalidRoll _ _)) _ = Left a
+combine _ (Left b@(InvalidRoll _ _)) = Left b
+combine (Right a) (Right b) = Right (a + b)
 
-score :: [Int] -> BowlingResult
-score = f 1 None
+score :: [Int] -> FrameResult
+score = scoreFrames 1 None
     where
-        f :: Int -> Status -> [Int] -> BowlingResult
-        f frame status [] = 0
-        f frame status (b1:b2:rs) = let next = f (frame + 1) (classify b1 b2) rs in
-            combine fscore next
-            where
-                fscore = BowlingResult
-                fscore = case (frame, status) of
-                    (_, None)   -> b1 + b2
-                    (_, Spare)  -> 2 * b1 + b2
-                    (_, Strike) -> 2 * (b1 + b2)
-                    _           -> 0
-                combine :: BowlingResult -> BowlingResult -> BowlingResult
-                combine IncompleteGame _ =  IncompleteGame
-                combine _ IncompleteGame = IncompleteGame
-                combine a@(InvalidRoll _ _) _ = a
-                combine _ b@(InvalidRoll _ _) = b
-                combine a b = a + b
-
+        scoreFrames :: Int -> Status -> [Int] -> FrameResult
+        scoreFrames frame status [] = Right 0
+        scoreFrames frame status [b1]
+            | frame == 11 && status == Spare = Right b1
+            | b1 == 10 = Right b1
+            | otherwise = Left IncompleteGame
+        scoreFrames frame status (b1:b2:rs) = let newStatus = classify b1 b2 in case (frame, status) of 
+            (11, Spare) -> Right b1
+            (_, Spare) -> combine (Right (2 * b1 + b2)) $ scoreFrames (frame + 1) newStatus rs
+            (11, Strike) -> Right (b1 + b2)
+            (_, Strike) -> if newStatus == Strike 
+                           then combine (Right (2 * b1)) $ scoreFrames (frame + 1) newStatus (b2:rs)
+                           else combine (Right (2 * (b1 + b2))) $ scoreFrames (frame + 1) newStatus rs
+            (_, None) -> combine (Right (b1 + b2)) $ scoreFrames (frame + 1) newStatus rs
