@@ -6,35 +6,37 @@ data BowlingError = IncompleteGame
   
 data Status = None | Spare | Strike deriving (Eq, Show)
 
-type FrameResult = Either BowlingError Int
-
-classify :: Int -> Int -> Status
-classify b1 b2
-    | b1 == 10 = Strike
-    | b1 + b2 == 10 = Spare
-    | otherwise = None
-    
-combine :: FrameResult -> FrameResult -> FrameResult
-combine (Left IncompleteGame) _ =  Left IncompleteGame
-combine _ (Left IncompleteGame) = Left IncompleteGame
-combine (Left a@(InvalidRoll _ _)) _ = Left a
-combine _ (Left b@(InvalidRoll _ _)) = Left b
-combine (Right a) (Right b) = Right (a + b)
-
-score :: [Int] -> FrameResult
-score = scoreFrames 1 None
-    where
-        scoreFrames :: Int -> Status -> [Int] -> FrameResult
-        scoreFrames frame status [] = Right 0
-        scoreFrames frame status [b1]
-            | frame == 11 && status == Spare = Right b1
-            | b1 == 10 = Right b1
-            | otherwise = Left IncompleteGame
-        scoreFrames frame status (b1:b2:rs) = let newStatus = classify b1 b2 in case (frame, status) of 
-            (11, Spare) -> Right b1
-            (_, Spare) -> combine (Right (2 * b1 + b2)) $ scoreFrames (frame + 1) newStatus rs
-            (11, Strike) -> Right (b1 + b2)
-            (_, Strike) -> if newStatus == Strike 
-                           then combine (Right (2 * b1)) $ scoreFrames (frame + 1) newStatus (b2:rs)
-                           else combine (Right (2 * (b1 + b2))) $ scoreFrames (frame + 1) newStatus rs
-            (_, None) -> combine (Right (b1 + b2)) $ scoreFrames (frame + 1) newStatus rs
+score :: [Int] -> Either BowlingError Int
+score = foldl combine (Right 0) . tally 1 0
+        where
+            combine a@(Left _) _        = a
+            combine _ b@(Left _)        = b
+            combine (Right a) (Right b) = Right (a + b)
+            classify b1 b2
+                | b1 == 10 = Strike
+                | b1 + b2 == 10 = Spare
+                | otherwise = None
+            invalidFrameBall f b = f > 10 || b < 0 || b > 10
+            tally f i [] = [Left IncompleteGame | f < 11]
+            tally f i [r] 
+                | invalidFrameBall f r           = [Left $ InvalidRoll i r]
+                | f < 10 || (f == 10 && r == 10) = [Left IncompleteGame]
+                | otherwise                      = [Right r]
+            tally f i (r:r2:rs) 
+                | invalidFrameBall f r   = [Left $ InvalidRoll i r]
+                | r2 < 0 || r2 > 10      = [Left $ InvalidRoll (i + 1) r2]
+                | r /= 10 && r + r2 > 10 = [Left $ InvalidRoll (i + 1) r2]
+                | otherwise = case (classify r r2, rs) of
+                    (None, _) -> Right (r + r2) : tally (f + 1) (i + 2) rs
+                    (_, []) -> [Left IncompleteGame]
+                    (Strike, _) -> let hrs  = head rs
+                                       rest = if f == 10 
+                                              then drop 1 rs
+                                              else r2:rs
+                                   in if f == 10 && (hrs > 10 || (r2 /= 10 && r2 + hrs > 10))
+                                      then [Left $ InvalidRoll (i + 2) hrs]
+                                      else Right (10 + r2 + head rs) : tally (f + 1) (i + 1) rest
+                    (Spare, _) -> let rest = if f == 10
+                                             then drop 1 rs
+                                             else rs
+                                  in Right (10 + head rs) : tally (f + 1) (i + 2) rest
