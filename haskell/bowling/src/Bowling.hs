@@ -35,7 +35,7 @@ score = foldl combine (Right 0) . tally 1 0
                                               else r2:rs
                                    in if f == 10 && (hrs > 10 || (r2 /= 10 && r2 + hrs > 10))
                                       then [Left $ InvalidRoll (i + 2) hrs]
-                                      else Right (10 + r2 + head rs) : tally (f + 1) (i + 1) rest
+                                      else Right (10 + r2 + hrs) : tally (f + 1) (i + 1) rest
                     (Spare, _) -> let rest = if f == 10
                                              then drop 1 rs
                                              else rs
