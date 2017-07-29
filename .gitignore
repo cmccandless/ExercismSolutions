@@ -179,8 +179,14 @@ csharp/bin/Debug/Exercism.csharp.dll
 csharp/obj/Debug/Exercism.csharp.dll
 
 *VC.*db
-*.pyc
 
 .cache
 __pycache__
 vstemplete_README.md
+
+*.keep
+
+# =========================
+# Java
+# =========================
+.gradle
