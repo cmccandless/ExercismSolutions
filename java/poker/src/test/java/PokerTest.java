@@ -12,7 +12,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(hand), new Poker(Arrays.asList(hand)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void nothingVsOnePair() {
         final String nothing = "4S 5H 6S 8D JH";
@@ -20,7 +20,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(pairOf4), new Poker(Arrays.asList(nothing, pairOf4)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void twoPairs() {
         final String pairOf2 = "4S 2H 6S 2D JH";
@@ -28,7 +28,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(pairOf4), new Poker(Arrays.asList(pairOf2, pairOf4)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void onePairVsDoublePair() {
         final String pairOf8 = "2S 8H 6S 8D JH";
@@ -36,7 +36,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(doublePair), new Poker(Arrays.asList(pairOf8, doublePair)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void twoDoublePairs() {
         final String doublePair2And8 = "2S 8H 2S 8D JH";
@@ -44,7 +44,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(doublePair2And8), new Poker(Arrays.asList(doublePair2And8, doublePair4And5)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void doublePairVsThree() {
         final String doublePair2And8 = "2S 8H 2S 8D JH";
@@ -52,7 +52,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(threeOf4), new Poker(Arrays.asList(doublePair2And8, threeOf4)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void twoThrees() {
         final String threeOf2 = "2S 2H 2S 8D JH";
@@ -60,7 +60,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(threeOf1), new Poker(Arrays.asList(threeOf2, threeOf1)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void threeVsStraight() {
         final String threeOf4 = "4S 5H 4S 8D 4H";
@@ -68,7 +68,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(straight), new Poker(Arrays.asList(threeOf4, straight)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void twoStraights() {
         final String straightTo8 = "4S 6H 7S 8D 5H";
@@ -80,7 +80,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(straightTo1), new Poker(Arrays.asList(straightTo1, straightTo5)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void straightVsFlush() {
         final String straightTo8 = "4S 6H 7S 8D 5H";
@@ -88,7 +88,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(flushTo7), new Poker(Arrays.asList(straightTo8, flushTo7)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void twoFlushes() {
         final String flushTo8 = "3H 6H 7H 8H 5H";
@@ -96,7 +96,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(flushTo8), new Poker(Arrays.asList(flushTo8, flushTo7)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void flushVsFull() {
         final String flushTo8 = "3H 6H 7H 8H 5H";
@@ -104,7 +104,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(full), new Poker(Arrays.asList(full, flushTo8)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void twoFulls() {
         final String fullOf4By9 = "4H 4S 4D 9S 9D";
@@ -112,7 +112,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(fullOf5By8), new Poker(Arrays.asList(fullOf4By9, fullOf5By8)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void fullVsSquare() {
         final String full = "4S 5H 4S 5D 4H";
@@ -120,7 +120,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(squareOf3), new Poker(Arrays.asList(full, squareOf3)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void twoSquares() {
         final String squareOf2 = "2S 2H 2S 8D 2H";
@@ -128,7 +128,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(squareOf5), new Poker(Arrays.asList(squareOf2, squareOf5)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void squareVsStraightFlush() {
         final String squareOf5 = "4S 5H 5S 5D 5H";
@@ -136,7 +136,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(straightFlushTo9), new Poker(Arrays.asList(squareOf5, straightFlushTo9)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void twoStraightFlushes() {
         final String straightFlushTo8 = "4H 6H 7H 8H 5H";
@@ -144,7 +144,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(straightFlushTo9), new Poker(Arrays.asList(straightFlushTo8, straightFlushTo9)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void threeHandWithTie() {
         final String spadeStraightTo9 = "9S 8S 7S 6S 5S";
@@ -153,7 +153,7 @@ public class PokerTest {
         assertEquals(Arrays.asList(spadeStraightTo9, diamondStraightTo9), new Poker(Arrays.asList(spadeStraightTo9, diamondStraightTo9, threeOf4)).getBestHands());
     }
 
-    @Ignore("Remove to run test")
+    // @Ignore("Remove to run test")
     @Test
     public void straightTo5AgainstAPairOfJacks() {
         final String straightTo5 = "2S 4D 5C 3S AS";
