@@ -1,19 +1,10 @@
 class Hamming
-	def self.compute(a, b)
-		if a.length != b.length
-			raise(ArgumentError)
-		end
-		if a == ""
-			return 0
-		end
-		if a[0] == b[0]
-			return compute(a[1..-1], b[1..-1])
-		else
-			return 1 + compute(a[1..-1], b[1..-1])
-		end
-	end
+  def self.compute(a, b)
+    raise(ArgumentError) if a.length != b.length
+    a.length == 0 ? 0 : a.chars.zip(b.chars).collect{ |x| (x[0]<=>x[1]).abs }.inject(:+)
+  end
 end
 
 module BookKeeping
-VERSION = 3 # Where the version number matches the one in the test.
+  VERSION = 3 # Where the version number matches the one in the test.
 end
