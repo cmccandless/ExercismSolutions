@@ -4,9 +4,9 @@ class Bst
     @left = nil
     @right = nil
   end
-  def data
-    @data
-  end
+  attr_reader :data
+  attr_reader :left
+  attr_reader :right
   def insert(x)
     if x > @data
       if @right
@@ -21,12 +21,6 @@ class Bst
         @left = Bst.new(x)
       end
     end
-  end
-  def left
-    @left
-  end
-  def right
-    @right
   end
   def each(&block)
     return enum_for(:each) unless block_given?

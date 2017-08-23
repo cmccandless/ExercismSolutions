@@ -3,12 +3,15 @@ class SumOfMultiples
     @factors = factors
   end
   def to(max)
-    @factors.collect {|x| (1..max/x).collect { |n| n*x } }
+    @factors.collect {|factor| 
+              (1..max / factor).collect { |multiplicand| 
+                multiplicand * factor 
+              } 
+            }
             .flatten
             .uniq
-            .select { |n| n < max }
-            .push(0) # In case of no valid factors
-            .inject(:+)
+            .select { |multiple| multiple < max }
+            .inject(0, :+)
   end
 end
 module BookKeeping
