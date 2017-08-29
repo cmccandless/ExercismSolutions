@@ -9,7 +9,7 @@ class School
     @roster[grade] = Array.new(@roster[grade]).push(name).sort
   end
   def students_by_grade
-    @roster.to_a.sort.collect { |a| {:grade => a[0], :students => a[1] } }
+    @roster.sort.collect { |g,s| {:grade => g, :students => s } }
   end
 end
 module BookKeeping
