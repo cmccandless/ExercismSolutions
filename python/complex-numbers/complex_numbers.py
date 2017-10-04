@@ -1,14 +1,16 @@
 import math
+
+
 class ComplexNumber(object):
     def __init__(self, real, imaginary):
         self.real = real
         self.imaginary = imaginary
-        
+
     def __iter__(self):
         return [self.real, self.imaginary].__iter__()
 
     def add(self, other):
-        return ComplexNumber(self.real + other.real, 
+        return ComplexNumber(self.real + other.real,
                              self.imaginary + other.imaginary)
 
     def mul(self, other):
@@ -36,7 +38,7 @@ class ComplexNumber(object):
 
     def exp(self):
         r, i = self
-        # Rounding necessary due to rounding error in 
+        # Rounding necessary due to rounding error in
         # implementation of sin
         return ComplexNumber(pow(math.e, r) * math.cos(i),
-                             round(math.sin(i),10))
+                             round(math.sin(i), 10))

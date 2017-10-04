@@ -1,7 +1,7 @@
 def find_minimum_coins(total_change, coins):
     if total_change < 0 or any(x < 1 for x in coins):
         return -1
-    m = [None]*(total_change + 1)
+    m = [None] * (total_change + 1)
     m[0] = []
     for c in range(len(coins)):
         for t in range(1, len(m)):
