@@ -28,12 +28,18 @@ gift = {
     12: 'twelve Drummers Drumming',
 }
 
+
 def sing():
-    return verses(1,12)
-    
+    return verses(1, 12)
+
+
 def verse(n):
-    return 'On the {} day of Christmas my true love gave to me, {}.\n'.format(nth[n],
-        ', '.join([('and ' if n>1 and i==1 else '')+gift[i] for i in reversed(range(1,n+1))]))
-    
-def verses(start,end):
-    return ''.join(verse(i)+'\n' for i in range(start,end+1))
+    words = 'On the {} day of Christmas my true love gave to me, {}.\n'
+    return words.format(nth[n],
+                        ', '.join([('and ' if n > 1 and i == 1 else '') +
+                                   gift[i]
+                                   for i in reversed(range(1, n + 1))]))
+
+
+def verses(start, end):
+    return ''.join(verse(i) + '\n' for i in range(start, end + 1))
