@@ -190,6 +190,9 @@ vstemplete_README.md
 # Java
 # =========================
 .gradle
+.classpath
+.project
+.settings
 
 # =========================
 # Haskell
