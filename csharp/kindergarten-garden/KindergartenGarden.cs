@@ -11,23 +11,26 @@ public enum Plant
     None = '.',
 }
 
-class Garden
+class KindergartenGarden
 {
-    public Garden(string[] children, string plants)
-    {
-        Children = children.OrderBy(c => c).ToArray();
-        SetPlants(plants);
-    }
-
     private static string[] DefaultChildren = new[]
     {
         "Alice", "Bob", "Charlie", "David",
         "Eve", "Fred", "Ginny", "Harriet",
         "Ileana", "Joseph", "Kincaid", "Larry",
     };
-    private string[] Children = DefaultChildren;
-    private Dictionary<string, Plant[]> Plants = new Dictionary<string, Plant[]>();
-    public static Garden DefaultGarden(string plants) => new Garden(DefaultChildren, plants);
+    public static KindergartenGarden DefaultGarden(string plants) => new KindergartenGarden(plants, DefaultChildren);
+
+    public KindergartenGarden(string plants, string[] children = null)
+    {
+        Children = (children ?? DefaultChildren).OrderBy(c => c).ToArray();
+        SetPlants(plants);
+    }
+    private string[] Children;
+    private Dictionary<string, Plant[]> _plants = new Dictionary<string, Plant[]>();
+
+    public Plant[] Plants(string child) => 
+        _plants.ContainsKey(child) ? _plants[child] : new Plant[0];
 
     private void SetPlants(string plants)
     {
@@ -38,12 +41,9 @@ class Garden
             for (int c = 0; c < line.Length; c++)
             {
                 var child = Children[(int)Math.Floor(c / 2.0)];
-                if (!Plants.ContainsKey(child)) Plants[child] = new Plant[4];
-                Plants[child][r * 2 + (c % 2)] = (Plant)line[c];
+                if (!_plants.ContainsKey(child)) _plants[child] = new Plant[4];
+                _plants[child][r * 2 + (c % 2)] = (Plant)line[c];
             }
         }
     }
-
-    public Plant[] GetPlants(string child) => 
-        Plants.ContainsKey(child) ? Plants[child] : new Plant[0];
 }

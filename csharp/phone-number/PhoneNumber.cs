@@ -1,21 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 public class PhoneNumber
 {
-    public readonly string Number;
+    private static Regex rgx = new Regex(@"^1?([2-9]\d{2}[2-9]\d{6})$");
 
-    public string AreaCode => Number.Substring(0, 3);
-
-    private string Prefix => Number.Substring(3, 3);
-
-    private string Suffix => Number.Substring(6);
-
-    public PhoneNumber(string number)
+    public static string Clean(string number)
     {
-        Number = string.Join("", number.Where(char.IsDigit));
-        if (Number.Length == 11 && Number[0] == '1') Number = Number.Substring(1);
-        else if (Number.Length != 10) Number = new string('0', 10);
+        number = string.Join("", number.Where(char.IsLetterOrDigit));
+        var match = rgx.Match(number);
+        if (string.IsNullOrEmpty(match.Value)) throw new ArgumentException();
+        return string.Join("", match.Groups.Skip(1).Select(g => g.Value));
     }
-
-    public override string ToString() => $"({AreaCode}) {Prefix}-{Suffix}";
 }

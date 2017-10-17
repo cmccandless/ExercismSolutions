@@ -5,7 +5,12 @@ public class School
 {
     private Dictionary<int, List<string>> byGrade = new Dictionary<int, List<string>>();
 
-    public List<string> Roster() => byGrade.Values.SelectMany(v => v).OrderBy(x => x).ToList();
+    // public List<string> Roster() => byGrade.Values.SelectMany(v => v).OrderBy(x => x).ToList();
+    public List<string> Roster() =>
+        (from kvp in byGrade
+         from student in kvp.Value
+         orderby kvp.Key, student
+         select student).ToList();
 
     public List<string> Grade(int grade) => byGrade.ContainsKey(grade) ? byGrade[grade].OrderBy(x => x).ToList() : new List<string>();
 

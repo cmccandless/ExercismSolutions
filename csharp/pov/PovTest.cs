@@ -1,12 +1,11 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 using System.Linq;
-using Exercism.pov;
 
 public class PovTest
 {
     private const string x = "x";
 
-	private static Graph<T> leaf<T>(T v) { return Pov.CreateGraph(v, new Graph<T>[0]); }
+    private static Graph<T> leaf<T>(T v) => Pov.CreateGraph(v, new Graph<T>[0]);
 
     private static readonly Graph<string> singleton = Pov.CreateGraph(x, new Graph<string>[0]);
 
@@ -88,65 +87,68 @@ public class PovTest
             })
         });
 
-    [Test]
+    [Fact]
     public void Reparent_singleton()
     {
-        Assert.That(Pov.FromPOV(x, singleton), Is.EqualTo(singleton_));
+        Assert.Equal(singleton_, Pov.FromPOV(x, singleton));
     }
 
-    [Test]
+    [Fact]
     public void Reparent_flat()
     {
-        Assert.That(Pov.FromPOV(x, flat), Is.EqualTo(flat_));
+        Assert.Equal(flat_, Pov.FromPOV(x, flat));
     }
 
-    [Test]
+    [Fact]
     public void Reparent_nested()
     {
-        Assert.That(Pov.FromPOV(x, nested), Is.EqualTo(nested_));
+        Assert.Equal(nested_, Pov.FromPOV(x, nested));
     }
 
-    [Test]
+    [Fact]
     public void Reparent_kids()
     {
-        Assert.That(Pov.FromPOV(x, kids), Is.EqualTo(kids_));
+        Assert.Equal(kids_, Pov.FromPOV(x, kids));
     }
 
-    [Test]
+    [Fact]
     public void Reparent_cousins()
     {
-        Assert.That(Pov.FromPOV(x, cousins), Is.EqualTo(cousins_));
+        Assert.Equal(cousins_, Pov.FromPOV(x, cousins));
     }
 
-    [Test]
+    [Fact]
     public void Reparent_from_POV_of_non_existent_node()
     {
-        Assert.That(Pov.FromPOV(x, leaf("foo")), Is.Null);
+        Assert.Null(Pov.FromPOV(x, leaf("foo")));
     }
 
-    [Test]
+    [Fact]
     public void Should_not_be_able_to_find_a_missing_node()
     {
         var nodes = new[] { singleton, flat, kids, nested, cousins }.Select(graph => Pov.FromPOV("NOT THERE", graph));
     
-        Assert.That(nodes, Is.All.Null);
+        Assert.All(nodes, node =>
+        {
+            Assert.Null(node);
+        });
     }
 
-    [Test]
+    [Fact]
     public void Cannot_trace_between_unconnected_nodes()
     {
-        Assert.That(Pov.TracePathBetween(x, "NOT THERE", cousins), Is.Null);
+        Assert.Null(Pov.TracePathBetween(x, "NOT THERE", cousins));
     }
 
-    [Test]
+    [Fact]
     public void Can_trace_a_path_from_x_to_cousin()
     {
-        Assert.That(Pov.TracePathBetween(x, "cousin-1", cousins), Is.EquivalentTo(new[] { "x", "parent", "grandparent", "uncle", "cousin-1" }));
+        Assert.Equal(new[] { "x", "parent", "grandparent", "uncle", "cousin-1" }, Pov.TracePathBetween(x, "cousin-1", cousins));
     }
 
-    [Test]
+    [Fact]
     public void Can_trace_from_a_leaf_to_a_leaf()
     {
-        Assert.That(Pov.TracePathBetween("kid-a", "cousin-0", cousins), Is.EquivalentTo(new[] { "kid-a", "x", "parent", "grandparent", "uncle", "cousin-0" }));
+        Assert.Equal(new[] { "kid-a", "x", "parent", "grandparent", "uncle", "cousin-0" }, Pov.TracePathBetween("kid-a", "cousin-0", cousins));
     }
 }

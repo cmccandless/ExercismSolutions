@@ -1,20 +1,60 @@
-﻿using NUnit.Framework;
+// This file was auto-generated based on version 1.1.0 of the canonical data.
 
-[TestFixture]
+using Xunit;
+
 public class IsogramTest
 {
-    [TestCase("duplicates", ExpectedResult = true)]
-    [TestCase("eleven", ExpectedResult = false)]
-    [TestCase("subdermatoglyphic", ExpectedResult = true)]
-    [TestCase("Alphabet", ExpectedResult = false)]
-    [TestCase("thumbscrew-japingly", ExpectedResult = true)]
-    [TestCase("Hjelmqvist-Gryb-Zock-Pfund-Wax", ExpectedResult = true)]
-    [TestCase("Heizölrückstoßabdämpfung", ExpectedResult = true)]
-    [TestCase("the quick brown fox", ExpectedResult = false)]
-    [TestCase("Emily Jung Schwartzkopf", ExpectedResult = true)]
-    [TestCase("éléphant", ExpectedResult = false)]
-    public bool Isogram_correctly_detects_isograms(string input)
+    [Fact]
+    public void Empty_string()
     {
-        return Isogram.IsIsogram(input);
+        Assert.True(Isogram.IsIsogram(""));
+    }
+
+    [Fact]
+    public void Isogram_with_only_lower_case_characters()
+    {
+        Assert.True(Isogram.IsIsogram("isogram"));
+    }
+
+    [Fact]
+    public void Word_with_one_duplicated_character()
+    {
+        Assert.False(Isogram.IsIsogram("eleven"));
+    }
+
+    [Fact]
+    public void Longest_reported_english_isogram()
+    {
+        Assert.True(Isogram.IsIsogram("subdermatoglyphic"));
+    }
+
+    [Fact]
+    public void Word_with_duplicated_character_in_mixed_case()
+    {
+        Assert.False(Isogram.IsIsogram("Alphabet"));
+    }
+
+    [Fact]
+    public void Hypothetical_isogrammic_word_with_hyphen()
+    {
+        Assert.True(Isogram.IsIsogram("thumbscrew-japingly"));
+    }
+
+    [Fact]
+    public void Isogram_with_duplicated_non_letter_character()
+    {
+        Assert.True(Isogram.IsIsogram("Hjelmqvist-Gryb-Zock-Pfund-Wax"));
+    }
+
+    [Fact]
+    public void Made_up_name_that_is_an_isogram()
+    {
+        Assert.True(Isogram.IsIsogram("Emily Jung Schwartzkopf"));
+    }
+
+    [Fact]
+    public void Duplicated_character_in_the_middle()
+    {
+        Assert.False(Isogram.IsIsogram("accentor"));
     }
 }

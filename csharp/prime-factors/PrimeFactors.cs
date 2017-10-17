@@ -28,7 +28,7 @@ public static class PrimeFactors
         }
     }
 
-    public static int[] For(long i)
+    public static int[] Factors(long i)
     {
         var result = new List<int>();
         if (i <= 1) return new int[0];

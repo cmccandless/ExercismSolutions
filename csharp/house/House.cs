@@ -16,7 +16,10 @@ public class House
         new[] {"ate","malt"},
         new[] {"lay in","house that Jack built."},
     }.Reverse().ToArray();
-    private static string Verse(int i, bool start = true) =>
+    public static string Verse(int i) => Verse(i - 1, true);
+    private static string Verse(int i, bool start) =>
         $"{(start ? "This is" : $"that {words[i][0]}")} the {words[i][1]}{(i == 0 ? string.Empty : $"\n{Verse(i - 1, false)}")}";
-    public static string Rhyme() => string.Join("\n\n", new int[words.Length].Select((_, i) => Verse(i)));
+    public static string Verses(int start, int stop) =>
+        string.Join("\n\n", Enumerable.Range(start, stop - start + 1).Select(i => Verse(i)));
+    public static string Rhyme() => Verses(1, words.Length);
 }

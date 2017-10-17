@@ -1,12 +1,15 @@
 ﻿public class BinarySearch
 {
-    public static int Search(int[] a, int x) => 
-        a.Length == 0 ? -1 : 
-        Search(a, x, 0, a.Length - 1, a.Length / 2);
+    private int[] array;
+    public BinarySearch(int[] array) => this.array = array;
 
-    public static int Search(int[] a, int x, int p, int q, int i) =>
-        a[i] == x ? i :
+    public int Find(int x) => 
+        array.Length == 0 ? -1 : 
+        Find(x, 0, array.Length - 1, array.Length / 2);
+
+    private int Find(int x, int p, int q, int i) =>
+        array[i].Equals(x) ? i :
         q <= p ? -1 :
-        a[i] < x ? Search(a, x, i + 1, q, (q + i + 1) / 2) :
-        Search(a, x, p, i - 1, (i - 1 + p) / 2);
+        array[i].CompareTo(x) < 0 ? Find(x, i + 1, q, (q + i + 1) / 2) :
+        Find(x, p, i - 1, (i - 1 + p) / 2);
 }

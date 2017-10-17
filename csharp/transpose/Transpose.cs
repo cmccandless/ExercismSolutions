@@ -4,7 +4,7 @@ public static class Transpose
 {
     private static string TrimEndSingle(this string s) => s.EndsWith(" ") ? s.Substring(0, s.Length - 1) : s;
 
-    public static string String(string input) => String(input.Split('\n')).TrimEndSingle();
+    public static string String(string input) => String(input.Split('\n')).TrimEnd();
 
     public static string String(string[] lines) => string.Join("\n", String(lines, lines.Max(s => s.Length)));
 

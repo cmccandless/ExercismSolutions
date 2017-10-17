@@ -2,5 +2,5 @@
 
 public class Gigasecond
 {
-	public static DateTime Date(DateTime date) => date.AddSeconds(1000000000);
+	public static DateTime Add(DateTime date) => date.AddSeconds(1000000000);
 }

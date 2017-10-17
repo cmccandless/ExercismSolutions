@@ -16,12 +16,10 @@ public class Allergies
 		cats=0x80,
 	}
 
-	public List<string> List()
-	{
-		return (from Allergy allergy in Enum.GetValues(typeof(Allergy))
-				where AllergyScore.HasFlag(allergy)
-				select allergy.ToString()).ToList();
-	}
+	public List<string> List() =>
+		(from Allergy allergy in Enum.GetValues(typeof(Allergy))
+		 where AllergyScore.HasFlag(allergy)
+		 select allergy.ToString()).ToList();
 
 	public Allergy AllergyScore { get; set; }
 
@@ -30,8 +28,6 @@ public class Allergies
 		AllergyScore = (Allergy)allergyScore;
 	}
 
-	public bool AllergicTo(string allergies)
-	{
-		return AllergyScore.HasFlag((Allergy)Enum.Parse(typeof(Allergy), allergies));
-	}
+	public bool IsAllergicTo(string allergies) =>
+		 AllergyScore.HasFlag((Allergy)Enum.Parse(typeof(Allergy), allergies));
 }

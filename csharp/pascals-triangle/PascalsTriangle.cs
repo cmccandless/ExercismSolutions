@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 public static class PascalsTriangle
 {
@@ -12,5 +13,9 @@ public static class PascalsTriangle
 
     private static int[][] GenTriangle(int[][] a, byte _) => a.Concat(new[] { a.NextRow() }).ToArray();
 
-    public static int[][] Calculate(int n) => new byte[n].Aggregate(new int[0][], GenTriangle);
+    public static int[][] Calculate(int n) 
+    {
+        if (n < 0) throw new ArgumentOutOfRangeException();
+        return new byte[n].Aggregate(new int[0][], GenTriangle);
+    }
 }

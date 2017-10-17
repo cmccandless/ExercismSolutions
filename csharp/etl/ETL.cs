@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-public static class ETL
+public static class Etl
 {
 	public static Dictionary<string, int> Transform(Dictionary<int, IList<string>> old)
 	{

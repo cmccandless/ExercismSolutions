@@ -10,5 +10,5 @@ public class SumOfMultiples
         return result;
     }
 
-    public static int To(int[] nums, int mult) => new HashSet<int>(nums.SelectMany(n => MultsLessThan(n, mult))).Sum();
+    public static int Sum(int[] nums, int mult) => new HashSet<int>(nums.SelectMany(n => MultsLessThan(n, mult))).Sum();
 }

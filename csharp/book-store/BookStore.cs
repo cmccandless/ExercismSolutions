@@ -7,8 +7,8 @@ public class BookStore
     private const int BASE_COST = 8;
     private static double[] discount = new[] { 1, 1, .95, .9, .8, .75 };
 
-    public static double CalculateTotalCost(List<int> list) =>
-        BASE_COST * Math.Min(CalcMethod1(list), CalcMethod2(list));
+    public static double Total(int[] list) =>
+        BASE_COST * Math.Min(CalcMethod1(list.ToList()), CalcMethod2(list.ToList()));
 
     private static double SumSet(IEnumerable<int> s) => Math.Round(s.Count() * discount[s.Count()], 2);
 

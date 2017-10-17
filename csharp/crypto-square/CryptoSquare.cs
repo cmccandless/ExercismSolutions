@@ -2,45 +2,42 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Crypto
+public class CryptoSquare
 {
-    public readonly string NormalizePlaintext;
-    public readonly int Size;
-    public Crypto(string str)
+    public static string NormalizedPlaintext(string plaintext)
     {
-        NormalizePlaintext = new string(str.ToLower().Where(char.IsLetterOrDigit).ToArray());
-        Size = (int)Math.Ceiling(Math.Sqrt(NormalizePlaintext.Length));
+        return new string(plaintext.ToLower().Where(char.IsLetterOrDigit).ToArray());
     }
 
-    private IEnumerable<char> Column(int col) => Enumerable.Range(0, Size)
-        .Select(r => r * Size + col)
-        .TakeWhile(i => i < NormalizePlaintext.Length)
-        .Select(i => NormalizePlaintext[i]);
-
-    private string ColumnAsRow(int col) => new string(Column(col).ToArray());
-
-    private string Cipher(string delimiter = " ") =>
-        string.Join(delimiter, Enumerable.Range(0, Size).Select(ColumnAsRow));
-
-    public string[] PlaintextSegments() => NormalizePlaintext.Segments(Size).ToArray();
-
-    public string Ciphertext() => Cipher("");
-
-    public string NormalizeCiphertext() => Cipher();
-}
-
-static class Ext
-{
-    public static IEnumerable<T> DequeueM<T>(this Queue<T> q, int n, bool exact = false)
+    public static string[] PlaintextSegments(string plaintext)
     {
-        while (q.Any() && n-- > 0) yield return q.Dequeue();
+        var q = new List<string>();
+        var normalized = NormalizedPlaintext(plaintext);
+        var size = (int)Math.Ceiling(Math.Sqrt(normalized.Length));
+        foreach (var ch in normalized)
+        {
+            if (!q.Any() || q.Last().Length >= size) q.Add("");
+            q[q.Count - 1] += ch;
+        }
+        return q.ToArray();
     }
 
-    public static IEnumerable<string> Segments(this IEnumerable<char> col, int size) =>
-        new Queue<char>(col).Segments(size);
-
-    public static IEnumerable<string> Segments(this Queue<char> q, int size)
+    public static string Ciphertext(string plaintext) 
     {
-        while (q.Any()) yield return string.Join(string.Empty, q.DequeueM(size));
+        var lines = PlaintextSegments(plaintext).Select(line => new Queue<char>(line)).ToArray();
+        var result = "";
+        bool charsRemaining() => lines.Any(line => line.Any());
+        while (charsRemaining())
+        {
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+                result += line.Any() ? line.Dequeue() : ' ';
+            }
+            if (charsRemaining()) result += " ";
+        }
+        return result;
     }
+
+    public static string Encoded(string plaintext) => Ciphertext(plaintext).Replace(" ", "");
 }

@@ -1,60 +1,97 @@
-﻿using Xunit;
+// This file was auto-generated based on version 1.0.0 of the canonical data.
 
-public class KinderGartenGardenTest
+using Xunit;
+
+public class KindergartenGardenTest
 {
     [Fact]
-    public void Missing_child()
+    public void Partial_garden_garden_with_single_student()
     {
-        var actual = Garden.DefaultGarden("RC\nGG").GetPlants("Potter");
-        Assert.Empty(actual);
+        var sut = new KindergartenGarden("RC\nGG");
+        Assert.Equal(new[] { Plant.Radishes, Plant.Clover, Plant.Grass, Plant.Grass }, sut.Plants("Alice"));
     }
 
-    [Fact()]
-    public void Alice()
+    [Fact]
+    public void Partial_garden_different_garden_with_single_student()
     {
-        Assert.Equal(new [] { Plant.Radishes, Plant.Clover, Plant.Grass, Plant.Grass }, Garden.DefaultGarden("RC\nGG").GetPlants("Alice"));
-        Assert.Equal(new[] { Plant.Violets, Plant.Clover, Plant.Radishes, Plant.Clover }, Garden.DefaultGarden("VC\nRC").GetPlants("Alice"));
+        var sut = new KindergartenGarden("VC\nRC");
+        Assert.Equal(new[] { Plant.Violets, Plant.Clover, Plant.Radishes, Plant.Clover }, sut.Plants("Alice"));
     }
 
-    [Fact()]
-    public void Small_garden()
+    [Fact]
+    public void Partial_garden_garden_with_two_students()
     {
-        var actual = Garden.DefaultGarden("VVCG\nVVRC").GetPlants("Bob");
-        Assert.Equal(new[] { Plant.Clover, Plant.Grass, Plant.Radishes, Plant.Clover }, actual);
+        var sut = new KindergartenGarden("VVCG\nVVRC");
+        Assert.Equal(new[] { Plant.Clover, Plant.Grass, Plant.Radishes, Plant.Clover }, sut.Plants("Bob"));
     }
 
-    [Fact()]
-    public void Medium_garden()
+    [Fact]
+    public void Partial_garden_multiple_students_for_the_same_garden_with_three_students_second_students_garden()
     {
-        var garden = Garden.DefaultGarden("VVCCGG\nVVCCGG");
-        Assert.Equal(new[] { Plant.Clover, Plant.Clover, Plant.Clover, Plant.Clover }, garden.GetPlants("Bob"));
-        Assert.Equal(new[] { Plant.Grass, Plant.Grass, Plant.Grass, Plant.Grass }, garden.GetPlants("Charlie"));
+        var sut = new KindergartenGarden("VVCCGG\nVVCCGG");
+        Assert.Equal(new[] { Plant.Clover, Plant.Clover, Plant.Clover, Plant.Clover }, sut.Plants("Bob"));
     }
 
-    [Fact()]
-    public void Full_garden()
+    [Fact]
+    public void Partial_garden_multiple_students_for_the_same_garden_with_three_students_third_students_garden()
     {
-        var garden = Garden.DefaultGarden("VRCGVVRVCGGCCGVRGCVCGCGV\nVRCCCGCRRGVCGCRVVCVGCGCV");
-        Assert.Equal(new[] { Plant.Violets, Plant.Radishes, Plant.Violets, Plant.Radishes }, garden.GetPlants("Alice"));
-        Assert.Equal(new[] { Plant.Clover, Plant.Grass, Plant.Clover, Plant.Clover }, garden.GetPlants("Bob"));
-        Assert.Equal(new[] { Plant.Radishes, Plant.Violets, Plant.Clover, Plant.Radishes }, garden.GetPlants("David"));
-        Assert.Equal(new[] { Plant.Clover, Plant.Grass, Plant.Radishes, Plant.Grass }, garden.GetPlants("Eve"));
-        Assert.Equal(new[] { Plant.Grass, Plant.Clover, Plant.Violets, Plant.Clover }, garden.GetPlants("Fred"));
-        Assert.Equal(new[] { Plant.Clover, Plant.Grass, Plant.Grass, Plant.Clover }, garden.GetPlants("Ginny"));
-        Assert.Equal(new[] { Plant.Violets, Plant.Radishes, Plant.Radishes, Plant.Violets }, garden.GetPlants("Harriet"));
-        Assert.Equal(new[] { Plant.Grass, Plant.Clover, Plant.Violets, Plant.Clover }, garden.GetPlants("Ileana"));
-        Assert.Equal(new[] { Plant.Violets, Plant.Clover, Plant.Violets, Plant.Grass }, garden.GetPlants("Joseph"));
-        Assert.Equal(new[] { Plant.Grass, Plant.Clover, Plant.Clover, Plant.Grass }, garden.GetPlants("Kincaid"));
-        Assert.Equal(new[] { Plant.Grass, Plant.Violets, Plant.Clover, Plant.Violets }, garden.GetPlants("Larry"));
+        var sut = new KindergartenGarden("VVCCGG\nVVCCGG");
+        Assert.Equal(new[] { Plant.Grass, Plant.Grass, Plant.Grass, Plant.Grass }, sut.Plants("Charlie"));
     }
 
-    [Fact()]
-    public void Surprise_garden()
+    [Fact]
+    public void Full_garden_first_students_garden()
     {
-        var garden = new Garden(new [] { "Samantha", "Patricia", "Xander", "Roger" }, "VCRRGVRG\nRVGCCGCV");
-        Assert.Equal(new[] { Plant.Violets, Plant.Clover, Plant.Radishes, Plant.Violets }, garden.GetPlants("Patricia"));
-        Assert.Equal(new[] { Plant.Radishes, Plant.Radishes, Plant.Grass, Plant.Clover }, garden.GetPlants("Roger"));
-        Assert.Equal(new[] { Plant.Grass, Plant.Violets, Plant.Clover, Plant.Grass }, garden.GetPlants("Samantha"));
-        Assert.Equal(new[] { Plant.Radishes, Plant.Grass, Plant.Clover, Plant.Violets }, garden.GetPlants("Xander"));
+        var sut = new KindergartenGarden("VRCGVVRVCGGCCGVRGCVCGCGV\nVRCCCGCRRGVCGCRVVCVGCGCV");
+        Assert.Equal(new[] { Plant.Violets, Plant.Radishes, Plant.Violets, Plant.Radishes }, sut.Plants("Alice"));
+    }
+
+    [Fact]
+    public void Full_garden_second_students_garden()
+    {
+        var sut = new KindergartenGarden("VRCGVVRVCGGCCGVRGCVCGCGV\nVRCCCGCRRGVCGCRVVCVGCGCV");
+        Assert.Equal(new[] { Plant.Clover, Plant.Grass, Plant.Clover, Plant.Clover }, sut.Plants("Bob"));
+    }
+
+    [Fact]
+    public void Full_garden_second_to_last_students_garden()
+    {
+        var sut = new KindergartenGarden("VRCGVVRVCGGCCGVRGCVCGCGV\nVRCCCGCRRGVCGCRVVCVGCGCV");
+        Assert.Equal(new[] { Plant.Grass, Plant.Clover, Plant.Clover, Plant.Grass }, sut.Plants("Kincaid"));
+    }
+
+    [Fact]
+    public void Full_garden_last_students_garden()
+    {
+        var sut = new KindergartenGarden("VRCGVVRVCGGCCGVRGCVCGCGV\nVRCCCGCRRGVCGCRVVCVGCGCV");
+        Assert.Equal(new[] { Plant.Grass, Plant.Violets, Plant.Clover, Plant.Violets }, sut.Plants("Larry"));
+    }
+
+    [Fact]
+    public void Non_alphabetical_student_list_first_students_garden()
+    {
+        var sut = new KindergartenGarden("VCRRGVRG\nRVGCCGCV", new[] { "Samantha", "Patricia", "Xander", "Roger" });
+        Assert.Equal(new[] { Plant.Violets, Plant.Clover, Plant.Radishes, Plant.Violets }, sut.Plants("Patricia"));
+    }
+
+    [Fact]
+    public void Non_alphabetical_student_list_second_students_garden()
+    {
+        var sut = new KindergartenGarden("VCRRGVRG\nRVGCCGCV", new[] { "Samantha", "Patricia", "Xander", "Roger" });
+        Assert.Equal(new[] { Plant.Radishes, Plant.Radishes, Plant.Grass, Plant.Clover }, sut.Plants("Roger"));
+    }
+
+    [Fact]
+    public void Non_alphabetical_student_list_third_students_garden()
+    {
+        var sut = new KindergartenGarden("VCRRGVRG\nRVGCCGCV", new[] { "Samantha", "Patricia", "Xander", "Roger" });
+        Assert.Equal(new[] { Plant.Grass, Plant.Violets, Plant.Clover, Plant.Grass }, sut.Plants("Samantha"));
+    }
+
+    [Fact]
+    public void Non_alphabetical_student_list_fourth_last_students_garden()
+    {
+        var sut = new KindergartenGarden("VCRRGVRG\nRVGCCGCV", new[] { "Samantha", "Patricia", "Xander", "Roger" });
+        Assert.Equal(new[] { Plant.Radishes, Plant.Grass, Plant.Clover, Plant.Violets }, sut.Plants("Xander"));
     }
 }

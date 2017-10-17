@@ -1,79 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-public class Poker
+public static class Poker
 {
-	private static Dictionary<char, int> values = new Dictionary<char, int>
+	private static readonly List<string> types = 
+		new List<string>{"11111","2111","221","S","F","32","41","SF"};
+	private const string straights = "2345678910111213142345";
+	private static string CardSuit(string card) => card.Substring(card.Length - 1);
+	private static int CardValue(string card) =>
+		int.Parse(card.Substring(0, card.Length - 1)
+		              .Replace("J", "11")
+		              .Replace("Q", "12")
+		              .Replace("K", "13")
+		              .Replace("A", "14"));
+	private static bool IsStraight(int[] values)
 	{
-		{'2',2},{'3',3},{'4',4},{'5',5},{'6',6},{'7',7},{'8',8},{'9',9},
-		{'T',10},{'J',11},{'Q',12},{'K',13},{'A',14},
-	};
-
-	private static int[] next = new[] { 0, 0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 2 };
-
-	private const string suits = "HDSC";
-
-	private static int Score(string hand)
-	{
-		var cards = (from card in hand.Split()
-					 let value = values[card[0]]
-					 orderby value
-					 select new Card() { Value = value, Suit = card[1] }).ToArray();
-		var score = 0;
-		var highCard = cards.Last().Value;
-		var straight = cards.Count(c => suits.Select(s =>
-			new Card() { Value = next[c.Value], Suit = s }).Any(c2 => cards.Contains(c2))) == 4;
-		var flush = cards.All(c => c.Suit.Equals(cards[0].Suit));
-		var byValue = (from card in cards
-					   group card by card.Value into grp
-					   orderby grp.Count() descending, grp.Key descending
-					   select new { Value = grp.Key, Count = grp.Count() }).ToArray();
-		if (straight && flush)
+		if (values.Length != 5) return false;
+		// var nums = new[]{2,3,4,5,6,7,8,9,10,11,12,13,14,2,3,4,5};
+		var nums = new[]{5,4,3,2,14,13,12,11,10,9,8,7,6,5,4,3,2};
+		for (int i = 0; i < nums.Length - 4; i++)
 		{
-			score = 8;
-			if (cards[3].Value != values['K']) highCard = byValue[1].Value;
+			int j = 0;
+			for (; j < 5 && values[j] == nums[i+j]; j++);
+			if (j == 5) return true;
 		}
-		else if (byValue[0].Count == 4) { score = 7; highCard = byValue[0].Value; }
-		else if (byValue[0].Count == 3 && byValue[1].Count == 2) { score = 6; highCard = byValue[0].Value; }
-		else if (flush) { score = 5; }
-		else if (straight)
-		{
-			score = 4;
-			if (cards[3].Value != values['K']) highCard = byValue[1].Value;
-		}
-		else if (byValue[0].Count > 1)
-		{
-			switch(byValue[0].Count)
-			{
-				case 3: score = 3; break;
-				case 2: score = byValue[1].Count == 2 ? 2 : 1; break;
-			}
-			highCard = byValue[0].Value;
-		}
-		return (score << 4) + highCard;
+		return false;
 	}
-
-	public static string[] BestHands(string[] hands)
-	{
-		return (from hand in hands
-				group hand by Score(hand) into grp
-				orderby grp.Key descending
-				select grp).First().ToArray();
-	}
-
-	private class Card
-	{
-		public int Value;
-		public char Suit;
-		public override bool Equals(object obj)
-		{
-			var other = obj as Card;
-			return other != null && this.Value == other.Value && this.Suit == other.Suit;
-		}
-		public override int GetHashCode() { return base.GetHashCode(); }
-		public override string ToString() { return Value.ToString() + Suit; }
-	}
+	public static string[] BestHands(string[] hands) =>
+		(from hand in hands
+		 let cards = hand.Split(" ")
+		 let flush = cards.Select(CardSuit).Distinct().Count() == 1
+		 let cardsByValue = (from card in cards
+		 		   group card by CardValue(card) into grp
+		 		   let grping = (value: grp.Key, count: grp.Count())
+				   orderby grping.count descending, grping.value descending
+		 		   select grping).ToArray()
+		 let values = (from tup in cardsByValue
+		               orderby tup.value descending
+		 		       select tup.value).ToArray()
+		 let straight = IsStraight(values)
+		 let counts = string.Join("", from tup in cardsByValue
+		                              select tup.count)
+		 let _class = types.IndexOf(!(straight || flush) ? counts : 
+		 			                  $"{(straight ? "S" : "")}{(flush ? "F" : "")}")
+		 let valuesR = string.Join("", values)
+		 group (hand: hand, values: valuesR) by _class into grp
+		 orderby grp.Key descending
+         from tup in grp
+		 group tup.hand by tup.values into grp
+		 orderby grp.Key descending
+         select grp.ToArray()).First();
 }

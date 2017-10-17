@@ -11,12 +11,11 @@ public class Anagram
         Sorted = Word.SortLetters();
     }
 
-    public string[] Match(string[] candidates) =>
+    public string[] Anagrams(string[] candidates) =>
         (from candidate in candidates
          let lowered = candidate.ToLower()
          where !lowered.Equals(Word)
          where lowered.SortLetters().Equals(Sorted)
-         orderby candidate
          select candidate).ToArray();
 }
 

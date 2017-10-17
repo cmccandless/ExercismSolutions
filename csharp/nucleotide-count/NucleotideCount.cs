@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 
-public class DNA
+public class NucleotideCount
 {
     public NucleotideGroup NucleotideCounts { get; } = new NucleotideGroup();
 
     public int Count(char ch) => NucleotideCounts[ch];
 
-    public DNA(string dna) { foreach (var ch in dna) NucleotideCounts[ch]++; }
+    public NucleotideCount(string dna) { foreach (var ch in dna) NucleotideCounts[ch]++; }
 }
 
 public class InvalidNucleotideException : Exception

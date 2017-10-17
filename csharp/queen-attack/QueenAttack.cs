@@ -1,24 +1,15 @@
 ﻿using System;
 
-public class Queen
+public static class QueenAttack
 {
-    public int X { get; set; }
-    public int Y { get; set; }
-    public Queen(int x, int y)
+    public static (int x, int y) Create(int x, int y)
     {
-        X = x;
-        Y = y;
+        if (x < 0 || x > 7 || y < 0 || y > 7) throw new ArgumentOutOfRangeException();
+        return (x, y);
     }
-    public override bool Equals(object obj) => Equals(obj as Queen);
-    public override int GetHashCode() => base.GetHashCode();
-    public bool Equals(Queen other) => X.Equals(other?.X) && Y.Equals(other.Y);
-}
-
-public class Queens
-{
-    public static bool CanAttack(Queen a, Queen b)
+    public static bool CanAttack((int x, int y) a, (int x, int y) b)
     {
         if (a.Equals(b)) throw new ArgumentException();
-        return a.X == b.X || a.Y == b.Y || (Math.Abs(a.X - b.X) == Math.Abs(a.Y - b.Y));
+        return a.x == b.x || a.y == b.y || (Math.Abs(a.x - b.x) == Math.Abs(a.y - b.y));
     }
 }

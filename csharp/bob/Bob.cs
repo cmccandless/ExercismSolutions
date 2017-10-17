@@ -10,7 +10,7 @@ public static class Bob
         "Whatever.",
     };
 
-    internal static string Hey(string query)
+    internal static string Response(string query)
     {
         query = query.Trim();
         return responses[
