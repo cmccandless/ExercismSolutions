@@ -1,12 +1,26 @@
-#!/c/Python36/python
+#!/usr/bin/env python
 
 import os
 import sys
 import hook_utils as hut
 
 
-def main():
-    changed_exercises = hut.get_changed_exercises()
+def main(commit=-1, *args, **kwargs):
+    if commit == 'HEAD':
+        commit = 0
+    else:
+        commit = int(commit)
+    changed_exercises = hut.get_changed_exercises(commit)
+    changed_tracks = set(track for track, _ in changed_exercises)
+    for track in changed_tracks:
+        hut.log('Running linter...', track)
+        results, ret = hut.linter(track)
+        if results.startswith('No available'):
+            hut.log(results, track)
+        elif ret == 0:
+            hut.log('Style checks passed', track)
+        else:
+            hut.abort(results, track)
     simple_tracks = {'cpp', 'csharp', 'go', 'haskell', 'java', 'ruby'}
     for track, exercise in sorted(changed_exercises):
         dir = os.path.join(track, exercise)
@@ -47,8 +61,8 @@ def main():
         else:
             hut.abort('Unknown track "{}"'.format(track))
         os.chdir(os.path.join('..', '..'))
-    sys.exit(0)
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main(*sys.argv[1:]))
