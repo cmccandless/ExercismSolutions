@@ -1,4 +1,4 @@
-#!/c/Python36/python
+#!/usr/bin/env python
 
 import sys
 import hook_utils as hut
