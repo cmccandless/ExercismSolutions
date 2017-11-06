@@ -2,7 +2,7 @@ import secrets
 
 
 def private_key(p):
-    return secrets.randbelow(p - 2) + 1
+    return secrets.randbelow(p - 2) + 2
 
 
 def public_key(p, g, private):
