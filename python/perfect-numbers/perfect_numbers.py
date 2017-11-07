@@ -1,4 +1,4 @@
-from math import sqrt, floor
+from math import sqrt
 
 
 def is_perfect(n):

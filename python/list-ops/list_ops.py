@@ -17,9 +17,11 @@ def length(xs):
 
 
 def filter_clone(function, xs):
+    result = []
     for x in xs:
         if function(x):
-            yield x
+            result.append(x)
+    return result
 
 
 def reverse(xs):
@@ -32,8 +34,11 @@ def reverse(xs):
     return s
 
 
-def append(xs, y):
-    xs.insert(length(xs), y)
+def append(xs, ys):
+    if isinstance(ys, list):
+        xs.extend(ys)
+    else:
+        xs.append(ys)
     return xs
 
 
@@ -60,8 +65,5 @@ def flat(xs):
     return s
 
 
-def concat(xs, ys):
-    if ys is not None:
-        for y in ys:
-            append(xs, y)
-    return xs
+def concat(*args):
+    return flat(args)

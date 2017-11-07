@@ -3,49 +3,39 @@ import unittest
 from space_age import SpaceAge
 
 
+# Tests adapted from `problem-specifications//canonical-data.json` @ v1.0.0
+
 class SpaceAgeTest(unittest.TestCase):
-    def test_age_in_seconds(self):
-        age = SpaceAge(1e6)
-        self.assertEqual(1e6, age.seconds)
 
-    def test_age_in_earth_years(self):
-        age = SpaceAge(1e9)
-        self.assertEqual(31.69, age.on_earth())
+    def test_age_on_mercury(self):
+        self.assertEqual(SpaceAge(2134835688).on_mercury(), 280.88)
 
-    def test_age_in_mercury_years(self):
-        age = SpaceAge(2134835688)
-        self.assertEqual(67.65, age.on_earth())
-        self.assertEqual(280.88, age.on_mercury())
+    def test_age_on_venus(self):
+        self.assertEqual(SpaceAge(189839836).on_venus(), 9.78)
 
-    def test_age_in_venus_years(self):
-        age = SpaceAge(189839836)
-        self.assertEqual(6.02, age.on_earth())
-        self.assertEqual(9.78, age.on_venus())
+    def test_age_on_earth(self):
+        self.assertEqual(SpaceAge(1000000000).on_earth(), 31.69)
 
     def test_age_on_mars(self):
-        age = SpaceAge(2329871239)
-        self.assertEqual(73.83, age.on_earth())
-        self.assertEqual(39.25, age.on_mars())
+        self.assertEqual(SpaceAge(2329871239).on_mars(), 39.25)
 
     def test_age_on_jupiter(self):
-        age = SpaceAge(901876382)
-        self.assertEqual(28.58, age.on_earth())
-        self.assertEqual(2.41, age.on_jupiter())
+        self.assertEqual(SpaceAge(901876382).on_jupiter(), 2.41)
 
     def test_age_on_saturn(self):
-        age = SpaceAge(3e9)
-        self.assertEqual(95.06, age.on_earth())
-        self.assertEqual(3.23, age.on_saturn())
+        self.assertEqual(SpaceAge(3000000000).on_saturn(), 3.23)
 
     def test_age_on_uranus(self):
-        age = SpaceAge(3210123456)
-        self.assertEqual(101.72, age.on_earth())
-        self.assertEqual(1.21, age.on_uranus())
+        self.assertEqual(SpaceAge(3210123456).on_uranus(), 1.21)
 
     def test_age_on_neptune(self):
-        age = SpaceAge(8210123456)
-        self.assertEqual(260.16, age.on_earth())
-        self.assertEqual(1.58, age.on_neptune())
+        self.assertEqual(SpaceAge(8210123456).on_neptune(), 1.58)
+
+    # Additional tests for this track
+
+    def test_age_in_seconds(self):
+        self.assertEqual(SpaceAge(1e6).seconds, 1e6)
+
 
 if __name__ == '__main__':
     unittest.main()

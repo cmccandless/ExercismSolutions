@@ -1,4 +1,4 @@
-consonents = ['sch', 'squ', 'thr', 'qu', 'th', 'sc', 'sh', 'ch', 'st']
+consonents = ['sch', 'squ', 'thr', 'qu', 'th', 'sc', 'sh', 'ch', 'st', 'rh']
 consonents.extend('bcdfghjklmnpqrstvwxyz')
 
 

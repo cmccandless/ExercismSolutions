@@ -50,7 +50,6 @@ class BeerTest(unittest.TestCase):
         )
 
     def test_song_all_the_rest_of_the_verses(self):
-        self.maxDiff=None
         self.assertEqual(
             song(3),
             "3 bottles of beer on the wall, 3 bottles of beer.\n"
@@ -66,6 +65,7 @@ class BeerTest(unittest.TestCase):
             "Go to the store and buy some more, "
             "99 bottles of beer on the wall.\n\n"
         )
+
 
 if __name__ == '__main__':
     unittest.main()

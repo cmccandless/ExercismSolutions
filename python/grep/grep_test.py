@@ -4,7 +4,7 @@ import unittest
 from grep import grep
 
 
-# test cases adapted from `x-common//canonical-data.json` @ version: 1.0.0
+# Tests adapted from `problem-specifications//canonical-data.json` @ v1.0.0
 
 ILIADFILENAME = 'iliad.txt'
 ILIADCONTENTS = '''Achilles sing, O Goddess! Peleus' son;
@@ -53,8 +53,6 @@ def create_file(name, contents):
 
 
 class GrepTest(unittest.TestCase):
-    maxDiff = None
-
     @classmethod
     def setUpClass(self):
         create_file(ILIADFILENAME, ILIADCONTENTS)
@@ -178,10 +176,10 @@ class GrepTest(unittest.TestCase):
              "iliad.txt:And Heroes gave (so stood the will of Jove)\n"
              "iliad.txt:To dogs and to all ravening fowls a prey,\n"
              "midsummer-night.txt:I do entreat your grace to pardon me.\n"
-             "midsummer-night.txt:In such a presence here to plead my thoughts;\n"
-             "midsummer-night.txt:If I refuse to wed Demetrius.\n"
-             "paradise-lost.txt:Brought Death into the World, and all our woe,\n"
-             "paradise-lost.txt:Restore us, and regain the blissful Seat,\n"
+             "midsummer-night.txt:In such a presence here to plead my thoughts"
+             ";\nmidsummer-night.txt:If I refuse to wed Demetrius.\n"
+             "paradise-lost.txt:Brought Death into the World, and all our woe,"
+             "\nparadise-lost.txt:Restore us, and regain the blissful Seat,\n"
              "paradise-lost.txt:Sing Heav'nly Muse, that on the secret top\n"))
 
     def test_multiple_files_several_matches_inverted_flag(self):

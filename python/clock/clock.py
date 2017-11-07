@@ -2,9 +2,9 @@ class Clock:
     def __init__(self, hour, minute):
         self.hour = hour % 24
         self.minute = 0
-        self.add(minute)
+        self.__add__(minute)
 
-    def add(self, minutes):
+    def __add__(self, minutes):
         self.minute += minutes
         while self.minute > 59:
             self.minute -= 60

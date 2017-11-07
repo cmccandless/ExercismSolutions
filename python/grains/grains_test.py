@@ -1,36 +1,56 @@
 import unittest
 
-from grains import on_square, total_after
+from grains import (
+    on_square,
+    total_after,
+)
 
+
+# Tests adapted from `problem-specifications//canonical-data.json` @ v1.0.0
 
 class GrainsTest(unittest.TestCase):
     def test_square_1(self):
-        self.assertEqual(1, on_square(1))
-        self.assertEqual(1, total_after(1))
+        self.assertEqual(on_square(1), 1)
 
     def test_square_2(self):
-        self.assertEqual(2, on_square(2))
-        self.assertEqual(3, total_after(2))
+        self.assertEqual(on_square(2), 2)
 
     def test_square_3(self):
-        self.assertEqual(4, on_square(3))
-        self.assertEqual(7, total_after(3))
+        self.assertEqual(on_square(3), 4)
 
     def test_square_4(self):
-        self.assertEqual(8, on_square(4))
-        self.assertEqual(15, total_after(4))
+        self.assertEqual(on_square(4), 8)
 
     def test_square_16(self):
-        self.assertEqual(32768, on_square(16))
-        self.assertEqual(65535, total_after(16))
+        self.assertEqual(on_square(16), 32768)
 
     def test_square_32(self):
-        self.assertEqual(2147483648, on_square(32))
-        self.assertEqual(4294967295, total_after(32))
+        self.assertEqual(on_square(32), 2147483648)
 
     def test_square_64(self):
-        self.assertEqual(9223372036854775808, on_square(64))
-        self.assertEqual(18446744073709551615, total_after(64))
+        self.assertEqual(on_square(64), 9223372036854775808)
+
+    def test_square_0_raises_exception(self):
+        with self.assertRaises(ValueError):
+            on_square(0)
+        with self.assertRaises(ValueError):
+            total_after(0)
+
+    def test_square_negative_raises_exception(self):
+        with self.assertRaises(ValueError):
+            on_square(-1)
+        with self.assertRaises(ValueError):
+            total_after(-1)
+
+    def test_square_gt_64_raises_exception(self):
+        with self.assertRaises(ValueError):
+            on_square(65)
+        with self.assertRaises(ValueError):
+            total_after(65)
+
+    def test_total(self):
+        self.assertEqual(total_after(64), 18446744073709551615)
+
 
 if __name__ == '__main__':
     unittest.main()

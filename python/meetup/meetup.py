@@ -24,3 +24,7 @@ def meetup_day(year, month, weekday, nth):
             raise MeetupDayException
         result -= datetime.timedelta(days=7)
     return result
+
+
+class MeetupDayException(Exception):
+    pass
