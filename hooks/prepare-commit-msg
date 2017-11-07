@@ -20,11 +20,13 @@ def main(commit_file, type=None, sha1_hash=None):
         track, exercise, *_ = filename.split('/')
         changed_tracks.add(track)
 
-    commit_msg = 'new solutions to {} exercises\n'
-    commit_msg = commit_msg.format(', '.join(changed_tracks))
-
     with open(commit_file, 'r') as f:
-        commit_msg += f.read()
+        commit_msg = f.read()
+
+    if commit_msg == '' or commit_msg.strip().startswitch('#'):
+        msg = 'new solutions to {} exercises\n'
+        msg = msg.format(', '.join(changed_tracks))
+        commit_msg = msg + commit_msg
 
     with open(commit_file, 'w') as f:
         f.write(commit_msg)
