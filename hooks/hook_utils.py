@@ -52,6 +52,7 @@ def runner(track, exercise, quiet=True):
         return (None, 0)
     if track == 'csharp':
         args = ['dotnet', 'test']
+        shell = True
     elif track == 'go':
         args = ['go', 'test']
     elif track == 'haskell':
