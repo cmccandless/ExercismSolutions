@@ -1,7 +1,10 @@
 class Triangle:
     def __init__(self, a, b, c):
         if a + b <= c or b + c <= a or a + c <= b:
-            raise TriangleError()
+            raise TriangleError(
+                'no side can be greater than or equal to '
+                'the sum of the other 2'
+            )
         self.sides = [a, b, c]
 
     def kind(self):

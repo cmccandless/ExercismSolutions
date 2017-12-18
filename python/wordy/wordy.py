@@ -6,10 +6,6 @@ op = {
 }
 
 
-def noop(x, y):
-    raise ValueError()
-
-
 def calculate(expr):
     s = list(reversed(expr[:-1].split()[2:]))
     r, o = (0, op['plus'])
@@ -18,11 +14,14 @@ def calculate(expr):
         try:
             r, o = (o(r, int(x)), None)
         except TypeError:
-            raise ValueError()
+            raise ValueError('missing operation')
         except ValueError:
             if o is not None:
-                raise ValueError()
-            o = op.get(x, noop)
+                raise ValueError('missing number')
+            try:
+                o = op[x]
+            except Exception:
+                raise ValueError('unknown operation')
             if x == 'multiplied' or x == 'divided':
                 s.pop()
     return r

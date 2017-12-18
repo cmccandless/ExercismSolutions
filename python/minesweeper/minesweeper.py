@@ -13,15 +13,12 @@ def countMines(x, y, board):
 def board(inp):
     for i, r in enumerate(inp):
         if len(r) != len(inp[0]):
-            raise ValueError()
-        if i == 0 or i == len(inp) - 1:
-            if r != '+{}+'.format(''.join(['-'] * (len(r) - 2))):
-                raise ValueError()
-        elif r[0] != '|' or r[-1] != '|':
-            raise ValueError()
+            raise ValueError(
+                'row {} length does not match length of first row'.format(i)
+            )
         for c in r:
             if c not in valid:
-                raise ValueError()
+                raise ValueError('invalid character ' + c)
     b = [list(r) for r in inp]
     b = [''.join([c if c != ' ' else str(countMines(x, y, b))
                   for x, c in enumerate(r)])

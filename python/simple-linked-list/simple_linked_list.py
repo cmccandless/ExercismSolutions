@@ -59,4 +59,5 @@ class LinkedList(object):
 
 
 class EmptyListException(Exception):
-    pass
+    def __init__(self):
+        Exception.__init__(self, 'list is empty')

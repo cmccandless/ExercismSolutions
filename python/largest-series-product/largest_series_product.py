@@ -2,8 +2,10 @@ from functools import reduce
 
 
 def largest_product(s, n):
-    if n < 0 or (s == '' and n > 0) or n > len(s):
-        raise ValueError()
+    if n < 0:
+        raise ValueError('length must be 0 or greater')
+    elif n > len(s):
+        raise ValueError('cannot have length greater than series length')
     if s == '' or n == 0:
         return 1
 

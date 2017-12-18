@@ -42,8 +42,10 @@ class CircularBuffer:
 
 
 class BufferFullException(Exception):
-    pass
+    def __init__(self, msg='buffer is full'):
+        Exception.__init__(self, msg)
 
 
 class BufferEmptyException(Exception):
-    pass
+    def __init__(self, msg='buffer is empty'):
+        Exception.__init__(self, msg)

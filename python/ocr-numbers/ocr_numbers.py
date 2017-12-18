@@ -29,12 +29,12 @@ def subtract(a, b):
     return set([x for x in a if x not in b])
 
 
-def number(nums):
+def convert(nums):
     if len(nums) < 4:
-        raise ValueError()
+        raise ValueError('not enough lines')
     for line in nums:
         if len(line) != len(nums[0]):
-            raise ValueError()
+            raise ValueError('lines are not same length')
 
     def reducer(a, b):
         return intersect(a, b[0] if b[1] else subtract(a, b[0]))
@@ -44,14 +44,20 @@ def number(nums):
 
     def segmentCheck(n, t):
         y, x, c, s = t
-        return (s, n[y][x] == c)
-    return ''.join(['?' if b or len(ns) == 0 else ns.pop()
-                    for ns, b in
-                    [(reduce(reducer,
-                             map(lambda t: segmentCheck(n, t),
-                                 map(mergeTuples, segments.items())),
-                             DIGITS),
-                      set(n[-1]) != set(' '))
-                     for n in
-                     [[x[i:i + 3] for x in nums]
-                      for i in range(0, len(nums[0]), 3)]]])
+        try:
+            return (s, n[y][x] == c)
+        except IndexError:
+            raise ValueError('grid columns not multiple of 3')
+    result = ''.join(['?' if b or len(ns) == 0 else ns.pop()
+                     for ns, b in
+                     [(reduce(reducer,
+                              map(lambda t: segmentCheck(n, t),
+                                  map(mergeTuples, segments.items())),
+                              DIGITS),
+                       set(n[-1]) != set(' '))
+                      for n in
+                      [[x[i:i + 3] for x in nums]
+                       for i in range(0, len(nums[0]), 3)]]])
+    if len(nums) > 4:
+        return result + ',' + convert(nums[4:])
+    return result

@@ -8,8 +8,10 @@ label = ['hundred', 'thousand', 'million', 'billion']
 
 
 def say(n):
-    if n < 0 or n >= 1000000000000:
-        raise AttributeError()
+    if n < 0:
+        raise ValueError('cannot say negative numbers')
+    if n >= 1000000000000:
+        raise ValueError('cannot say numbers greater than or equal to 1T')
     elif n == 0:
         return 'zero'
     s = str(int(n))

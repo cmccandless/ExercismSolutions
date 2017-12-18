@@ -1,8 +1,10 @@
 from functools import reduce
 
 
-def todecimal(ibase, bytes):
-    return 0 if len(bytes) == 0 else reduce(lambda x, y: x * ibase + y, bytes)
+def todecimal(ibase, digits):
+    if digits:
+        return reduce(lambda x, y: x * ibase + y, digits)
+    return 0
 
 
 def fromdecimal(x, obase):
@@ -13,7 +15,14 @@ def fromdecimal(x, obase):
     return result
 
 
-def rebase(ibase, bytes, obase):
-    if ibase < 2 or obase < 2 or any(b < 0 or b >= ibase for b in bytes):
-        raise ValueError()
-    return fromdecimal(todecimal(ibase, bytes), obase)
+def rebase(ibase, digits, obase):
+    if ibase < 2:
+        raise ValueError('input base must be 2 or greater')
+    elif obase < 2:
+        raise ValueError('output base must be 2 or greater')
+    for d in digits:
+        if d < 0 or d >= ibase:
+            raise ValueError(
+                'digit "{}" is invalid for base {}'.format(d, ibase)
+            )
+    return fromdecimal(todecimal(ibase, digits), obase)

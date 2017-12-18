@@ -18,7 +18,7 @@ class Cipher:
         if key is None:
             key = ''.join([chr(randint(a, z)) for _ in range(100)])
         elif any([ord(x) > z or ord(x) < a for x in key]):
-            raise ValueError()
+            raise ValueError('invalid character in key')
         self.key = key
 
     def encode(self, decoded):

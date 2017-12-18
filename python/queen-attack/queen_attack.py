@@ -3,12 +3,12 @@ BOARD_SIZE = 8
 
 def validate(w, b):
     if w == b:
-        raise ValueError()
+        raise ValueError('w and b are the same')
     wy, wx = w
     by, bx = b
     s = sorted([wy, wx, by, bx])
     if s[0] < 0 or s[3] >= BOARD_SIZE:
-        raise ValueError()
+        raise ValueError('invalid board position')
     return True
 
 

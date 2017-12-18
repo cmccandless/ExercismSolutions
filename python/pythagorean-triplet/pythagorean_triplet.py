@@ -20,7 +20,7 @@ def maxMin(a, b):
 
 def primitive_triplets(b):
     if b % 4 != 0:
-        raise ValueError()
+        raise ValueError('b must be divisible by 4')
     b2 = int(b / 2)
     return set([(x[1], x[0], c) for x, c in
                 [(maxMin(m2 - n2, b), m2 + n2) for m, n, m2, n2 in

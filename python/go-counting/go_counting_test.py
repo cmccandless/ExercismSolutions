@@ -25,7 +25,7 @@ board9x9 = "\n".join([
 ])
 
 
-class go_countingTest(unittest.TestCase):
+class GoCountingTest(unittest.TestCase):
     def test_5x5_for_black(self):
         board = go_counting.Board(board5x5)
         stone, territory = board.territoryFor((0, 1))

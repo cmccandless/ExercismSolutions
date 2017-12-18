@@ -4,6 +4,8 @@ _n = 120000
 
 
 def nth_prime(n):
+    if n < 1:
+        raise ValueError('n must be 1 or greater')
     global gen, nth, _n
     n -= 1
     if gen is None or nth > n:

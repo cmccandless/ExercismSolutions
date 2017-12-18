@@ -12,13 +12,13 @@ def is_integer(string):
 
 def evaluate(input_data):
     defines = {}
-    while input_data[0][0] == ':':
-        values = input_data.pop(0).split()
-        values.pop()
-        values.pop(0)
+    if not input_data:
+        return []
+    while input_data[0][:1] == ':':
+        values = input_data.pop(0).split()[1:-1]
         key = values.pop(0)
         if is_integer(key):
-            raise ValueError()
+            raise ValueError('cannot redefine numbers')
         defines[key] = values
     stack = []
     input_data = input_data[-1].split()
@@ -38,7 +38,7 @@ def evaluate(input_data):
             elif word == '/':
                 divider = stack.pop()
                 if divider == 0:
-                    raise ZeroDivisionError()
+                    raise ZeroDivisionError('cannot divide by zero')
                 stack.append(int(stack.pop() / divider))
             elif word == 'dup':
                 stack.append(stack[-1])
@@ -50,9 +50,9 @@ def evaluate(input_data):
             elif word == 'over':
                 stack.append(stack[-2])
             else:
-                raise ValueError()
+                raise ValueError('unknown word ' + word)
         except ZeroDivisionError:
             raise
         except IndexError:
-            raise StackUnderflowError()
+            raise StackUnderflowError('not enough values for ' + word)
     return stack

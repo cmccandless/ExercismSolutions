@@ -16,4 +16,4 @@ class School:
             return tuple()
 
     def sort(self):
-        return [(k, self.grade(k)) for k in self.grades.keys()]
+        return sorted([(k, self.grade(k)) for k in self.grades.keys()])

@@ -18,4 +18,4 @@ def solve(expr):
                 return {k: int(v) for k, v in solution.items()}
         except ValueError:
             pass
-    return None
+    return {}

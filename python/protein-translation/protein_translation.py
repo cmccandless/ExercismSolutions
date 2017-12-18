@@ -21,10 +21,10 @@ def of_codon(codon):
     try:
         return codons[codon]
     except KeyError:
-        raise ValueError()
+        raise ValueError('unknown codon ' + codon)
 
 
-def of_rna(rna):
+def proteins(rna):
     result = []
     while len(rna) > 2:
         x = of_codon(rna[:3])

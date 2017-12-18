@@ -21,7 +21,7 @@ def meetup_day(year, month, weekday, nth):
         i += 1
     if result.month != month:
         if nth != 'last':
-            raise MeetupDayException
+            raise MeetupDayException('day does not exist!')
         result -= datetime.timedelta(days=7)
     return result
 

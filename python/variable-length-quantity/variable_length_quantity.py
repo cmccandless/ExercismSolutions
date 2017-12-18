@@ -18,7 +18,7 @@ def encode(bytes):
 
 def decode(bytes):
     if len(bytes) > 0 and bytes[-1] & 0x80 > 0:
-        raise ValueError()
+        raise ValueError('incomplete sequence')
     result = []
     x = 0
     for b in bytes:

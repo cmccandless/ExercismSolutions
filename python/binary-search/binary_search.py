@@ -7,8 +7,8 @@ def binary_search(a, x):
             return q
         elif a[q] < x:
             if p == q:
-                raise ValueError()
+                raise ValueError('not found')
             p = q
         else:
             r = q
-    raise ValueError()
+    raise ValueError('not found')

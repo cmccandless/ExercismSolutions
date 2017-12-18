@@ -24,4 +24,7 @@ class Scale:
 
     def __init__(self, tonic, name, intervals='mmmmmmmmmmmm'):
         self.name = '{} {}'.format(tonic.title(), name)
-        self.pitches = Scale.pitches(tonic, intervals[:-1])
+        self.pitches = Scale.pitches(tonic, intervals)
+        if self.pitches[0] != self.pitches[-1]:
+            raise ValueError('broken interval')
+        self.pitches = self.pitches[:-1]
