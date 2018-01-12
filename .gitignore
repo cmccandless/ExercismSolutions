@@ -198,6 +198,7 @@ vstemplete_README.md
 # Haskell
 # =========================
 .stack-work
+*.cabal
 
 setup.cfg
 .vscode
