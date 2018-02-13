@@ -10,7 +10,7 @@ public class CircularBuffer<T>
 
     public int Length => writePosition - readPosition;
 
-    public CircularBuffer(int size) { buf = new T[Size = size]; }
+    public CircularBuffer(int size) => buf = new T[Size = size];
 
     private static TA AssertDo<TA>(bool c, Func<TA> f, string msg = "")
     {
@@ -30,5 +30,5 @@ public class CircularBuffer<T>
 
     public T Read() => AssertDo(Length > 0, () => buf[readPosition++ % buf.Length]);
 
-    public void Clear() => readPosition = writePosition = 0;
+    public void Clear() => readPosition = writePosition;
 }
