@@ -7,7 +7,7 @@ public final class BookStore {
         new double[] {1.0, 1.0, 0.95, 0.9, 0.8, 0.75};
     private class Grouping {
         private List<Set<Integer>> groups;
-        public Grouping() { this(new ArrayList()); }
+        public Grouping() { this(new ArrayList<>()); }
         public Grouping(List<Set<Integer>> groups) {
             this.groups = groups;
         }
@@ -28,7 +28,7 @@ public final class BookStore {
             List<Set<Integer>> valid = other.groups.stream()
                 .filter(g -> !g.contains(b))
                 .collect(Collectors.toList());
-            if (valid.isEmpty()) other.groups.add(new HashSet(Arrays.asList(b)));
+            if (valid.isEmpty()) other.groups.add(new HashSet<>(Arrays.asList(b)));
             else valid.get((valid.size() + index) % valid.size()).add(b);
             return other;
         }
@@ -45,10 +45,10 @@ public final class BookStore {
     private static List<Grouping> step(List<Grouping> t, int b) {
         Grouping sm = t.get(0);
         Grouping la = t.get(1);
-        return new ArrayList() {{
-           add(sm.add(b).min(la.add(b)));
-           add(sm.add(b, -1).min(la.add(b, -1)));
-        }};
+        List<Grouping> result = new ArrayList<>();
+        result.add(sm.add(b).min(la.add(b)));
+        result.add(sm.add(b, -1).min(la.add(b, -1)));
+        return result;
     }
     public double calculateBasketCost(List<Integer> books) {
         if (books.isEmpty()) return 0;

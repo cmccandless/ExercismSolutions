@@ -15,10 +15,10 @@ public final class Atbash {
                 StringBuilder::append)
             .toString();
     }
-    public static String encode(String decoded) {
+    public String encode(String decoded) {
         return __encode(decoded.toLowerCase().replaceAll("[^a-z\\d]",""));
     }
-    public static String decode(String encoded) {
+    public String decode(String encoded) {
         return encoded.replaceAll("\\s","")
             .chars()
             .collect(StringBuilder::new,

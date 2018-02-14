@@ -4,14 +4,14 @@ import java.util.Collections;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import org.junit.Ignore;
+// import org.junit.Ignore;
 import org.junit.Test;
 
 public class BSTTest {
 
     @Test
     public void dataIsRetained() {
-        BST<Integer> sut = new BST();
+        BST<Integer> sut = new BST<>();
         final int actual = 4;
         sut.insert(actual);
         final BST.Node<Integer> root = sut.getRoot();
@@ -23,7 +23,7 @@ public class BSTTest {
     @Test
     // @Ignore("Remove to run test")
     public void insertsLess() {
-        BST<Integer> sut = new BST();
+        BST<Integer> sut = new BST<>();
         final int expectedRoot = 4;
         final int expectedLeft = 2;
 
@@ -44,7 +44,7 @@ public class BSTTest {
     @Test
     // @Ignore("Remove to run test")
     public void insertsSame() {
-        BST<Integer> sut = new BST();
+        BST<Integer> sut = new BST<>();
         final int expectedRoot = 4;
         final int expectedLeft = 4;
 
@@ -65,7 +65,7 @@ public class BSTTest {
     @Test
     // @Ignore("Remove to run test")
     public void insertsRight() {
-        BST<Integer> sut = new BST();
+        BST<Integer> sut = new BST<>();
         final int expectedRoot = 4;
         final int expectedRight = 5;
 

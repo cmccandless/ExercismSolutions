@@ -5,7 +5,7 @@ public class BeerSong {
         return v == 0 ? "No more bottles of beer" :
             String.format("%s bottle%s of beer", (v + 100) % 100, v != 1 ? "s" : "");
     }
-    public static String verse(int v) {
+    public String verse(int v) {
         return verse(v, bottles(v));
     }
     private static String action(int v) {
@@ -19,13 +19,13 @@ public class BeerSong {
             action(v), 
             bottles(v - 1).toLowerCase());
     }
-    public static String sing(int start, int stop) {
+    public String sing(int start, int stop) {
         return IntStream.iterate(start, i -> i - 1)
             .limit(start - stop + 1)
-            .mapToObj(BeerSong::verse)
+            .mapToObj(this::verse)
             .collect(Collectors.joining(""));
     }
-    public static String singSong() {
+    public String singSong() {
         return sing(99,0);
     }
 }

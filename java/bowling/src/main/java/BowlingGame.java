@@ -7,7 +7,7 @@ public class BowlingGame {
 	private static String ERROR_INCOMPLETE = 
 		"Score cannot be taken until the end of the game";
 	private static String ERROR_GAMEOVER = "Cannot roll after game is over";
-	private LinkedList<Integer> rolls = new LinkedList();
+	private LinkedList<Integer> rolls = new LinkedList<>();
 	public void roll(int pins) { rolls.offer(pins); }
 	private static void validateBall(int ball) {
 		if (ball < 0) throw new IllegalStateException(ERROR_NEG);

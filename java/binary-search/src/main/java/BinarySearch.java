@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class BinarySearch<T extends Comparable> {
+public class BinarySearch<T extends Comparable<T>> {
     private List<T> list;
     public BinarySearch(List<T> list) {
         this.list = list;
