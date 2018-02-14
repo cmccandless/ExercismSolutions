@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.stream.*;
 
-public final class CustomSet<T extends Comparable> {
+public final class CustomSet<T extends Comparable<T>> {
     private T data = null;
     private CustomSet<T> left, right;
     public CustomSet() { }
@@ -9,11 +9,11 @@ public final class CustomSet<T extends Comparable> {
         for (T t : c) add(t);
     }
     private CustomSet<T> getLeft() {
-        if (left == null) left = new CustomSet();
+        if (left == null) left = new CustomSet<>();
         return left;
     }
     private CustomSet<T> getRight() {
-        if (right== null) right = new CustomSet();
+        if (right== null) right = new CustomSet<>();
         return right;
     }
     public boolean isEmpty() {
@@ -65,7 +65,7 @@ public final class CustomSet<T extends Comparable> {
                 (a, b) -> a.getUnion(b));
     }
     public CustomSet<T> getUnion(CustomSet<T> other) {
-        return new CustomSet(Stream.concat(stream(),
+        return new CustomSet<>(Stream.concat(stream(),
             other.stream()).collect(Collectors.toList()));
     }
 }

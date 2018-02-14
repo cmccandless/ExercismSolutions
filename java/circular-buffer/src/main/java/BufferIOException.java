@@ -1,6 +1,8 @@
 public class BufferIOException extends Exception {
 
-    BufferIOException(String message) {
+    private static final long serialVersionUID = -4931740227310236683L;
+
+	BufferIOException(String message) {
         super(message);
     }
 }

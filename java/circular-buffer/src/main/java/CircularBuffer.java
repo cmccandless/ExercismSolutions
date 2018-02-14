@@ -6,6 +6,7 @@ public class CircularBuffer<T> {
     }
     private int increment(int i) { return (i + 1) % buf.length; }
     private T _read() {
+        @SuppressWarnings("unchecked")
         T x = (T)buf[r];
         r = increment(r);
         length--;

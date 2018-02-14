@@ -1,7 +1,7 @@
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 
-import org.junit.Ignore;
+// import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -160,4 +160,3 @@ public class CircularBufferTest {
         assertThat(buffer.read(), is(5));
     }
 }
-
