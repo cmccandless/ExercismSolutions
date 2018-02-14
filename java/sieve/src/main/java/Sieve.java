@@ -8,7 +8,7 @@ public final class Sieve {
     
     public List<Integer> getPrimes() {
         boolean[] np = new boolean[max + 1];
-        ArrayList<Integer> p = new ArrayList();
+        ArrayList<Integer> p = new ArrayList<>();
         np[0] = np[1] = true;
         for (int i=2;i<np.length;i++) {
             if (np[i]) continue;

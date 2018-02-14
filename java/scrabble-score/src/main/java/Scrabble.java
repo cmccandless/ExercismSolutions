@@ -1,18 +1,17 @@
 import java.util.HashMap;
 
 final class Scrabble {
-    private String word;
     private int score;
-    private static HashMap<String, Integer> scores = new HashMap<String, Integer>()
-    {{
-        put("aeioulnrst", 1);
-        put("dg", 2);
-        put("bcmp", 3);
-        put("fhvwy", 4);
-        put("k", 5);
-        put("jx", 8);
-        put("qz", 10);
-    }};
+    private static HashMap<String, Integer> scores = new HashMap<String, Integer>();
+    static {
+        scores.put("aeioulnrst", 1);
+        scores.put("dg", 2);
+        scores.put("bcmp", 3);
+        scores.put("fhvwy", 4);
+        scores.put("k", 5);
+        scores.put("jx", 8);
+        scores.put("qz", 10);
+    }
     
     Scrabble(String word) {
         score = (word == null || word.trim().isEmpty()) ? 0 :

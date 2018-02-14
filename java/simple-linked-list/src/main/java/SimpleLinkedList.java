@@ -36,7 +36,7 @@ public final class SimpleLinkedList {
         return a;
     }
     public void reverse() {
-        Queue<Integer> a = new LinkedList();
+        Queue<Integer> a = new LinkedList<Integer>();
         while (size() > 0) a.offer(pop());
         while (!a.isEmpty()) push(a.poll());
     }
