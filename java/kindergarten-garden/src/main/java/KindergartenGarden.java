@@ -5,7 +5,7 @@ public class KindergartenGarden {
     private String[] students = { "Alice", "Bob", "Charlie", "David", 
         "Eve", "Fred", "Ginny", "Harriet", 
         "Ileana", "Joseph", "Kincaid", "Larry"};
-    Map<String, List<Plant>> plantsByStudent = new HashMap();
+    Map<String, List<Plant>> plantsByStudent = new HashMap<>();
     public KindergartenGarden(String garden, String[] students) {
         this.students = Arrays.stream(students)
             .sorted()

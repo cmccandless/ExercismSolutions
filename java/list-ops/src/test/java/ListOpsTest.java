@@ -12,7 +12,7 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
-import org.junit.Ignore;
+// import org.junit.Ignore;
 import org.junit.Test;
 
 public class ListOpsTest {
@@ -115,6 +115,7 @@ public class ListOpsTest {
     @Test
     // @Ignore("Remove to run test")
     public void shouldConcatenateZeroLists() {
+        @SuppressWarnings("unchecked")
         List<Integer> actual = ListOps.concat();
 
         assertNotNull(actual);
@@ -128,6 +129,7 @@ public class ListOpsTest {
                 = Collections.unmodifiableList(
                         Arrays.asList(0, 1, 2, 3, 4)
                 );
+        @SuppressWarnings("unchecked")
         final List<Integer> actual = ListOps.concat(list);
         final List<Integer> expected = Arrays.asList(0, 1, 2, 3, 4);
 
@@ -139,6 +141,7 @@ public class ListOpsTest {
     @Test
     // @Ignore("Remove to run test")
     public void shouldConcatenateOneEmptyList() {
+        @SuppressWarnings("unchecked")
         final List<Integer> actual = ListOps.concat(EMPTY_LIST);
 
         assertNotNull(actual);
@@ -148,6 +151,7 @@ public class ListOpsTest {
     @Test
     // @Ignore("Remove to run test")
     public void shouldConcatenateTwoEmptyLists() {
+        @SuppressWarnings("unchecked")
         final List<Integer> actual = ListOps.concat(EMPTY_LIST, EMPTY_LIST);
 
         assertNotNull(actual);
@@ -161,6 +165,7 @@ public class ListOpsTest {
                 = Collections.unmodifiableList(
                         Arrays.asList(0, 1, 2, 3, 4)
                 );
+        @SuppressWarnings("unchecked")
         final List<Integer> actual = ListOps.concat(list, EMPTY_LIST);
         final List<Integer> expected
                 = Arrays.asList(0, 1, 2, 3, 4);
@@ -177,6 +182,7 @@ public class ListOpsTest {
                 = Collections.unmodifiableList(
                         Arrays.asList(0, 1, 2, 3, 4)
                 );
+        @SuppressWarnings("unchecked")
         final List<Integer> actual = ListOps.concat(EMPTY_LIST, list);
         final List<Integer> expected
                 = Arrays.asList(0, 1, 2, 3, 4);
@@ -197,6 +203,7 @@ public class ListOpsTest {
         );
         final List<Integer> expected
                 = Arrays.asList(0, 1, 2, 3, 4, 1, 2, 3, 4, 5, 6);
+        @SuppressWarnings("unchecked")
         final List<Integer> actual = ListOps.concat(list1, list2);
 
         assertNotNull(actual);
@@ -223,6 +230,7 @@ public class ListOpsTest {
                 = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
                         14, 15);
 
+        @SuppressWarnings("unchecked")
         final List<Integer> actual
                 = ListOps.concat(list1, list2, EMPTY_LIST, list3, list4);
 

@@ -1,18 +1,18 @@
 public class DoublyLinkedList<T> {
-    private class Node<T> {
+    private class Node {
         public T value;
-        public Node<T> prev;
-        public Node<T> next;
+        public Node prev;
+        public Node next;
     }
-    private Node<T> head, tail;
+    private Node head, tail;
     public void push(T v) {
-        Node<T> n = new Node() {{value = v; prev = tail;}};
+        Node n = new Node() {{value = v; prev = tail;}};
         if (tail != null) tail.next = n;
         tail = n;
         if (head == null) head = n;
     }
     public void unshift(T v) {
-        Node<T> n = new Node() {{value = v; next = head;}};
+        Node n = new Node() {{value = v; next = head;}};
         if (head != null) head.prev = n;
         head = n;
         if (tail == null) tail = n;
