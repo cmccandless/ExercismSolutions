@@ -1,5 +1,4 @@
 import java.util.stream.IntStream;
-import java.util.stream.Collectors;
 
 public class Hamming {
     private String left, right;

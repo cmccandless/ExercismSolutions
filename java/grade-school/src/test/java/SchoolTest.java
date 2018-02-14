@@ -1,10 +1,11 @@
 import org.junit.Before;
-import org.junit.Ignore;
+// import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+// import java.util.Map.Entry;
 import java.util.List;
 import java.util.Collection;
 
@@ -13,7 +14,7 @@ import org.hamcrest.collection.IsIterableContainingInOrder;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+// import static org.junit.Assert.assertEquals;
 
 public class SchoolTest {
   private School school;
@@ -76,7 +77,7 @@ public class SchoolTest {
     school.add("Kareem", 6);
     school.add("Christopher", 4);
     school.add("Kylie", 3);
-    Map<Integer, Matcher> sortedStudents = new HashMap<Integer, Matcher>();
+    Map<Integer, Matcher<Iterable<? extends String>>> sortedStudents = new HashMap<>();
     sortedStudents.put(6, IsIterableContainingInOrder
       .contains("Kareem"));
     sortedStudents.put(4, IsIterableContainingInOrder
@@ -84,10 +85,9 @@ public class SchoolTest {
     sortedStudents.put(3, IsIterableContainingInOrder
       .contains("Kylie"));
 
-    Map schoolStudents = school.studentsByGradeAlphabetical();
-    for (Map.Entry<?, Matcher> entry : sortedStudents.entrySet()) {
-
-      assertThat((Collection) schoolStudents.get(entry.getKey()), entry.getValue());
+    Map<Integer, List<String>> schoolStudents = school.studentsByGradeAlphabetical();
+    for (Map.Entry<?, Matcher<Iterable<? extends String>>> entry : sortedStudents.entrySet()) {
+      assertThat((Iterable<? extends String>) schoolStudents.get(entry.getKey()), entry.getValue());
     }
   }
 
@@ -97,7 +97,7 @@ public class SchoolTest {
     String shouldNotBeAdded = "Should not be added to school";
     int grade = 1;
 
-    Collection students = school.grade(grade);
+    Collection<String> students = school.grade(grade);
 
     try {
       students.add(shouldNotBeAdded);
@@ -117,7 +117,7 @@ public class SchoolTest {
     List<String> listWhichShouldNotBeAdded = new ArrayList<>();
     listWhichShouldNotBeAdded.add(studentWhichShouldNotBeAdded);
 
-    Map sortedStudents = school.studentsByGradeAlphabetical();
+    Map<Integer, List<String>> sortedStudents = school.studentsByGradeAlphabetical();
 
     try {
       sortedStudents.put(grade, listWhichShouldNotBeAdded);

@@ -10,7 +10,7 @@ public final class School {
             grade = g;
         }
     }
-    private List<Student> all = new ArrayList();
+    private List<Student> all = new ArrayList<>();
     public int numberOfStudents() {
         return all.size();
     }
