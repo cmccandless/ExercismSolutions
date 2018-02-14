@@ -1,7 +1,7 @@
 import java.util.stream.*;
 
 public final class PascalsTriangleGenerator {
-    public static int[][] generateTriangle(int n) {
+    public int[][] generateTriangle(int n) {
         if (n < 0) throw new IllegalArgumentException();
         int[][] a = new int[n][];
         for (int i = 0; i < n; i++) {

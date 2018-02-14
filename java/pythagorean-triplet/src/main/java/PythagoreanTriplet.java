@@ -1,6 +1,3 @@
-import java.util.*;
-import java.util.stream.*;
-
 public class PythagoreanTriplet {
     private int a, b, c;
     public PythagoreanTriplet(int a, int b, int c) {

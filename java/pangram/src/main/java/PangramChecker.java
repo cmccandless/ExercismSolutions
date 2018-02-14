@@ -8,7 +8,7 @@ public class PangramChecker {
     public boolean isPangram(String input) {
         return Normalizer.normalize(input.toLowerCase(), Normalizer.Form.NFD)
             .chars()
-            .filter(Character::isLetter)
+            .filter(ch -> ch >= 'a' && ch <= 'z')
             .collect(HashSet<Character>::new,
                 (r, c) -> r.add((char)c),
                 PangramChecker::AddSet)

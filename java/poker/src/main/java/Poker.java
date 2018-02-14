@@ -1,23 +1,23 @@
-import java.lang.Enum;
 import java.util.*;
 import java.util.stream.*;
 
 public class Poker {
-	private static Map<Character, Integer> values = new HashMap() {{
-		put('2',2);
-		put('3',3);
-		put('4',4);
-		put('5',5);
-		put('6',6);
-		put('7',7);
-		put('8',8);
-		put('9',9);
-		put('T',10);
-		put('J',11);
-		put('Q',12);
-		put('K',13);
-		put('A',14);
-	}};
+	private static Map<Character, Integer> values = new HashMap<>();
+	static {
+		values.put('2',2);
+		values.put('3',3);
+		values.put('4',4);
+		values.put('5',5);
+		values.put('6',6);
+		values.put('7',7);
+		values.put('8',8);
+		values.put('9',9);
+		values.put('T',10);
+		values.put('J',11);
+		values.put('Q',12);
+		values.put('K',13);
+		values.put('A',14);
+	}
 	private List<String> hands;
 	public Poker(List<String> hands) { this.hands = hands; }
 	private enum HandType {
@@ -107,7 +107,7 @@ public class Poker {
         return c;
 	}
 	public List<String> getBestHands() {
-		List<String> results = new ArrayList();
+		List<String> results = new ArrayList<>();
 		for (String hand : hands) {
 			if (results.isEmpty()) {
                 results.add(hand);

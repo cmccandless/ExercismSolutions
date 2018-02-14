@@ -3,12 +3,19 @@ import java.util.stream.*;
 
 final class OpticalCharacterReader {
     private static char[] template = "*_*|_||_|".toCharArray();
-    private static Map<Integer, String> ocr = new HashMap() {{
-       put(0xAF,"0"); put(0x09,"1"); put(0x9E,"2");
-       put(0x9B,"3"); put(0x39,"4"); put(0xB3,"5");
-       put(0xB7,"6"); put(0x89,"7"); put(0xBF,"8");
-       put(0xBB,"9");
-    }};
+    private static Map<Integer, String> ocr = new HashMap<>();
+    static {
+       ocr.put(0xAF,"0");
+       ocr.put(0x09,"1");
+       ocr.put(0x9E,"2");
+       ocr.put(0x9B,"3");
+       ocr.put(0x39,"4");
+       ocr.put(0xB3,"5");
+       ocr.put(0xB7,"6");
+       ocr.put(0x89,"7");
+       ocr.put(0xBF,"8");
+       ocr.put(0xBB,"9");
+    };
     private static Stream<String> getLetters(List<String> input) {
         return IntStream.range(0,input.get(0).length())
             .filter(i -> i % 3 == 0)

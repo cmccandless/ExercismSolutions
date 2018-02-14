@@ -5,7 +5,7 @@ class ProteinTranslator {
 
     List<String> translate(String rnaSequence) {
         Matcher m = Pattern.compile("[A-Z]{3}").matcher(rnaSequence);
-        List<String> proteins = new ArrayList();
+        List<String> proteins = new ArrayList<>();
         while (m.find()) {
             switch(m.group()) {
                 case "AUG":
