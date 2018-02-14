@@ -2,103 +2,117 @@ import java.util.*;
 import java.util.stream.*;
 import java.util.function.Supplier;
 public class Alphametics {
-    private String expr;
-    public Alphametics(String equation) {
-        expr = equation;
+    private static Set<String> operators = new HashSet<>();
+    static {
+        operators.add("+");
+        operators.add("==");
     }
 
-    private static long sub(String word, Map<Character, Integer> solution) {
-        System.out.println(word);
-        StringBuilder sb = new StringBuilder();
-        for (char ch : word.toCharArray()) {
-            sb.append(solution.get(ch));
-        }
-        return Long.parseLong(sb.toString());
+    private String equation;
+    
+    public Alphametics(String equation) {
+        this.equation = equation;
     }
 
     public Map<Character, Integer> solve() throws UnsolvablePuzzleException {
-        Set<String> operators = new HashSet();
-        operators.add("+");
-        operators.add("==");
-        operators.add("=");
-        operators.add(" ");
-        List<String> words = Arrays.stream(expr.split(" "))
+        // Parse equation to get words
+        List<String> words = Arrays.stream(equation.split(" "))
             .filter(w -> !operators.contains(w))
             .collect(Collectors.toList());
-        words.stream().forEach(w -> System.out.print(w + ", "));
-        System.out.println();
-        String right = words.remove(words.size() - 1);
-        Set<Character> letterSet = new HashSet();
+
+        // Multitasking:
+        // - Get set of all letters in equation
+        // - Get set of leading characters for all words
+        Set<Character> letterSet = new HashSet<>();
+        Set<Character> nonZero = new HashSet<>();
         for (String word : words) {
+            nonZero.add(word.charAt(0));
             for (Character ch : word.toCharArray()) {
                 letterSet.add(ch);
             }
         }
+
+        // Get letterSet in array form to use for mapping key to solution
         Character[] letters = new Character[letterSet.size()];
         letters = letterSet.toArray(letters);
-        Stream<String> combStream = combinations("0123456789", letters.length);
-        for (String combo : (Iterable<String>) combStream::iterator) {
-            Stream<String> permStream = permutations(combo);
-            for (String solutionKey : (Iterable<String>) permStream::iterator) {
-                Map<Character, Integer> solution = new HashMap();
+
+        // Pop right side of equation from word list
+        String right = words.remove(words.size() - 1);
+
+        // Map right characters to reversed array
+        char[] rightChars = new char[right.length()];
+        for (int i = 0; i < rightChars.length; i++) {
+            rightChars[i] = right.charAt(rightChars.length - 1 - i);
+        }
+
+        // Map left characters to matrix, reversing each word
+        char[][] leftChars = new char[words.size()][];
+        for (int w = 0; w < words.size(); w++) {
+            String word = words.get(w);
+            int n = word.length();
+            leftChars[w] = new char[n];
+            for (int i = 0; i < n; i++) {
+                leftChars[w][i] = word.charAt(n - 1 - i);
+            }
+        }
+        
+        // Iterate through permutations of digit string,
+        // using only the permutations that are of the same length as the number 
+        // of unique letters in the equation
+        Supplier<String> perms = new PermutationsSupplier("0123456789", letters.length);
+        String solutionKey = perms.get();
+        try {
+            // Not infinite; will throw EmptyStackException
+            // when all valid permutations have been checked
+            while (true) {
+                Map<Character, Integer> solution = new HashMap<>();
+                // Map key to solution
                 for (int i = 0; i < solutionKey.length(); i++) {
                     solution.put(letters[i], solutionKey.charAt(i) - '0');
                 }
-                if (
-                    solution.get(right.charAt(0)) != 0 &&
-                    words.stream()
-                        .allMatch(w -> solution.get(w.charAt(0)) != 0) &&
-                    sub(right, solution) == words.stream()
-                        .mapToLong(word -> sub(word, solution))
-                        .sum()
-                )
-                    return solution;
+
+                // Confirm no word starts with 0
+                if (nonZero.stream().allMatch(ch -> solution.get(ch) != 0)) {
+                    // Starting with right-most digit (keeping track of overflow),
+                    // compare decoded values. If sum(left) == right, return solution
+                    int carry = 0;
+                    boolean viable = true;
+                    for (int i = 0; viable && i < rightChars.length; i++) {
+                        int digitTotal = carry % 10;
+                        carry /= 10;
+                        for (int w = 0; w < leftChars.length; w++) {
+                            if (leftChars[w].length > i) {
+                                digitTotal += solution.get(leftChars[w][i]);
+                            }
+                        }
+                        int digit = digitTotal % 10;
+                        carry += digitTotal / 10;
+                        if (digit != solution.get(rightChars[i])) {
+                            viable = false;
+                            break;
+                        }
+                    }
+                    if (viable && carry == 0)
+                        return solution;
+                }
+                solutionKey = perms.get();
             }
+        } catch (EmptyStackException ex) {
+            throw new UnsolvablePuzzleException();
         }
-
-        throw new UnsolvablePuzzleException();
-    }
-
-    private static long factorial(int n) {
-        long result = 1;
-        for (long i = 2; i <= n; i++)
-            result *= i;
-        return result;
-    }
-
-    public static Stream<String> permutations(String str) {
-        return permutations(str, str.length());
-    }
-
-    public static Stream<String> permutations(String str, int n) {
-        Supplier<String> permSup = new PermutationsSupplier(str);
-        return Stream.generate(permSup)
-            .limit(factorial(str.length()))
-            .filter(s -> s.length() == n);
-    }
-
-    public static Stream<String> combinations(String str) {
-        Stream<String> stream = combinations(str, 0);
-        for (int i = 1; i < str.length(); i++)
-            stream = Stream.concat(stream, combinations(str, i));
-        return stream;
-    }
-
-    public static Stream<String> combinations(String str, int n) {
-        Supplier<String> comSup = new CombinationsSupplier(str);
-        int size = str.length();
-        long count = factorial(size) / (factorial(size - n) * factorial(n));
-        return Stream.generate(comSup)
-            .filter(s -> s.length() == n)
-            .limit(count);
     }
 }
 class PermutationsSupplier implements Supplier<String> {
-    private Stack<String> prefixStack = new Stack();
-    private Stack<String> stringStack = new Stack();
+    private Stack<String> prefixStack = new Stack<>();
+    private Stack<String> stringStack = new Stack<>();
+    private int terminal = 0;
     public PermutationsSupplier(String baseString) {
         prefixStack.push("");
         stringStack.push(baseString);
+    }
+    public PermutationsSupplier(String baseString, int n) {
+        this(baseString);
+        terminal = baseString.length() - n;
     }
     
     @Override
@@ -106,29 +120,11 @@ class PermutationsSupplier implements Supplier<String> {
         String prefix = prefixStack.pop();
         String s = stringStack.pop();
         int n = s.length();
-        if (n == 0) return prefix;
+        if (n == terminal) return prefix;
         for (int i = n - 1; i >= 0; i--) {
             prefixStack.push(prefix + s.charAt(i));
             stringStack.push(s.substring(0, i) + s.substring(i + 1, n));
         }
         return get();
-    }
-}
-class CombinationsSupplier implements Supplier<String> {
-    private long index = 0;
-    private String baseString;
-    public CombinationsSupplier(String baseString) {
-        this.baseString = baseString;
-    }
-    @Override
-    public String get() {
-        StringBuilder sb = new StringBuilder();
-        int n = baseString.length();
-        for (int i = n; i >= 0; i--) {
-            if (((1 << i) & index) != 0)
-                sb.append(baseString.charAt(n - 1 - i));
-        }
-        index++;
-        return sb.toString();
     }
 }
