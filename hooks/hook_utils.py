@@ -58,7 +58,7 @@ def runner(track, exercise, quiet=True):
     elif track == 'haskell':
         args = ['stack', '--silent', 'test']
     elif track == 'java':
-        args = ['gradle', 'test']
+        args = ['gradle', 'test', '-Dfile.encoding=utf-8']
         shell = True
     elif track == 'python':
         args = ['pytest', '-q']
