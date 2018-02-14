@@ -19,7 +19,7 @@ final class DiamondPrinter {
             .collect(Collectors.joining(""))
             .toString();
     }
-    public static List<String> printToList(char character) {
+    public List<String> printToList(char character) {
         return mirror(IntStream.rangeClosed('A', character)
             .mapToObj(c -> makeLine(c, character)))
             .collect(Collectors.toList());
