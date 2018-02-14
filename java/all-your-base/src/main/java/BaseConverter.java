@@ -26,7 +26,7 @@ final class BaseConverter {
     public static int[] fromBase10(int n, int outputBase) {
         if (outputBase < 2)
             throw new IllegalArgumentException("Bases must be at least 2.");
-        List<Integer> digits = new ArrayList();
+        List<Integer> digits = new ArrayList<Integer>();
         for (; n > 0; n /= outputBase) digits.add(0, n % outputBase);
         return digits.isEmpty() ?
             new int[] { 0 } :
