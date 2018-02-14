@@ -10,7 +10,7 @@ class Triangle {
     }
 
     TriangleKind getKind() {
-        int r = sides[0] == sides[1] ? 1 : 0 + sides[1] == sides[2] ? 1 : 0;
+        int r = (sides[0] == sides[1] ? 1 : 0) + (sides[1] == sides[2] ? 1 : 0);
         return TriangleKind.values()[2-r];
     }
 

@@ -35,7 +35,7 @@ public final class WordSearcher {
     public static Optional<WordLocation> search(String word, char[][] grid) {
         return Optional.ofNullable(searchNullable(word, grid));
     }
-    public static Map<String, Optional<WordLocation>> search(Set<String> words, char[][] grid) {
+    public Map<String, Optional<WordLocation>> search(Set<String> words, char[][] grid) {
         return words.stream().collect(Collectors.toMap(w -> w, w -> search(w, grid)));
     }
 }

@@ -1,15 +1,16 @@
 import java.util.*;
 
 final class WordProblemSolver {
-    private static Set<String> validWords = new HashSet() {{
-       add("What");
-       add("is");
-       add("by");
-       add("plus");
-       add("minus");
-       add("multiplied");
-       add("divided");
-    }};
+    private static Set<String> validWords = new HashSet<>();
+    static {
+       validWords.add("What");
+       validWords.add("is");
+       validWords.add("by");
+       validWords.add("plus");
+       validWords.add("minus");
+       validWords.add("multiplied");
+       validWords.add("divided");
+    }
     public int solve(String eq) {
         int result = 0;
         String op = "plus";

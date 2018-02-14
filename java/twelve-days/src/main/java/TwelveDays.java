@@ -21,19 +21,19 @@ public final class TwelveDays {
         "eleven Pipers Piping",
         "twelve Drummers Drumming"
     };
-    public static String verse(int n) {
+    public String verse(int n) {
         return String.format("On the %s day of Christmas my true love gave to me, %s\n",
             ord[n - 1], IntStream.range(0,n)
                 .map(i -> n - 1 - i)
                 .mapToObj(i -> (n > 1 && i == 0 ? "and " : "") + gift[i])
                 .collect(Collectors.joining(", ")));
     }
-    public static String verses(int start, int stop) {
+    public String verses(int start, int stop) {
         return IntStream.rangeClosed(start, stop)
-            .mapToObj(TwelveDays::verse)
+            .mapToObj(this::verse)
             .collect(Collectors.joining("\n"));
     }
-    public static String sing() {
+    public String sing() {
         return verses(1,12);
     }
 }
