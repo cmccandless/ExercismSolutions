@@ -9,7 +9,9 @@ def main(commit_file, type=None, sha1_hash=None):
     changes = changes.split('\n')
     if ret != 0:
         hut.abort('error {} occurred'.format(ret), label='git-diff')
-    changed_tracks = set()
+    # changed_tracks = set()
+    new_solution_tracks = set()
+    revised_tracks = set()
     for change in changes:
         if change == '':
             continue
@@ -18,15 +20,26 @@ def main(commit_file, type=None, sha1_hash=None):
         if change_type == 'D' or '/' not in filename:
             continue
         track, exercise, *_ = filename.split('/')
-        changed_tracks.add(track)
+        # changed_tracks.add(track)
+        if change_type == 'A':
+            new_solution_tracks.add(track)
+        elif change_type == 'M':
+            revised_tracks.add(track)
 
     with open(commit_file, 'r') as f:
         commit_msg = f.read()
 
     if commit_msg == '' or commit_msg.strip().startswith('#'):
-        msg = 'new solutions to {} exercises\n'
-        msg = msg.format(', '.join(changed_tracks))
-        commit_msg = msg + commit_msg
+        # msg = 'new solutions for {} exercises\n'
+        # msg = msg.format(', '.join(changed_tracks))
+        # commit_msg = msg + commit_msg
+        msg = 'new {} for {} exercises\n'
+        if new_solution_tracks:
+            tracks = ', '.join(new_solution_tracks)
+            commit_msg = msg.format('solutions', tracks) + commit_msg
+        if revised_tracks:
+            tracks = ', '.join(revised_tracks)
+            commit_msg = msg.format('revisions', tracks) + commit_msg
 
     with open(commit_file, 'w') as f:
         f.write(commit_msg)
