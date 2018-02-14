@@ -20,7 +20,7 @@ public class FoodChain {
 							 words[i - 1][2]);
 	}
 	private static String getVerse(int n) {
-		List<String> list = new ArrayList();
+		List<String> list = new ArrayList<>();
 		list.add(String.format("I know an old lady who swallowed a %s.", words[n - 1][0]));
 		if (n > 1) list.add(words[n - 1][1]);
 		if (n < 8) {

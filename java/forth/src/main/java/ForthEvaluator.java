@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.stream.*;
 
 public class ForthEvaluator {
     private static final String ERR_UNDERFLOW = 
@@ -15,26 +14,19 @@ public class ForthEvaluator {
         if (s.trim().isEmpty()) return false;
         return s.codePoints().allMatch(c -> Character.isDigit((char)c));
     }
-    private static Set<Character> nonSeparators = 
-        new HashSet(Arrays.asList('+','-','*','/',':',';'));
-    private static List<Character> separators = IntStream.range(1,128)
-        .mapToObj(i -> (char)i)
-        .filter(c -> !nonSeparators.contains(c) && 
-                     !Character.isLetterOrDigit(c))
-        .collect(Collectors.toList());
     private static void stackUnderflow(String label, int needed) {
         String plural = needed == 1 ? "" : "s";
         String msg = String.format(ERR_UNDERFLOW, label, needed, plural);
         throw new IllegalArgumentException(msg);
     }
     public List<Integer> evaluateProgram(List<String> input) {
-        LinkedList<String> inputStack = new LinkedList();
+        LinkedList<String> inputStack = new LinkedList<>();
         for (String line : input) {
             for (String word : line.split(" "))
                 inputStack.offer(word);
         }
-        Map<String, List<String>> defines = new HashMap();
-        LinkedList<Integer> s = new LinkedList();
+        Map<String, List<String>> defines = new HashMap<>();
+        LinkedList<Integer> s = new LinkedList<>();
         while (!inputStack.isEmpty()) {
             String x = inputStack.pop();
             System.out.println(x);
@@ -94,7 +86,7 @@ public class ForthEvaluator {
                     String key = inputStack.pop();
                     if (isNumber(key)) 
                         throw new IllegalArgumentException(ERR_BAD_REDEFINE);
-                    LinkedList<String> values = new LinkedList();
+                    LinkedList<String> values = new LinkedList<>();
                     x = inputStack.pop();
                     while (!x.equals(";")) {
                         values.push(x);

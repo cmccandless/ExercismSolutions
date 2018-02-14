@@ -1,13 +1,15 @@
 import java.util.*;
 
 final class Flattener {
-    private static List<Object> flat(Object o) {
-        return o instanceof List ? flatten((List)o) : new ArrayList() {{add(o);}};
+    private List<?> flat(Object o) {
+        return o instanceof List ? 
+            flatten((List<?>)o) :
+            Arrays.asList(new Object[] {o});
     }
-    public static List<Object> flatten(List<Object> list) {
+    public List<?> flatten(List<?> list) {
         return list.stream()
             .filter(o -> o != null)
-            .map(Flattener::flat)
+            .map(this::flat)
             .collect(ArrayList::new,
                 ArrayList::addAll,
                 ArrayList::addAll);
