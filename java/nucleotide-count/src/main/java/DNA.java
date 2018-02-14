@@ -2,7 +2,7 @@ import java.util.*;
 import java.util.stream.*;
 
 public class DNA {
-    private Map<Character, Integer> counts = new HashMap();
+    private Map<Character, Integer> counts = new HashMap<>();
     public DNA(String s) {
         Stream.of('A','C','T','G').forEach(ch -> counts.put(ch,0));
         s.chars().mapToObj(c -> (char)c)

@@ -2,10 +2,6 @@ import java.util.*;
 import java.util.stream.*;
 
 public final class MinesweeperBoard {
-    private class Coordinate {
-        public int x, y;
-        public Coordinate(int x, int y) { this.x = x; this.y = y; }
-    }
     public char[][] board;
     public MinesweeperBoard(List<String> board) {
         if (board == null)
