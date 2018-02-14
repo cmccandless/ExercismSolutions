@@ -1,22 +1,22 @@
 import java.util.*;
-import java.util.stream.*;
 
 public final class RomanNumeral {
-    private static final Map<Integer, String> table = new LinkedHashMap() {{
-       put(1000, "M");
-       put(900, "CM");
-       put(500, "D");
-       put(400, "CD");
-       put(100, "C");
-       put(90, "XC");
-       put(50, "L");
-       put(40, "XL");
-       put(10, "X");
-       put(9, "IX");
-       put(5, "V");
-       put(4, "IV");
-       put(1, "I");
-    }};
+    private static final Map<Integer, String> table = new LinkedHashMap<>();
+    static {
+       table.put(1000, "M");
+       table.put(900, "CM");
+       table.put(500, "D");
+       table.put(400, "CD");
+       table.put(100, "C");
+       table.put(90, "XC");
+       table.put(50, "L");
+       table.put(40, "XL");
+       table.put(10, "X");
+       table.put(9, "IX");
+       table.put(5, "V");
+       table.put(4, "IV");
+       table.put(1, "I");
+    }
     private int value;
     public RomanNumeral(int n) {
         value = n;

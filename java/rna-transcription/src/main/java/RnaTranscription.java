@@ -1,5 +1,3 @@
-import java.util.stream.Collectors;
-
 public class RnaTranscription {
     public static char transcribe(int codon) {
         return transcribe((char)codon);

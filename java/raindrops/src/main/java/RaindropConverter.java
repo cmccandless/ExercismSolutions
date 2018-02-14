@@ -1,12 +1,12 @@
 import java.util.HashMap;
 
 class RaindropConverter {
-    private static HashMap<Integer, String> words = new HashMap<Integer, String>()
-    {{
-       put(3, "Pling");
-       put(5, "Plang");
-       put(7, "Plong");
-    }};
+    private static HashMap<Integer, String> words = new HashMap<>();
+    static {
+       words.put(3, "Pling");
+       words.put(5, "Plang");
+       words.put(7, "Plong");
+    }
     String convert(int number) {
         String result = words.entrySet()
             .stream()
