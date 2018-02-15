@@ -29,6 +29,7 @@ public final class SimpleLinkedList {
     }
     public <T> T[] asArray(Class<T> c) {
         int s = size();
+        @SuppressWarnings("unchecked")
         T[] a = (T[])Array.newInstance(c, s);
         for (Node n = head; n != null; n = n.next) {
             a[s-n.size()] = (T)n.value;

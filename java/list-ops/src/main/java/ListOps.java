@@ -4,7 +4,7 @@ import java.util.function.*;
 public abstract class ListOps {
     public static <T> int length(Collection<T> list) {
         int result = 0;
-        for (T t : list) result++;
+        for (T t : list) if (t != null) result++;
         return result;
     }
     public static <T> List<T> reverse(Collection<T> list) {
