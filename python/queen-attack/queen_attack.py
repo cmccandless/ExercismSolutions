@@ -1,24 +1,23 @@
 BOARD_SIZE = 8
 
 
-def validate(w, b):
-    if w == b:
-        raise ValueError('w and b are the same')
-    wy, wx = w
-    by, bx = b
-    s = sorted([wy, wx, by, bx])
-    if s[0] < 0 or s[3] >= BOARD_SIZE:
-        raise ValueError('invalid board position')
-    return True
+class Queen(object):
+    def __init__(self, x, y):
+        if (
+            x < 0 or x >= BOARD_SIZE or
+            y < 0 or y >= BOARD_SIZE
+        ):
+            raise ValueError('invalid board position')
+        self.p = (x, y)
 
+    def __eq__(self, other):
+        return self.p == other.p
 
-def board(w, b):
-    validate(w, b)
-    return [''.join(['W' if (y, x) == w else ('B' if (y, x) == b else '_')
-                     for x in range(BOARD_SIZE)])
-            for y in range(BOARD_SIZE)]
-
-
-def can_attack(w, b):
-    validate(w, b)
-    return w[0] == b[0] or w[1] == b[1] or abs(w[0] - b[0]) == abs(w[1] - b[1])
+    def can_attack(self, other):
+        if self.p == other.p:
+            raise ValueError('cannot attack self')
+        return (
+            self.p[0] == other.p[0] or
+            self.p[1] == other.p[1] or
+            abs(self.p[0] - other.p[0]) == abs(self.p[1] - other.p[1])
+        )

@@ -16,7 +16,7 @@ def evaluate(input_data):
         return []
     while input_data[0][:1] == ':':
         values = input_data.pop(0).split()[1:-1]
-        key = values.pop(0)
+        key = values.pop(0).lower()
         if is_integer(key):
             raise ValueError('cannot redefine numbers')
         defines[key] = values

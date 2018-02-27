@@ -15,16 +15,22 @@ def card_value(card_str):
 
 
 def is_straight(values):
-    if len(values) != 5:
-        return False
-    nums = [5, 4, 3, 2, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
-    for i in range(len(nums) - 4):
-        if all(values[j] == nums[i + j] for j in range(5)):
-            return True
-    return False
+    ret = False
+    if len(values) == 5:
+        # Ace ends straight
+        if values == [14, 5, 4, 3, 2]:
+            ret = True
+        else:
+            nums = [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 14]
+            for i in range(len(nums) - 4):
+                if all(values[j] == nums[i + j] for j in range(5)):
+                    ret = True
+                    break
+    return ret
 
 
-def hand_key(cards):
+def hand_key(hand):
+    cards = hand.split(' ')
     flush = len(set(map(card_suit, cards))) == 1
     cards_by_value = [(len(list(grp)), key) for key, grp in
                       groupby(sorted(cards), card_value)]
@@ -39,11 +45,31 @@ def hand_key(cards):
         if flush:
             _type += 'F'
         _class = types.index(_type)
-    values_str = ''.join('{:02}'.format(k) for n, k in cards_by_value_desc)
-    return '{}_{}'.format(_class, values_str)
+    if values == [14, 5, 4, 3, 2]:
+        values_str = ''.join(map('{:02}'.format, range(5, 0, -1)))
+    else:
+        values_str = ''.join('{:02}'.format(k) for n, k in cards_by_value_desc)
+    key = '{}_{}'.format(_class, values_str)
+    return key
 
 
-def poker(hands):
-    return list(sorted(groupby(sorted(hands, key=hand_key), hand_key),
-                       key=lambda t: t[0],
-                       reverse=True)[0][1])
+def safe_groupby(iterable, key=None):
+    return (
+        (k, list(g))  # Cast to list to allow repeated access
+        for k, g in groupby(iterable, key=key)
+    )
+
+
+def best_hands(hands):
+    return [
+        hand
+        for key, hand in max(
+            safe_groupby(
+                sorted(
+                    ((hand_key(h), h) for h in hands),
+                    key=lambda t: t[0]
+                ),
+                key=lambda t: t[0]
+            )
+        )[1]
+    ]

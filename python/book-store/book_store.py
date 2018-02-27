@@ -1,6 +1,6 @@
 from functools import reduce
 
-BASE_COST = 8.0
+BASE_COST = 800
 discount = [1.0, 1.0, 0.95, 0.9, 0.8, 0.75]
 
 
@@ -41,4 +41,4 @@ def calculate_total(books):
     if len(books) == 0:
         return 0
     start = Grouping().add(books[0])
-    return min(reduce(step, books[1:], (start, start.dup()))).total()
+    return round(min(reduce(step, books[1:], (start, start.dup()))).total())

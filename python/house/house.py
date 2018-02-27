@@ -14,11 +14,24 @@ words = [
 ]
 
 
-def rhyme():
-    return '\n\n'.join(map(verse, range(len(words))))
+def recite(start, stop):
+    def num_gen(start, stop):
+        stop -= 0.5
+        while start < stop:
+            yield start
+            start += 0.5
+    start -= 1
+    return [
+        line
+        for i in num_gen(start, stop)
+        for line in verse(i).split('\n')
+    ]
 
 
 def verse(n, start=True):
+    if int(n) != n:
+        return ''
+    n = int(n)
     verb, noun = words[n]
     return '{} the {}{}'.format('This is' if start else 'that {}'.format(verb),
                                 noun, '' if n == 0 else '\n' + verse(n - 1,

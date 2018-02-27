@@ -1,15 +1,19 @@
+from functools import reduce
+from itertools import zip_longest
+
+
 def transpose(s):
-    results = []
-    lines = s.split('\n')
-    m = max(len(line) for line in lines)
-    for line in lines:
-        c = 0
-        for i in range(m):
-            while True:
-                try:
-                    results[c] += line[i] if i < len(line) else ' '
-                    break
-                except IndexError:
-                    results.append('')
-            c += 1
-    return '\n'.join(results).rstrip()
+    return '\n'.join(
+        reduce(
+            lambda columns, t: [
+                a.ljust(t[0] if b else 0) + b
+                for a, b in zip_longest(
+                    columns,
+                    t[1],
+                    fillvalue=''
+                )
+            ],
+            enumerate(s.split('\n')),
+            []
+        )
+    )

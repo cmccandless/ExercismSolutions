@@ -26,10 +26,10 @@ def verse(n_verse):
         lst.append(extra[n_verse])
     if n_verse < 7:
         lst.extend(phrase(n) for n in range(n_verse, 0, -1))
-        lst.append("I don't know why she swallowed the fly."
+        lst.append("I don't know why she swallowed the fly. "
                    "Perhaps she'll die.")
-    return '\n'.join(lst)
+    return ''.join(lst)
 
 
-def chain():
-    return '\n\n'.join(verse(n) for n in range(8))
+def recite(start, stop):
+    return [verse(i) for i in range(start - 1, stop)]

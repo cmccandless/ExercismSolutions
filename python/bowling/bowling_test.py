@@ -3,9 +3,10 @@ import unittest
 from bowling import BowlingGame
 
 
-# Tests adapted from `problem-specifications//canonical-data.json` @ v1.0.1
+# Tests adapted from `problem-specifications//canonical-data.json` @ v1.2.0
 
 class BowlingTests(unittest.TestCase):
+
     def roll(self, rolls):
         [self.game.roll(roll) for roll in rolls]
 
@@ -118,7 +119,7 @@ class BowlingTests(unittest.TestCase):
     def test_rolls_cannot_score_negative_points(self):
 
         with self.assertRaisesWithMessage(ValueError):
-            self.game.roll(-11)
+            self.game.roll(11)
 
     def test_a_roll_cannot_score_more_than_10_points(self):
 
@@ -196,18 +197,21 @@ class BowlingTests(unittest.TestCase):
             self.game.score()
 
     def test_cannot_roll_after_bonus_roll_for_spare(self):
-        rolls = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 3,
-                 2, 2]
+        rolls = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 3, 2]
+
+        self.roll(rolls)
 
         with self.assertRaisesWithMessage(IndexError):
-            self.roll(rolls)
+            self.game.roll(2)
 
     def test_cannot_roll_after_bonus_rolls_for_strike(self):
-        rolls = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 3,
-                 2, 2]
+        rolls = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,
+                 3, 2]
+
+        self.roll(rolls)
 
         with self.assertRaisesWithMessage(IndexError):
-            self.roll(rolls)
+            self.game.roll(2)
 
     # Utility functions
     def setUp(self):

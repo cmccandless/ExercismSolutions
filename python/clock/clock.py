@@ -15,6 +15,9 @@ class Clock:
         self.hour %= 24
         return self
 
+    def __sub__(self, minutes):
+        return self + -minutes
+
     def __str__(self):
         return '{:02}:{:02}'.format(self.hour, self.minute)
 

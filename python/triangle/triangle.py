@@ -1,20 +1,17 @@
-class Triangle:
-    def __init__(self, a, b, c):
-        if a + b <= c or b + c <= a or a + c <= b:
-            raise TriangleError(
-                'no side can be greater than or equal to '
-                'the sum of the other 2'
-            )
-        self.sides = [a, b, c]
-
-    def kind(self):
-        a, b, c = self.sides
-        if a == b and b == c:
-            return 'equilateral'
-        elif a == b or b == c or a == c:
-            return 'isosceles'
-        return 'scalene'
+def is_equilateral(sides):
+    a, b, c = sides
+    return valid_triangle(sides) and a == b and b == c
 
 
-class TriangleError(Exception):
-    pass
+def is_isosceles(sides):
+    a, b, c = sides
+    return valid_triangle(sides) and (a == b or b == c or a == c)
+
+
+def is_scalene(sides):
+    return valid_triangle(sides) and not is_isosceles(sides)
+
+
+def valid_triangle(sides):
+    a, b, c = sorted(sides)
+    return a > 0 and a + b > c

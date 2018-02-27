@@ -16,14 +16,14 @@ class Scale:
 
         def doStep(pitches, step):
             key = keys[(keys.index(pitches[-1]) + step) % len(keys)]
-            pitches.append(key)
-            return pitches
-        return reduce(doStep,
-                      map('_mMA'.index, intervals),
-                      [tonic.title()])
+            return pitches + [key]
+        return reduce(
+            doStep,
+            map('_mMA'.index, intervals),
+            [tonic.title()]
+        )
 
-    def __init__(self, tonic, name, intervals='mmmmmmmmmmmm'):
-        self.name = '{} {}'.format(tonic.title(), name)
+    def __init__(self, tonic, intervals='mmmmmmmmmmmm'):
         self.pitches = Scale.pitches(tonic, intervals)
         if self.pitches[0] != self.pitches[-1]:
             raise ValueError('broken interval')

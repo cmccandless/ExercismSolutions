@@ -1,6 +1,14 @@
 from itertools import permutations
 
 
+def drinks_water():
+    return solution()[0]
+
+
+def owns_zebra():
+    return solution()[1]
+
+
 def solution():
     nHouses = 5  # Constraint 1
     perms = list(permutations(range(nHouses)))
@@ -43,5 +51,4 @@ def solution():
                               nor: 'Norwegian',
                               span: 'Spaniard',
                               ukr: 'Ukrainian'}[x] for x in (water, zebra)]
-                        return ('It is the {} who drinks the water.\n'
-                                'The {} keeps the zebra.').format(*t)
+                        return t

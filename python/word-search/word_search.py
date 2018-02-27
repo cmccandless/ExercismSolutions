@@ -21,7 +21,7 @@ class Point(object):
 
 class WordSearch(object):
     def __init__(self, puzzle):
-        self.puzzle = list(map(list, puzzle.split('\n')))
+        self.puzzle = [list(row) for row in puzzle]
 
     def search(self, word):
         dirs = [Point(i, j)

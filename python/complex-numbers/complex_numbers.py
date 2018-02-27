@@ -1,4 +1,5 @@
 import math
+ERR = 15
 
 
 class ComplexNumber(object):
@@ -9,27 +10,27 @@ class ComplexNumber(object):
     def __iter__(self):
         return [self.real, self.imaginary].__iter__()
 
-    def add(self, other):
+    def __add__(self, other):
         return ComplexNumber(self.real + other.real,
                              self.imaginary + other.imaginary)
 
-    def mul(self, other):
+    def __mul__(self, other):
         a, b = self
         c, d = other
         return ComplexNumber(a * c - b * d, a * d + b * c)
 
-    def sub(self, other):
+    def __sub__(self, other):
         return ComplexNumber(self.real - other.real,
                              self.imaginary - other.imaginary)
 
-    def div(self, other):
+    def __truediv__(self, other):
         a, b = self
         c, d = other
         div = c * c + d * d
         return ComplexNumber((a * c + b * d) / div,
                              (b * c - a * d) / div)
 
-    def abs(self):
+    def __abs__(self):
         r, i = self
         return math.sqrt(r * r + i * i)
 
@@ -38,7 +39,13 @@ class ComplexNumber(object):
 
     def exp(self):
         r, i = self
-        # Rounding necessary due to rounding error in
-        # implementation of sin
-        return ComplexNumber(pow(math.e, r) * math.cos(i),
-                             round(math.sin(i), 10))
+        a = math.e ** r
+        r = round(math.cos(i) * a, ERR)
+        i = round(math.sin(i) * a, ERR)
+        return ComplexNumber(r, i)
+
+    def __eq__(self, other):
+        return tuple(self) == tuple(other)
+
+    def __repr__(self):
+        return '{} + {}i'.format(*tuple(self))

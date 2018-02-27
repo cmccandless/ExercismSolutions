@@ -2,7 +2,7 @@ open = '{[('
 close = '}])'
 
 
-def check_brackets(str):
+def is_paired(str):
     s = list(str)
     b = []
     while s:

@@ -8,10 +8,10 @@ class Phone:
         else:
             raise ValueError('bad format')
         self.area_code = self.number[:3]
-        if self.area_code[:1] == '1':
+        if self.area_code[:1] in '01':
             raise ValueError('bad area code')
         self.exchange_code = self.number[3:6]
-        if self.exchange_code[:1] == '0':
+        if self.exchange_code[:1] in '01':
             raise ValueError('bad exchange code')
 
     def pretty(self):

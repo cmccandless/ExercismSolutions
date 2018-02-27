@@ -17,7 +17,7 @@ def handshake(value):
     return result
 
 
-def code(seq):
+def secret_code(seq):
     if any(c not in codes for c in seq):
         return '0'
     return str(int(''.join(('0'
