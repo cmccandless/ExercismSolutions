@@ -35,37 +35,36 @@ def exec(*args, quiet=True, label=None, shell=False):
 
 
 def linter(track, quiet=True):
-    shell = False
-    if track in ['python', 'hooks']:
-        args = ['flake8', track]
-    elif track == 'haskell':
-        args = ['hlint', track]
-    else:
-        return ('No available linter for "{}"'.format(track), 0)
-    return exec(*args, quiet=quiet, label=track, shell=shell)
+    cwd = os.getcwd()
+    os.chdir(track)
+    args = ['make', 'lint']
+    results = exec(*args, quiet=quiet, label=track)
+    os.chdir(cwd)
+    return results
 
 
 def runner(track, exercise, quiet=True):
+    make_args = {
+        'python': ('-q', exercise),
+        'haskell': ('--silent', exercise),
+    }
     label = '{}/{}'.format(track, exercise)
     shell = False
     if track in ['cpp', 'powershell']:
         return (None, 0)
-    if track == 'csharp':
-        args = ['dotnet', 'test']
-        shell = True
-    elif track == 'go':
-        args = ['go', 'test']
-    elif track == 'haskell':
-        args = ['stack', '--silent', 'test']
-    elif track == 'java':
-        args = ['gradle', 'test', '-Dfile.encoding=utf-8']
-        shell = True
-    elif track == 'python':
-        args = ['pytest', '-q']
-    elif track == 'ruby':
-        args = ['ruby', '{}_test.rb'.format(exercise.replace('-', '_'))]
     else:
-        return ('unknown track "{}"'.format(track), -1)
+        opts, files = make_args.get(track, ('', exercise))
+        cwd = os.getcwd()
+        os.chdir('..')
+        args = [
+            'make',
+            'test',
+            'OPTS="{}"'.format(opts),
+            'FILES="{}"'.format(files)
+        ]
+        results = exec(*args, quiet=quiet, label=label, shell=shell)
+        os.chdir(cwd)
+        return results
     return exec(*args, quiet=quiet, label=label, shell=shell)
 
 
