@@ -5,24 +5,25 @@ import hook_utils as hut
 
 
 def main(commit_file, type=None, sha1_hash=None):
-    changes, ret = hut.exec('git', 'diff', '--cached', '--name-status')
-    changes = changes.split('\n')
-    if ret != 0:
-        hut.abort('error {} occurred'.format(ret), label='git-diff')
+    diffs = hut.get_changes()
     new_solution_tracks = set()
     revised_tracks = set()
-    for change in changes:
-        if change == '':
+    new_makefile_tracks = set()
+    revised_makefile_tracks = set()
+    for d in diffs:
+        if d.change_type == 'D' or '/' not in d.b_path:
             continue
-        change_type, *fileparts = change.split()
-        filename = ' '.join(fileparts).strip()
-        if change_type == 'D' or '/' not in filename:
-            continue
-        track, exercise, *_ = filename.split('/')
-        if change_type == 'A':
-            new_solution_tracks.add(track)
-        elif change_type == 'M':
-            revised_tracks.add(track)
+        track, exercise = d.a_path.split('/')[:2]
+        if d.change_type == 'A':
+            if exercise == 'Makefile':
+                new_makefile_tracks.add(track)
+            else:
+                new_solution_tracks.add(track)
+        elif d.change_type == 'M':
+            if exercise == 'Makefile':
+                revised_makefile_tracks.add(track)
+            else:
+                revised_tracks.add(track)
 
     with open(commit_file, 'r') as f:
         commit_msg = f.read()
@@ -36,12 +37,35 @@ def main(commit_file, type=None, sha1_hash=None):
             revised_tracks.remove('hooks')
         commit_msg_parts = []
         msg = 'new {} for {} exercises'
+        makefile_msg = (
+            '{change_type} Makefile{plural} for {tracks} track{plural}'
+        )
         if new_solution_tracks:
             tracks = ', '.join(new_solution_tracks)
             commit_msg_parts.append(msg.format('solutions', tracks))
         if revised_tracks:
             tracks = ', '.join(revised_tracks)
             commit_msg_parts.append(msg.format('revisions', tracks))
+        if new_makefile_tracks:
+            tracks = ', '.join(new_makefile_tracks)
+            plural = 's' if len(new_makefile_tracks) > 1 else ''
+            commit_msg_parts.append(
+                makefile_msg.format(
+                    change_type='new',
+                    plural=plural,
+                    tracks=tracks
+                )
+            )
+        if revised_makefile_tracks:
+            tracks = ', '.join(revised_makefile_tracks)
+            plural = 's' if len(revised_makefile_tracks) > 1 else ''
+            commit_msg_parts.append(
+                makefile_msg.format(
+                    change_type='revised',
+                    plural=plural,
+                    tracks=tracks
+                )
+            )
         if new_hooks:
             commit_msg_parts.append('new hooks')
         if revised_hooks:

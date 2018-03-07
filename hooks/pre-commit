@@ -28,9 +28,8 @@ def main(commit=-1, *args, **kwargs):
             continue
         label = '{}/{}'.format(track, exercise)
         hut.log('Running tests...', label)
-        os.chdir(dir)
+        os.chdir(track)
         if track == 'python':
-            # results, ret = hut.exec('pytest', '-q', label=label)
             results, ret = hut.runner(track, exercise)
             if ret == 0:
                 hut.log(('All tests were collected and passed '
