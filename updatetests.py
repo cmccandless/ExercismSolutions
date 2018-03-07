@@ -13,7 +13,12 @@ parser.add_argument('--track', default='*', help=' ')
 parser.add_argument('--only', help='exercises to update', default='*')
 parser.add_argument('--tests', default='{exercise}_test.py',
                     dest='tests', help=' ')
-parser.add_argument('--exclude', default=['hooks', 'parallel-letter-frequency'], nargs='+', help=' ')
+parser.add_argument(
+    '--exclude',
+    default=['hooks', 'parallel-letter-frequency'],
+    nargs='+',
+    help=' '
+)
 
 url_fmt = (
     'https://raw.githubusercontent.com/exercism/{track}/'
@@ -44,6 +49,16 @@ for track in filter(os.path.isdir, glob(opts.track)):
                 urlretrieve(
                     url,
                     filename=os.path.join(exercise, env['tests'])
+                )
+            except HTTPError as e:
+                if e.code == 404:
+                    print(e.filename, 'could not be downloaded!')
+                else:
+                    raise
+            try:
+                urlretrieve(
+                    url,
+                    filename=os.path.join(exercise, 'README.md')
                 )
             except HTTPError as e:
                 if e.code == 404:

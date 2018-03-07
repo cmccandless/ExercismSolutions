@@ -3,4 +3,4 @@ lint:
 	@echo "No linter configured"
 
 test:
-	@dotnet test $(OPTS) $(FILES)
+	@cmd /C dotnet test $(OPTS) $(FILES)

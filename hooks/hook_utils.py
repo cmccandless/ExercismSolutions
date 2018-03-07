@@ -2,6 +2,10 @@ from io import StringIO
 import os
 import subprocess as sp
 import sys
+from argutil import WorkingDirectory
+import git
+
+repo = git.Repo()
 
 
 def log(msg, label=None):
@@ -16,7 +20,7 @@ def log(msg, label=None):
 
 
 def abort(msg='', label=None):
-    log('Aborting commit: {}'.format(msg), label)
+    log('Aborting: {}'.format(msg), label)
     sys.exit(1)
 
 
@@ -35,12 +39,9 @@ def exec(*args, quiet=True, label=None, shell=False):
 
 
 def linter(track, quiet=True):
-    cwd = os.getcwd()
-    os.chdir(track)
-    args = ['make', 'lint']
-    results = exec(*args, quiet=quiet, label=track)
-    os.chdir(cwd)
-    return results
+    with WorkingDirectory(track):
+        args = ['make', 'lint']
+        return exec(*args, quiet=quiet, label=track)
 
 
 def runner(track, exercise, quiet=True):
@@ -54,28 +55,18 @@ def runner(track, exercise, quiet=True):
         return (None, 0)
     else:
         opts, files = make_args.get(track, ('', exercise))
-        cwd = os.getcwd()
-        os.chdir('..')
         args = [
             'make',
             'test',
             'OPTS="{}"'.format(opts),
             'FILES="{}"'.format(files)
         ]
-        results = exec(*args, quiet=quiet, label=label, shell=shell)
-        os.chdir(cwd)
-        return results
+        return exec(*args, quiet=quiet, label=label, shell=shell)
     return exec(*args, quiet=quiet, label=label, shell=shell)
 
 
 def get_current_branch():
-    branch, ret = exec('git', 'symbolic-ref', '-q', 'HEAD')
-    if ret != 0:
-        abort('git-symbolic-ref: error {} occurred'.format(ret))
-    branch = branch.replace('refs/heads/', '')
-    if branch == '':
-        branch = 'HEAD'
-    return branch
+    return repo.active_branch.name
 
 
 def get_exercises(track):
@@ -90,30 +81,29 @@ def get_exercises(track):
     return results
 
 
-def get_changed_exercises(commit=-1):
-    args = ['git', 'diff', '--name-status']
+def get_changes(commit=-1):
     if commit < 0:
-        args.append('--cached')
+        tree = 'HEAD'
+        diffs = repo.index.diff(tree)
     else:
-        args.append('HEAD~{}'.format(commit + 1))
-        args.append('HEAD~{}'.format(commit))
-    changes, ret = exec(*args)
-    changes = changes.split('\n')
-    if ret != 0:
-        abort('error {} occurred'.format(ret), 'git-diff')
+        left = 'HEAD~{}'.format(commit + 1)
+        right = 'HEAD~{}'.format(commit)
+        diffs = repo.commit(left).diff(repo.commit(right))
+    return diffs
+
+
+def get_changed_exercises(commit=-1):
+    diffs = get_changes(commit)
     changed_exercises = set()
-    for change in changes:
-        if change == '':
+    for d in diffs:
+        if d.change_type == 'D' or '/' not in d.b_path:
             continue
-        change_type, *fileparts = change.split()
-        filename = ' '.join(fileparts).strip()
-        if change_type == 'D' or '/' not in filename:
-            continue
-        track, exercise, *_ = filename.split('/')
+        track, exercise = d.a_path.split('/')[:2]
+        # if not os.path.isdir(os.path.join(track, exercise)):
+        #     continue
         changed_exercises.add((track, exercise))
     return changed_exercises
 
 
 def get_git_root():
-    git_root, ret = exec('git rev-parse --show-toplevel')
-    return git_root if ret == 0 else None
+    return repo.working_dir
