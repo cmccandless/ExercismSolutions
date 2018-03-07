@@ -6,11 +6,10 @@ python:
   - 3.6
 
 install:
-  - pip install -r requirements-travis.txt
+  - make init
 
 before_script:
-  - flake8 python
-  - hlint haskell
+  - make lint
 
 script:
   - hooks/test_changed.py HEAD -v
