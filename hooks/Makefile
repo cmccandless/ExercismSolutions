@@ -1,10 +1,11 @@
 GIT-HOOKS = ../.git/hooks/
+PYTHON=python3.6
 
 .PHONY: lint, install
 lint:
-	@flake8
+	@$(PYTHON) -m flake8 .
 
 install: lint
-	cp ./hook_utils.py $(GIT-HOOKS)
-	cp ./prepare-commit-msg $(GIT-HOOKS)
-	cp ./pre-commit $(GIT-HOOKS)
+	cp $(PYTHON) ./hook_utils.py $(GIT-HOOKS)
+	cp $(PYTHON) ./prepare-commit-msg $(GIT-HOOKS)
+	cp $(PYTHON) ./pre-commit $(GIT-HOOKS)

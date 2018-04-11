@@ -30,7 +30,6 @@ def main(commit=-1, *args, **kwargs):
         hut.log('Running tests...', label)
         os.chdir(dir)
         if track == 'python':
-            results, ret = hut.exec('pytest', '-q', label=label)
             results, ret = hut.runner(track, exercise)
             if ret == 0:
                 hut.log(('All tests were collected and passed '
