@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.6
 
 from __future__ import print_function
 import sys
@@ -11,6 +11,8 @@ def main(commit_file, type=None, sha1_hash=None):
     revised_tracks = set()
     new_makefile_tracks = set()
     revised_makefile_tracks = set()
+    new_hooks = set()
+    revised_hooks = set()
     for d in diffs:
         if d.change_type == 'D' or '/' not in d.b_path:
             continue
@@ -18,11 +20,15 @@ def main(commit_file, type=None, sha1_hash=None):
         if d.change_type == 'A':
             if exercise == 'Makefile':
                 new_makefile_tracks.add(track)
+            elif track == 'hooks':
+                new_hooks.add(exercise)
             else:
                 new_solution_tracks.add(track)
         elif d.change_type == 'M':
             if exercise == 'Makefile':
                 revised_makefile_tracks.add(track)
+            elif track == 'hooks':
+                revised_hooks.add(exercise)
             else:
                 revised_tracks.add(track)
 
@@ -30,18 +36,12 @@ def main(commit_file, type=None, sha1_hash=None):
         commit_msg = f.read()
 
     if commit_msg == '' or commit_msg.strip().startswith('#'):
-        new_hooks = 'hooks' in new_solution_tracks
-        if new_hooks:
-            new_solution_tracks.remove('hooks')
-        revised_hooks = 'hooks' in revised_tracks
-        if revised_hooks:
-            revised_tracks.remove('hooks')
         commit_msg_parts = []
         exercise_msg = '{tracks}: new {change_type}'
         makefile_msg = (
             '{tracks}: {change_type} Makefile{plural}'
         )
-        hook_msg = 'hooks: {change_type}'
+        hook_msg = 'hooks: {change_type} {tracks}'
         entries = [
             (exercise_msg, 'solutions', new_solution_tracks),
             (exercise_msg, 'revisions', revised_tracks),
@@ -53,8 +53,8 @@ def main(commit_file, type=None, sha1_hash=None):
         for fmt, change_type, tracks in entries:
             if tracks:
                 try:
-                    tracks = ', '.join(tracks)
                     plural = len(tracks) > 1
+                    tracks = ', '.join(tracks)
                 except TypeError:
                     plural = False
                 msg = fmt.format(

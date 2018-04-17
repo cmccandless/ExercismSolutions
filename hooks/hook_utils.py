@@ -1,3 +1,5 @@
+#!/usr/bin/env python3.6
+from __future__ import print_function
 from io import StringIO
 import os
 import subprocess as sp
@@ -83,8 +85,7 @@ def get_exercises(track):
 
 def get_changes(commit=-1):
     if commit < 0:
-        tree = 'HEAD'
-        diffs = repo.index.diff(tree)
+        diffs = repo.index.diff(None, staged=True)
     else:
         left = 'HEAD~{}'.format(commit + 1)
         right = 'HEAD~{}'.format(commit)
@@ -99,8 +100,6 @@ def get_changed_exercises(commit=-1):
         if d.change_type == 'D' or '/' not in d.b_path:
             continue
         track, exercise = d.a_path.split('/')[:2]
-        # if not os.path.isdir(os.path.join(track, exercise)):
-        #     continue
         changed_exercises.add((track, exercise))
     return changed_exercises
 

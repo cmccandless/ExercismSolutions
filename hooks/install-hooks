@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+from __future__ import print_function
+import subprocess
+import shutil
+import os
+import sys
+
+HOOK_FILES = [
+    'applypatch-msg',
+    'commit-msg',
+    'post-update',
+    'pre-applypatch',
+    'pre-commit',
+    'prepare-commit-msg',
+    'pre-push',
+    'pre-rebase',
+    'update',
+]
+
+git_version_str = subprocess.check_output(['git',  '--version'])
+if sys.version_info[0] > 2:
+    git_version_str = git_version_str.decode()
+git_version = git_version_str.split(' ')[-1]
+major, minor, patch = git_version = git_version.split('.')
+
+MINIMUM_MINOR = 10
+
+if int(minor) < MINIMUM_MINOR:
+    print(
+        'Git config setting core.hooksPath support not available for git '
+        'version < 2.10'
+    )
+    print('Copying git hook files into ../.git/hooks')
+    for hook in HOOK_FILES:
+        if os.path.isfile(hook):
+            shutil.copy2(hook, os.path.join('..', '.git', 'hooks', hook))
+else:
+    print('Configuring git core.hooksPath = {}'.format(os.path.abspath('.')))
+    subprocess.check_call([
+        'git', 'config', 'core.hooksPath', os.path.abspath('.')
+    ])
