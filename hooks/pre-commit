@@ -16,7 +16,7 @@ def main(commit=-1, *args, **kwargs):
     for track in changed_tracks:
         hut.log('Running linter...', track)
         results, ret = hut.linter(track)
-        if results.startswith('No available'):
+        if results.startswith('No linter configured'):
             hut.log(results, track)
         elif ret == 0:
             hut.log('Style checks passed', track)
