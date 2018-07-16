@@ -22,7 +22,7 @@ def main(commit=-1, *args, **kwargs):
             hut.log('Style checks passed', track)
         else:
             hut.abort(results, track)
-    simple_tracks = {'cpp', 'csharp', 'go', 'haskell', 'java', 'ruby'}
+    simple_tracks = {'cpp', 'csharp', 'go', 'haskell', 'java', 'ruby', 'prolog'}
     for track, exercise in sorted(changed_exercises):
         dir = os.path.join(track, exercise)
         if not os.path.isdir(dir):
