@@ -60,7 +60,7 @@ def main(commit=-1, *args, **kwargs):
                     hut.abort('Some of the tests failed', label)
         else:
             hut.abort('Unknown track "{}"'.format(track))
-        os.chdir(os.path.join('..', '..'))
+        os.chdir(os.path.join('..'))
     return 0
 
 
