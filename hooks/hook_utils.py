@@ -8,6 +8,9 @@ from argutil import WorkingDirectory
 import git
 
 repo = git.Repo()
+shell_tracks = {
+    'bash'
+}
 
 
 def log(msg, label=None):
@@ -52,7 +55,7 @@ def runner(track, exercise, quiet=True):
         'haskell': ('--silent', exercise),
     }
     label = '{}/{}'.format(track, exercise)
-    shell = False
+    shell = track in shell_tracks
     if track in ['cpp', 'powershell']:
         return (None, 0)
     else:
