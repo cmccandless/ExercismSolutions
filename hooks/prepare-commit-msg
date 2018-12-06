@@ -7,62 +7,71 @@ import hook_utils as hut
 
 def main(commit_file, type=None, sha1_hash=None):
     diffs = hut.get_changes()
-    new_solution_tracks = set()
-    revised_tracks = set()
-    new_makefile_tracks = set()
-    revised_makefile_tracks = set()
-    new_hooks = set()
-    revised_hooks = set()
+    file_changes = ['Makefile', '.exutil', 'init.sh']
+    changes = {
+        k: {
+            'A': set(),
+            'M': set(),
+            'change_types': {
+                'A': ct_a,
+                'M': ct_m
+            },
+            'msg': m
+        }
+        for k, ct_a, ct_m, m in (
+            (
+                'solution',
+                'solutions',
+                'revisions',
+                '{tracks}: new {change_type}'
+            ),
+            ('hooks', 'add', 'revise', 'hooks: {change_type} {tracks}'),
+            *zip(
+                file_changes,
+                ('create' for _ in range(len(file_changes))),
+                ('revise' for _ in range(len(file_changes))),
+                (
+                    '{tracks}: {change_type} Makefile{plural}',
+                    '{tracks}: {change_type} exutil config{plural}',
+                    '{tracks}: {change_type} init script{plural}'
+                )
+            )
+        )
+    }
     for d in diffs:
         if d.change_type == 'D' or '/' not in d.b_path:
             continue
         track, exercise = d.a_path.split('/')[:2]
-        if d.change_type == 'A':
-            if exercise == 'Makefile':
-                new_makefile_tracks.add(track)
-            elif track == 'hooks':
-                new_hooks.add(exercise)
-            else:
-                new_solution_tracks.add(track)
-        elif d.change_type == 'M':
-            if exercise == 'Makefile':
-                revised_makefile_tracks.add(track)
-            elif track == 'hooks':
-                revised_hooks.add(exercise)
-            else:
-                revised_tracks.add(track)
+        if d.change_type not in {'A', 'M'}:
+            continue
+        if exercise in file_changes:
+            changes[exercise][d.change_type].add(track)
+        else:
+            changes['solution'][d.change_type].add(track)
 
     with open(commit_file, 'r') as f:
         commit_msg = f.read()
 
     if commit_msg == '' or commit_msg.strip().startswith('#'):
         commit_msg_parts = []
-        exercise_msg = '{tracks}: new {change_type}'
-        makefile_msg = (
-            '{tracks}: {change_type} Makefile{plural}'
-        )
-        hook_msg = 'hooks: {change_type} {tracks}'
-        entries = [
-            (exercise_msg, 'solutions', new_solution_tracks),
-            (exercise_msg, 'revisions', revised_tracks),
-            (makefile_msg, 'create', new_makefile_tracks),
-            (makefile_msg, 'revise', revised_makefile_tracks),
-            (hook_msg, 'add', new_hooks),
-            (hook_msg, 'revise', revised_hooks),
-        ]
-        for fmt, change_type, tracks in entries:
-            if tracks:
-                try:
-                    plural = len(tracks) > 1
-                    tracks = ', '.join(tracks)
-                except TypeError:
-                    plural = False
-                msg = fmt.format(
-                    change_type=change_type,
-                    plural='s' if plural else '',
-                    tracks=tracks
-                )
-                commit_msg_parts.append(msg)
+        for k, v in changes.items():
+            ct_labels = v['change_types']
+            fmt = v['msg']
+            for ct_abbr in 'AM':
+                tracks = v[ct_abbr]
+                if tracks:
+                    try:
+                        plural = len(tracks) > 1
+                        tracks = ', '.join(tracks)
+                    except TypeError:
+                        plural = False
+                    msg = fmt.format(
+                        change_type=ct_labels[ct_abbr],
+                        plural='s' if plural else '',
+                        tracks=tracks
+                    )
+                    commit_msg_parts.append(msg)
+        commit_msg_parts.sort()
         commit_msg_parts.append(commit_msg)
         commit_msg = '\n'.join(commit_msg_parts)
 

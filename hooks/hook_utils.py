@@ -9,7 +9,8 @@ import git
 
 repo = git.Repo()
 shell_tracks = {
-    'bash'
+    'bash',
+    'javascript',
 }
 
 

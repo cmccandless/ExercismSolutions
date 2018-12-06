@@ -23,7 +23,8 @@ def main(commit=-1, *args, **kwargs):
         else:
             hut.abort(results, track)
     simple_tracks = {
-        'cpp', 'csharp', 'go', 'haskell', 'java', 'ruby', 'prolog', 'bash',
+        'cpp', 'csharp', 'go', 'haskell', 'java',
+        'ruby', 'prolog', 'bash', 'javascript',
     }
     for track, exercise in sorted(changed_exercises):
         dir = os.path.join(track, exercise)
