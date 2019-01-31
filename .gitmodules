@@ -4,3 +4,6 @@
 [submodule "bash"]
 	path = bash
 	url = git@github.com:cmccandless/ExercismSolutions-bash.git
+[submodule "csharp"]
+	path = csharp
+	url = git@github.com:cmccandless/ExercismSolutions-csharp.git
