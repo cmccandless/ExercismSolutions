@@ -19,3 +19,6 @@
 [submodule "javascript"]
 	path = javascript
 	url = git@github.com:cmccandless/ExercismSolutions-javascript.git
+[submodule "powershell"]
+	path = powershell
+	url = git@github.com:cmccandless/ExercismSolutions-powershell.git
