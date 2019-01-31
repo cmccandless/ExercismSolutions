@@ -25,3 +25,6 @@
 [submodule "prolog"]
 	path = prolog
 	url = git@github.com:cmccandless/ExercismSolutions-prolog.git
+[submodule "python"]
+	path = python
+	url = git@github.com:cmccandless/ExercismSolutions-python.git
