@@ -7,3 +7,6 @@
 [submodule "csharp"]
 	path = csharp
 	url = git@github.com:cmccandless/ExercismSolutions-csharp.git
+[submodule "go"]
+	path = go
+	url = git@github.com:cmccandless/ExercismSolutions-go.git
