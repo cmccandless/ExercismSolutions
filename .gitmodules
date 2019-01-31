@@ -1,3 +1,6 @@
 [submodule "cpp"]
 	path = cpp
 	url = git@github.com:cmccandless/ExercismSolutions-cpp.git
+[submodule "bash"]
+	path = bash
+	url = git@github.com:cmccandless/ExercismSolutions-bash.git
