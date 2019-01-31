@@ -16,3 +16,6 @@
 [submodule "java"]
 	path = java
 	url = git@github.com:cmccandless/ExercismSolutions-java.git
+[submodule "javascript"]
+	path = javascript
+	url = git@github.com:cmccandless/ExercismSolutions-javascript.git
