@@ -28,3 +28,6 @@
 [submodule "python"]
 	path = python
 	url = git@github.com:cmccandless/ExercismSolutions-python.git
+[submodule "ruby"]
+	path = ruby
+	url = git@github.com:cmccandless/ExercismSolutions-ruby.git
