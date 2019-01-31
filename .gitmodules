@@ -22,3 +22,6 @@
 [submodule "powershell"]
 	path = powershell
 	url = git@github.com:cmccandless/ExercismSolutions-powershell.git
+[submodule "prolog"]
+	path = prolog
+	url = git@github.com:cmccandless/ExercismSolutions-prolog.git
