@@ -11,7 +11,7 @@ My solutions to problems found on Exercism.io
 | Go | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-go.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-go) |
 | Haskell | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-haskell.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-haskell) |
 | Java | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-java.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-java) |
-| JavaScript | *N/A* |
+| JavaScript | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-javascript.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-javascript) |
 | Powershell | *N/A* |
 | Prolog | *N/A* |
 | Python | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-python.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-python) |
