@@ -15,4 +15,4 @@ My solutions to problems found on Exercism.io
 | Powershell | *N/A* |
 | Prolog | *N/A* |
 | Python | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-python.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-python) |
-| Ruby | *N/A* |
+| Ruby | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-ruby.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-ruby) |
