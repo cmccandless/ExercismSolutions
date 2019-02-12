@@ -1,0 +1,29 @@
+#!/bin/bash
+set -e
+
+# Moves HEAD, don't use:
+# git submodule sync
+# Do this instead:
+for track in $(bash bin/lstracks.sh); do
+    git add "$track"
+done
+
+tmpfile=$(mktemp)
+bash bin/generate_readme.sh > "$tmpfile"
+
+# If README has not yet been generated
+if ! diff README.md "$tmpfile" &> /dev/null; then
+    # If README has been modified (and does not match generated version), fail because it should be generated.
+    if git status | grep -E '.*modified: *README.md.*' &> /dev/null; then
+        echo "README.md is a generated file; do not modify it by hand. Aborting commit."
+        exit 1
+    fi
+    cp -f "$tmpfile" README.md
+    git add README.md
+fi
+rm "$tmpfile"
+
+if ! git diff-files --quiet; then
+    echo "You have unstaged changes; aborting commit."
+    exit 1
+fi
