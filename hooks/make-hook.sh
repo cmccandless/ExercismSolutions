@@ -1,14 +1,17 @@
 #!/bin/bash
 
-make "$1"
-ret="$?"
-if [ "$ret" -eq 2 ]; then
-    make all
-    ret="$?"
-    if [ "$ret" -eq 2 ]; then
-        echo "make"
+hook="$1"
+
+targets="$(grep -E '^[^:]+:[^=]' Makefile | cut -d':' -f1)"
+# echo "$targets"
+
+if grep -q "$hook" <<<"$targets"; then
+    make "$hook"
+else
+    if grep -q 'all' <<<"$targets"; then
+        make all
+    else
         make
-        ret="$?"
     fi
 fi
-exit $ret
+exit "$?"
