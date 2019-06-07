@@ -7,7 +7,7 @@ My solutions to problems found on Exercism.io
 | --- | --- | --- |
 | C++ | 2019-02-08 15:54:43 -0500 | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-cpp.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-cpp) |
 | Bash | 2019-04-10 12:50:41 -0400 | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-bash.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-bash) |
-| C# | 2019-06-07 08:34:40 -0400 | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-csharp.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-csharp) |
+| C# | 2019-06-07 08:39:51 -0400 | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-csharp.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-csharp) |
 | Go | 2019-02-08 15:54:43 -0500 | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-go.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-go) |
 | Haskell | 2019-02-08 15:54:44 -0500 | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-haskell.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-haskell) |
 | Java | 2019-02-08 15:54:44 -0500 | [![Build Status](https://travis-ci.com/cmccandless/ExercismSolutions-java.svg?branch=master)](https://travis-ci.com/cmccandless/ExercismSolutions-java) |
