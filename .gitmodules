@@ -31,3 +31,6 @@
 [submodule "ruby"]
 	path = ruby
 	url = git@github.com:cmccandless/ExercismSolutions-ruby.git
+[submodule "julia"]
+	path = julia
+	url = git@github.com:cmccandless/ExercismSolutions-julia.git
