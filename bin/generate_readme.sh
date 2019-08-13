@@ -23,7 +23,7 @@ echo '## Solutions Status'
 echo
 echo '| Track | Last Updated | Status |'
 echo '| --- | --- | --- |'
-for track in $(bash bin/lstracks.sh); do
+for track in $(bash bin/lstracks.sh | sort); do
     title="$(track_title "$track")"
     timestamp="$(track_timestamp "$track")"
     if [ -f "$track/.travis.yml" ]; then
